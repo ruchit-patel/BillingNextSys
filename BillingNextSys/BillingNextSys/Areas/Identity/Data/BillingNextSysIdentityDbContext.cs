@@ -2,13 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BillingNextSys.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BillingNextSys.Areas.Identity.Data
 {
-    public class BillingNextSysIdentityDbContext : IdentityDbContext<IdentityUser>
+    public class BillingNextSysIdentityDbContext : IdentityDbContext<BillingNextUser>
     {
         public BillingNextSysIdentityDbContext(DbContextOptions<BillingNextSysIdentityDbContext> options)
             : base(options)

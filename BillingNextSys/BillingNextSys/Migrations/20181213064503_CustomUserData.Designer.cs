@@ -3,15 +3,17 @@ using System;
 using BillingNextSys.Areas.Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace BillingNextSys.Migrations
 {
     [DbContext(typeof(BillingNextSysIdentityDbContext))]
-    partial class BillingNextSysIdentityDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181213064503_CustomUserData")]
+    partial class CustomUserData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

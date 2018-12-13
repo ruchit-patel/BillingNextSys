@@ -19,8 +19,14 @@ namespace BillingNextSys.Areas.Identity
                     options.UseNpgsql(
                         context.Configuration.GetConnectionString("BillingNextSysIdentityDbContextConnection")));
 
-                services.AddDefaultIdentity<IdentityUser>()
-                    .AddEntityFrameworkStores<BillingNextSysIdentityDbContext>();
+                services.AddDefaultIdentity<BillingNextUser> (config =>
+                {
+                  //  config.SignIn.RequireConfirmedEmail = true;
+                    //config.SignIn.RequireConfirmedPhoneNumber = true;
+                })
+                    .AddEntityFrameworkStores<BillingNextSysIdentityDbContext>()
+                .AddDefaultTokenProviders()
+                 .AddDefaultUI();
             });
         }
     }
