@@ -19,7 +19,7 @@ namespace BillingNextSys.Areas.Identity
                     options.UseNpgsql(
                         context.Configuration.GetConnectionString("BillingNextSysIdentityDbContextConnection")));
 
-                services.AddDefaultIdentity<BillingNextUser> (config =>
+                services.AddIdentity<BillingNextUser,IdentityRole> (config =>
                 {
                   //  config.SignIn.RequireConfirmedEmail = true;
                     //config.SignIn.RequireConfirmedPhoneNumber = true;
