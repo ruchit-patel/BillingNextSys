@@ -16,7 +16,7 @@ namespace BillingNextSys.Areas.Identity
         {
             builder.ConfigureServices((context, services) => {
                 services.AddDbContext<BillingNextSysIdentityDbContext>(options =>
-                    options.UseSqlServer(
+                    options.UseNpgsql(
                         context.Configuration.GetConnectionString("BillingNextSysIdentityDbContextConnection")));
 
                 services.AddDefaultIdentity<IdentityUser>()
