@@ -15,4 +15,16 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
     <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.1" />
   </ItemGroup>
+<ItemGroup>
+  <Folder Include="Models\" />
+  <Folder Include="Pages\Company\" />
+  <Folder Include="Pages\Branch\" />
+  <Folder Include="Pages\DebtorGroup\" />
+  <Folder Include="Pages\Debtor\" />
+  <Folder Include="Pages\Bill\" />
+  <Folder Include="Pages\BillDetails\" />
+  <Folder Include="Pages\Particulars\" />
+  <Folder Include="Pages\Received\" />
+  <Folder Include="Pages\BillSeries\" />
+</ItemGroup>
 </Project>
