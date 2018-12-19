@@ -1,0 +1,66 @@
+@page
+@model BillingNextSys.PagesReceived.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Received[0].ReceivedAmount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Received[0].ReceivedDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Received[0].ChequePaymet)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Received[0].ChequeNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Received[0].Company)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Received[0].BillDetails)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Received) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReceivedAmount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReceivedDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ChequePaymet)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ChequeNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Company.AccountNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BillDetails.ParticularsName)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.ReceivedID">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.ReceivedID">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.ReceivedID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,108 @@
+@page
+@model BillingNextSys.PagesBillDetails.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.BillDetails[0].ParticularsName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BillDetails[0].Period)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BillDetails[0].YearInfo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BillDetails[0].Amount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BillDetails[0].CGSTAmount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BillDetails[0].SGSTAmount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BillDetails[0].TaxableValue)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BillDetails[0].BillAmountOutstanding)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BillDetails[0].Company)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BillDetails[0].Particulars)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BillDetails[0].Bill)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BillDetails[0].Debtor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BillDetails[0].DebtorGroup)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.BillDetails) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ParticularsName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Period)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.YearInfo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CGSTAmount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SGSTAmount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TaxableValue)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BillAmountOutstanding)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Company.AccountNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Particulars.ParticularsName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Bill.BillNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Debtor.DebtorName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DebtorGroup.DebtorGroupAddress)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.BillDetailsID">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.BillDetailsID">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.BillDetailsID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

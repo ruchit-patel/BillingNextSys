@@ -1,0 +1,67 @@
+@page
+@model BillingNextSys.PagesDebtorGroup.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>DebtorGroup</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.DebtorGroup.DebtorGroupName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DebtorGroup.DebtorGroupName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DebtorGroup.DebtorGroupAddress)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DebtorGroup.DebtorGroupAddress)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DebtorGroup.DebtorGroupMail)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DebtorGroup.DebtorGroupMail)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DebtorGroup.DebtorGroupPhoneNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DebtorGroup.DebtorGroupPhoneNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DebtorGroup.DebtorGroupCity)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DebtorGroup.DebtorGroupCity)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DebtorGroup.DebtorGSTIN)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DebtorGroup.DebtorGSTIN)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DebtorGroup.DebtorOutstanding)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DebtorGroup.DebtorOutstanding)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DebtorGroup.Branch)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DebtorGroup.Branch.BranchAddress)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.DebtorGroup.DebtorGroupID">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>

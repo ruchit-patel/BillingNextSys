@@ -1,0 +1,37 @@
+@page
+@model BillingNextSys.PagesDebtor.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Debtor</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Debtor.DebtorName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Debtor.DebtorName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Debtor.DebtorOutstanding)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Debtor.DebtorOutstanding)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Debtor.DebtorGroup)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Debtor.DebtorGroup.DebtorGroupAddress)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Debtor.DebtorID">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>

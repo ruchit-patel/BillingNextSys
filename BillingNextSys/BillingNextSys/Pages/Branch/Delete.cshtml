@@ -1,0 +1,40 @@
+@page
+@model BillingNextSys.PagesBranch.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Branch</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Branch.BranchName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Branch.BranchName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Branch.BranchAddress)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Branch.BranchAddress)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Branch.Company)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Branch.Company.AccountNumber)
+        </dd>
+    </dl>
+    
+    <form method="post">
+        <input type="hidden" asp-for="Branch.BranchID" />
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <a asp-page="./Index">Back to List</a>
+    </form>
+</div>

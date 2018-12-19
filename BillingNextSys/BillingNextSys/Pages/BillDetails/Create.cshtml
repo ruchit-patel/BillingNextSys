@@ -1,0 +1,89 @@
+@page
+@model BillingNextSys.PagesBillDetails.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Create</h2>
+
+<h4>BillDetails</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="BillDetails.ParticularsName" class="control-label"></label>
+                <input asp-for="BillDetails.ParticularsName" class="form-control" />
+                <span asp-validation-for="BillDetails.ParticularsName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BillDetails.Period" class="control-label"></label>
+                <input asp-for="BillDetails.Period" class="form-control" />
+                <span asp-validation-for="BillDetails.Period" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BillDetails.YearInfo" class="control-label"></label>
+                <input asp-for="BillDetails.YearInfo" class="form-control" />
+                <span asp-validation-for="BillDetails.YearInfo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BillDetails.Amount" class="control-label"></label>
+                <input asp-for="BillDetails.Amount" class="form-control" />
+                <span asp-validation-for="BillDetails.Amount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BillDetails.CGSTAmount" class="control-label"></label>
+                <input asp-for="BillDetails.CGSTAmount" class="form-control" />
+                <span asp-validation-for="BillDetails.CGSTAmount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BillDetails.SGSTAmount" class="control-label"></label>
+                <input asp-for="BillDetails.SGSTAmount" class="form-control" />
+                <span asp-validation-for="BillDetails.SGSTAmount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BillDetails.TaxableValue" class="control-label"></label>
+                <input asp-for="BillDetails.TaxableValue" class="form-control" />
+                <span asp-validation-for="BillDetails.TaxableValue" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BillDetails.BillAmountOutstanding" class="control-label"></label>
+                <input asp-for="BillDetails.BillAmountOutstanding" class="form-control" />
+                <span asp-validation-for="BillDetails.BillAmountOutstanding" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BillDetails.CompanyID" class="control-label"></label>
+                <select asp-for="BillDetails.CompanyID" class ="form-control" asp-items="ViewBag.CompanyID"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="BillDetails.ParticularsID" class="control-label"></label>
+                <select asp-for="BillDetails.ParticularsID" class ="form-control" asp-items="ViewBag.ParticularsID"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="BillDetails.BillNumber" class="control-label"></label>
+                <select asp-for="BillDetails.BillNumber" class ="form-control" asp-items="ViewBag.BillNumber"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="BillDetails.DebtorID" class="control-label"></label>
+                <select asp-for="BillDetails.DebtorID" class ="form-control" asp-items="ViewBag.DebtorID"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="BillDetails.DebtorGroupID" class="control-label"></label>
+                <select asp-for="BillDetails.DebtorGroupID" class ="form-control" asp-items="ViewBag.DebtorGroupID"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

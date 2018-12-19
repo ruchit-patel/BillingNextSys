@@ -1,0 +1,100 @@
+@page
+@model BillingNextSys.PagesBillDetails.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>BillDetails</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.BillDetails.ParticularsName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BillDetails.ParticularsName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.BillDetails.Period)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BillDetails.Period)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.BillDetails.YearInfo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BillDetails.YearInfo)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.BillDetails.Amount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BillDetails.Amount)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.BillDetails.CGSTAmount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BillDetails.CGSTAmount)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.BillDetails.SGSTAmount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BillDetails.SGSTAmount)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.BillDetails.TaxableValue)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BillDetails.TaxableValue)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.BillDetails.BillAmountOutstanding)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BillDetails.BillAmountOutstanding)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.BillDetails.Company)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BillDetails.Company.AccountNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.BillDetails.Particulars)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BillDetails.Particulars.ParticularsName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.BillDetails.Bill)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BillDetails.Bill.BillNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.BillDetails.Debtor)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BillDetails.Debtor.DebtorName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.BillDetails.DebtorGroup)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BillDetails.DebtorGroup.DebtorGroupAddress)
+        </dd>
+    </dl>
+    
+    <form method="post">
+        <input type="hidden" asp-for="BillDetails.BillDetailsID" />
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <a asp-page="./Index">Back to List</a>
+    </form>
+</div>

@@ -1,0 +1,67 @@
+@page
+@model BillingNextSys.PagesBill.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Bill</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Bill.BilledTo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Bill.BilledTo)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Bill.BillAmount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Bill.BillAmount)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Bill.Note)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Bill.Note)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Bill.InvoiceDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Bill.InvoiceDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Bill.PlaceOfSupply)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Bill.PlaceOfSupply)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Bill.DebtorGroup)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Bill.DebtorGroup.DebtorGroupAddress)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Bill.Company)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Bill.Company.AccountNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Bill.BillSeries)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Bill.BillSeries.SeriesName)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Bill.BillNumber">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>

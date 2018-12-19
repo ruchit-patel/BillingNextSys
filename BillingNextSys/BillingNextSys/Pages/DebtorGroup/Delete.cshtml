@@ -1,0 +1,70 @@
+@page
+@model BillingNextSys.PagesDebtorGroup.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>DebtorGroup</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.DebtorGroup.DebtorGroupName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DebtorGroup.DebtorGroupName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DebtorGroup.DebtorGroupAddress)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DebtorGroup.DebtorGroupAddress)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DebtorGroup.DebtorGroupMail)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DebtorGroup.DebtorGroupMail)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DebtorGroup.DebtorGroupPhoneNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DebtorGroup.DebtorGroupPhoneNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DebtorGroup.DebtorGroupCity)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DebtorGroup.DebtorGroupCity)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DebtorGroup.DebtorGSTIN)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DebtorGroup.DebtorGSTIN)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DebtorGroup.DebtorOutstanding)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DebtorGroup.DebtorOutstanding)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DebtorGroup.Branch)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DebtorGroup.Branch.BranchAddress)
+        </dd>
+    </dl>
+    
+    <form method="post">
+        <input type="hidden" asp-for="DebtorGroup.DebtorGroupID" />
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <a asp-page="./Index">Back to List</a>
+    </form>
+</div>

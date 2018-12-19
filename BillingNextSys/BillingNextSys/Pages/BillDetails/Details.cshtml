@@ -1,0 +1,97 @@
+@page
+@model BillingNextSys.PagesBillDetails.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>BillDetails</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.BillDetails.ParticularsName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BillDetails.ParticularsName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.BillDetails.Period)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BillDetails.Period)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.BillDetails.YearInfo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BillDetails.YearInfo)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.BillDetails.Amount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BillDetails.Amount)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.BillDetails.CGSTAmount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BillDetails.CGSTAmount)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.BillDetails.SGSTAmount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BillDetails.SGSTAmount)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.BillDetails.TaxableValue)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BillDetails.TaxableValue)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.BillDetails.BillAmountOutstanding)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BillDetails.BillAmountOutstanding)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.BillDetails.Company)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BillDetails.Company.AccountNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.BillDetails.Particulars)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BillDetails.Particulars.ParticularsName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.BillDetails.Bill)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BillDetails.Bill.BillNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.BillDetails.Debtor)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BillDetails.Debtor.DebtorName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.BillDetails.DebtorGroup)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BillDetails.DebtorGroup.DebtorGroupAddress)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.BillDetails.BillDetailsID">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>

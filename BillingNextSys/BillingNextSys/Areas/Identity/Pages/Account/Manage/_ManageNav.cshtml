@@ -1,3 +1,4 @@
+@using BillingNextSys.Areas.Identity.Data
 @inject SignInManager<BillingNextUser> SignInManager
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();

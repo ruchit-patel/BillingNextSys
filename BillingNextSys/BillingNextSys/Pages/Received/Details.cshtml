@@ -1,0 +1,55 @@
+@page
+@model BillingNextSys.PagesReceived.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Received</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Received.ReceivedAmount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Received.ReceivedAmount)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Received.ReceivedDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Received.ReceivedDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Received.ChequePaymet)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Received.ChequePaymet)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Received.ChequeNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Received.ChequeNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Received.Company)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Received.Company.AccountNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Received.BillDetails)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Received.BillDetails.ParticularsName)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Received.ReceivedID">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>

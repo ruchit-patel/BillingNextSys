@@ -1,0 +1,48 @@
+@page
+@model BillingNextSys.PagesParticulars.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Particulars[0].ParticularsName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Particulars[0].SACCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Particulars[0].Amount)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Particulars) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ParticularsName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SACCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.ParticularsID">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.ParticularsID">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.ParticularsID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

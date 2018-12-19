@@ -22,14 +22,13 @@ namespace BillingNextSys.Models
         [ScaffoldColumn(false)]
         public DateTime CreationDate { get; set; }
 
-        [DataType(DataType.Upload)]
-        [ScaffoldColumn(false)]
-        [Required(ErrorMessage = "Please Upload Your Company Logo")]
-        public string CompanyLogo { get; set; }
+      
+        public byte[] CompanyLogoImg { get; set; }
 
         [NotMapped]
-        [Display(Name = "Upload Your Company Logo. Preferably in PNG format.")]
-        public IFormFile CompanyLogoActual { get; set; }
+        [DataType(DataType.Upload)]
+        [Display(Name = "Company Logo")]
+        public IFormFile CompLogo { get; set; }
 
         public BillFormat? BillFormat { get; set; }
 

@@ -1,0 +1,78 @@
+@page
+@model BillingNextSys.PagesDebtorGroup.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DebtorGroup[0].DebtorGroupName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DebtorGroup[0].DebtorGroupAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DebtorGroup[0].DebtorGroupMail)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DebtorGroup[0].DebtorGroupPhoneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DebtorGroup[0].DebtorGroupCity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DebtorGroup[0].DebtorGSTIN)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DebtorGroup[0].DebtorOutstanding)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DebtorGroup[0].Branch)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.DebtorGroup) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DebtorGroupName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DebtorGroupAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DebtorGroupMail)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DebtorGroupPhoneNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DebtorGroupCity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DebtorGSTIN)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DebtorOutstanding)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Branch.BranchAddress)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.DebtorGroupID">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.DebtorGroupID">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.DebtorGroupID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
