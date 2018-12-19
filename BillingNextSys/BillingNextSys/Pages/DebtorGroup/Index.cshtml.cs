@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BillingNextSys.Models;
 
-namespace BillingNextSys.PagesDebtorGroup
+namespace BillingNextSys.Pages.DebtorGroup
 {
     public class IndexModel : PageModel
     {
@@ -18,7 +18,7 @@ namespace BillingNextSys.PagesDebtorGroup
             _context = context;
         }
 
-        public IList<DebtorGroup> DebtorGroup { get;set; }
+        public IList<Models.DebtorGroup> DebtorGroup { get;set; }
 
         public async Task OnGetAsync()
         {
