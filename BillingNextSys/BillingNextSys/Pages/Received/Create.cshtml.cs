@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using BillingNextSys.Models;
 
-namespace BillingNextSys.PagesReceived
+namespace BillingNextSys.Pages.Received
 {
     public class CreateModel : PageModel
     {
@@ -21,12 +21,12 @@ namespace BillingNextSys.PagesReceived
         public IActionResult OnGet()
         {
         ViewData["BillDetailsID"] = new SelectList(_context.BillDetails, "BillDetailsID", "ParticularsName");
-        ViewData["CompanyID"] = new SelectList(_context.Company, "CompanyID", "AccountNumber");
+        ViewData["CompanyID"] = new SelectList(_context.Company, "CompanyID", "CompanyName");
             return Page();
         }
 
         [BindProperty]
-        public Received Received { get; set; }
+        public Models.Received Received { get; set; }
 
         public async Task<IActionResult> OnPostAsync()
         {

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BillingNextSys.Models;
 
-namespace BillingNextSys.PagesReceived
+namespace BillingNextSys.Pages.Received
 {
     public class EditModel : PageModel
     {
@@ -20,7 +20,7 @@ namespace BillingNextSys.PagesReceived
         }
 
         [BindProperty]
-        public Received Received { get; set; }
+        public Models.Received Received { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -38,7 +38,7 @@ namespace BillingNextSys.PagesReceived
                 return NotFound();
             }
            ViewData["BillDetailsID"] = new SelectList(_context.BillDetails, "BillDetailsID", "ParticularsName");
-           ViewData["CompanyID"] = new SelectList(_context.Company, "CompanyID", "AccountNumber");
+           ViewData["CompanyID"] = new SelectList(_context.Company, "CompanyID", "CompanyName");
             return Page();
         }
 

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BillingNextSys.Models;
 
-namespace BillingNextSys.PagesReceived
+namespace BillingNextSys.Pages.Received
 {
     public class DeleteModel : PageModel
     {
@@ -19,7 +19,7 @@ namespace BillingNextSys.PagesReceived
         }
 
         [BindProperty]
-        public Received Received { get; set; }
+        public Models.Received Received { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {

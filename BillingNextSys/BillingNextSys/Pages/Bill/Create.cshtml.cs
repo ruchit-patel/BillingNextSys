@@ -20,7 +20,7 @@ namespace BillingNextSys.Pages.Bill
 
         public IActionResult OnGet()
         {
-        ViewData["SeriesName"] = new SelectList(_context.Set<BillSeries>(), "SeriesName", "SeriesName");
+        ViewData["SeriesName"] = new SelectList(_context.BillSeries, "SeriesName", "SeriesName");
         ViewData["CompanyID"] = new SelectList(_context.Company, "CompanyID", "CompanyName");
         ViewData["DebtorGroupID"] = new SelectList(_context.DebtorGroup, "DebtorGroupID", "DebtorGroupName");
             return Page();

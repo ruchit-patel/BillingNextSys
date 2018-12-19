@@ -44,7 +44,7 @@ namespace BillingNextSys.Pages.BillDetails
            ViewData["CompanyID"] = new SelectList(_context.Company, "CompanyID", "CompanyName");
            ViewData["DebtorID"] = new SelectList(_context.Debtor, "DebtorID", "DebtorName");
            ViewData["DebtorGroupID"] = new SelectList(_context.DebtorGroup, "DebtorGroupID", "DebtorGroupName");
-           ViewData["ParticularsID"] = new SelectList(_context.Set<Particulars>(), "ParticularsID", "ParticularsName");
+           ViewData["ParticularsID"] = new SelectList(_context.Particulars, "ParticularsID", "ParticularsName");
             return Page();
         }
 
