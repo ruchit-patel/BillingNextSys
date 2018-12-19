@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BillingNextSys.Models;
 
-namespace BillingNextSys.PagesBillDetails
+namespace BillingNextSys.Pages.BillDetails
 {
     public class EditModel : PageModel
     {
@@ -20,7 +20,7 @@ namespace BillingNextSys.PagesBillDetails
         }
 
         [BindProperty]
-        public BillDetails BillDetails { get; set; }
+        public Models.BillDetails BillDetails { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -41,9 +41,9 @@ namespace BillingNextSys.PagesBillDetails
                 return NotFound();
             }
            ViewData["BillNumber"] = new SelectList(_context.Bill, "BillNumber", "BillNumber");
-           ViewData["CompanyID"] = new SelectList(_context.Company, "CompanyID", "AccountNumber");
+           ViewData["CompanyID"] = new SelectList(_context.Company, "CompanyID", "CompanyName");
            ViewData["DebtorID"] = new SelectList(_context.Debtor, "DebtorID", "DebtorName");
-           ViewData["DebtorGroupID"] = new SelectList(_context.DebtorGroup, "DebtorGroupID", "DebtorGroupAddress");
+           ViewData["DebtorGroupID"] = new SelectList(_context.DebtorGroup, "DebtorGroupID", "DebtorGroupName");
            ViewData["ParticularsID"] = new SelectList(_context.Set<Particulars>(), "ParticularsID", "ParticularsName");
             return Page();
         }

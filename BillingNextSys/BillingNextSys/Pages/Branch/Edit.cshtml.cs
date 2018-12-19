@@ -36,7 +36,7 @@ namespace BillingNextSys.Pages.Branch
             {
                 return NotFound();
             }
-           ViewData["CompanyID"] = new SelectList(_context.Company, "CompanyID", "AccountNumber");
+           ViewData["CompanyID"] = new SelectList(_context.Company, "CompanyID", "CompanyName");
             return Page();
         }
 

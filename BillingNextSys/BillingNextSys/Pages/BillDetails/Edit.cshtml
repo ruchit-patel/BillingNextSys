@@ -1,5 +1,6 @@
 @page
-@model BillingNextSys.PagesBillDetails.EditModel
+@using BillingNextSys.Models
+@model BillingNextSys.Pages.BillDetails.EditModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -26,7 +27,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="BillDetails.YearInfo" class="control-label"></label>
-                <input asp-for="BillDetails.YearInfo" class="form-control" />
+                <select asp-for="BillDetails.YearInfo" class="form-control" asp-items="Html.GetEnumSelectList(typeof(YearInfo))"> </select>
                 <span asp-validation-for="BillDetails.YearInfo" class="text-danger"></span>
             </div>
             <div class="form-group">

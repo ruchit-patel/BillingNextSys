@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BillingNextSys.Models;
 
-namespace BillingNextSys.PagesBillDetails
+namespace BillingNextSys.Pages.BillDetails
 {
     public class IndexModel : PageModel
     {
@@ -18,7 +18,7 @@ namespace BillingNextSys.PagesBillDetails
             _context = context;
         }
 
-        public IList<BillDetails> BillDetails { get;set; }
+        public IList<Models.BillDetails> BillDetails { get;set; }
 
         public async Task OnGetAsync()
         {

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using BillingNextSys.Models;
 
-namespace BillingNextSys.PagesDebtor
+namespace BillingNextSys.Pages.Debtor
 {
     public class CreateModel : PageModel
     {
@@ -20,12 +20,12 @@ namespace BillingNextSys.PagesDebtor
 
         public IActionResult OnGet()
         {
-        ViewData["DebtorGroupID"] = new SelectList(_context.DebtorGroup, "DebtorGroupID", "DebtorGroupAddress");
+        ViewData["DebtorGroupID"] = new SelectList(_context.DebtorGroup, "DebtorGroupID", "DebtorGroupName");
             return Page();
         }
 
         [BindProperty]
-        public Debtor Debtor { get; set; }
+        public Models.Debtor Debtor { get; set; }
 
         public async Task<IActionResult> OnPostAsync()
         {

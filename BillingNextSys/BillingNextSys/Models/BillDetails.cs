@@ -30,7 +30,7 @@ namespace BillingNextSys.Models
         public YearInfo? YearInfo { get; set; }
 
         [Required(ErrorMessage = "Please Specify Amount for the respective particulars")]
-        [Display(Name = "Year")]
+        [Display(Name = "Amount")]
         [DataType(DataType.Currency)]
         public double Amount { get; set; }
 

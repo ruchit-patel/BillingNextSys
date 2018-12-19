@@ -36,7 +36,7 @@ namespace BillingNextSys.Pages.DebtorGroup
             {
                 return NotFound();
             }
-           ViewData["BranchID"] = new SelectList(_context.Branch, "BranchID", "BranchAddress");
+           ViewData["BranchID"] = new SelectList(_context.Branch, "BranchID", "BranchName");
             return Page();
         }
 
