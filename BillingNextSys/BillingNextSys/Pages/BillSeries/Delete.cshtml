@@ -1,5 +1,5 @@
 @page
-@model BillingNextSys.PagesBillSeries.DeleteModel
+@model BillingNextSys.Pages.BillSeries.DeleteModel
 
 @{
     ViewData["Title"] = "Delete";
@@ -15,7 +15,7 @@
     </dl>
     
     <form method="post">
-        <input type="hidden" asp-for="BillSeries.SeriesName" />
+        <input  asp-for="BillSeries.SeriesName" />
         <input type="submit" value="Delete" class="btn btn-default" /> |
         <a asp-page="./Index">Back to List</a>
     </form>

@@ -1,5 +1,5 @@
 @page
-@model BillingNextSys.PagesBillSeries.IndexModel
+@model BillingNextSys.Pages.BillSeries.IndexModel
 
 @{
     ViewData["Title"] = "Index";
@@ -13,12 +13,18 @@
 <table class="table">
     <thead>
         <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.BillSeries[0].SeriesName)
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model.BillSeries) {
         <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SeriesName)
+            </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.SeriesName">Edit</a> |
                 <a asp-page="./Details" asp-route-id="@item.SeriesName">Details</a> |

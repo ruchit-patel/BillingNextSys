@@ -1,5 +1,5 @@
 @page
-@model BillingNextSys.PagesBillSeries.DetailsModel
+@model BillingNextSys.Pages.BillSeries.DetailsModel
 
 @{
     ViewData["Title"] = "Details";
@@ -11,6 +11,12 @@
     <h4>BillSeries</h4>
     <hr />
     <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.BillSeries.SeriesName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BillSeries.SeriesName)
+        </dd>
     </dl>
 </div>
 <div>

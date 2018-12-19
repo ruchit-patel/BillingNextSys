@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using BillingNextSys.Models;
 
-namespace BillingNextSys.PagesBillSeries
+namespace BillingNextSys.Pages.BillSeries
 {
     public class CreateModel : PageModel
     {
@@ -24,7 +24,7 @@ namespace BillingNextSys.PagesBillSeries
         }
 
         [BindProperty]
-        public BillSeries BillSeries { get; set; }
+        public Models.BillSeries BillSeries { get; set; }
 
         public async Task<IActionResult> OnPostAsync()
         {
