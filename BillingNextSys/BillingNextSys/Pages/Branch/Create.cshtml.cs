@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using BillingNextSys.Models;
 
-namespace BillingNextSys.PagesBranch
+namespace BillingNextSys.Pages.Branch
 {
     public class CreateModel : PageModel
     {
@@ -20,12 +20,12 @@ namespace BillingNextSys.PagesBranch
 
         public IActionResult OnGet()
         {
-        ViewData["CompanyID"] = new SelectList(_context.Company, "CompanyID", "AccountNumber");
+        ViewData["CompanyID"] = new SelectList(_context.Company, "CompanyID", "CompanyName");
             return Page();
         }
 
         [BindProperty]
-        public Branch Branch { get; set; }
+        public Models.Branch Branch { get; set; }
 
         public async Task<IActionResult> OnPostAsync()
         {

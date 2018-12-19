@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BillingNextSys.Models;
 
-namespace BillingNextSys.PagesBranch
+namespace BillingNextSys.Pages.Branch
 {
     public class EditModel : PageModel
     {
@@ -20,7 +20,7 @@ namespace BillingNextSys.PagesBranch
         }
 
         [BindProperty]
-        public Branch Branch { get; set; }
+        public Models.Branch Branch { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {

@@ -4,14 +4,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BillingNextSys.Models
 {
-    public enum AccountType
-    {
-        [Display(Name = "Current Account")]
-        CurrentAcc,
-
-        [Display(Name = "Saving Account")]
-        SavingAcc
-    }
 
     public class Branch
     {

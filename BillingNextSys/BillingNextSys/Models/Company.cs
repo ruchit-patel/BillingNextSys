@@ -11,6 +11,17 @@ namespace BillingNextSys.Models
         Format1,
         Format2
     }
+
+    public enum AccountType
+    {
+        [Display(Name = "Current Account")]
+        CurrentAcc,
+
+        [Display(Name = "Saving Account")]
+        SavingAcc
+    }
+
+
     public class Company
     {
         public int CompanyID { get; set; }
