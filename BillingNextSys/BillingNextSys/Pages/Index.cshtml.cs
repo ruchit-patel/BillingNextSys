@@ -24,11 +24,11 @@ namespace BillingNextSys.Pages
             ViewData["CompanyList"] = new SelectList(_context.Company, "CompanyID", "CompanyName");
             return Page();
         }
-        public async Task<IActionResult> OnPostAsync()
+        public IActionResult OnPost()
         {
-            int Cid =Convert.ToInt32(Request.Form["Cid"].ToString());
+            int Cid = Convert.ToInt32(Request.Form["Cid"].ToString());
             HttpContext.Session.SetInt32("Cid", Cid);
-            return RedirectToPage("/Branch/Index");
+            return RedirectToPage("/Branch/SelectBranch");
         }
     }
 }
