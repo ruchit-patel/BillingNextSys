@@ -10,49 +10,72 @@
 <h4>DebtorGroup</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-12">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="DebtorGroup.DebtorGroupID" />
-            <div class="form-group">
-                <label asp-for="DebtorGroup.DebtorGroupName" class="control-label"></label>
-                <input asp-for="DebtorGroup.DebtorGroupName" class="form-control" />
-                <span asp-validation-for="DebtorGroup.DebtorGroupName" class="text-danger"></span>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="DebtorGroup.DebtorGroupName" class="control-label"></label>
+                        <input asp-for="DebtorGroup.DebtorGroupName" class="form-control" />
+                        <span asp-validation-for="DebtorGroup.DebtorGroupName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="DebtorGroup.DebtorGroupAddress" class="control-label"></label>
+                        <textarea asp-for="DebtorGroup.DebtorGroupAddress" class="form-control"></textarea>
+                        <span asp-validation-for="DebtorGroup.DebtorGroupAddress" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="DebtorGroup.DebtorGroupAddress" class="control-label"></label>
-                <textarea asp-for="DebtorGroup.DebtorGroupAddress" class="form-control"></textarea>
-                <span asp-validation-for="DebtorGroup.DebtorGroupAddress" class="text-danger"></span>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="DebtorGroup.DebtorGroupMail" class="control-label"></label>
+                        <input asp-for="DebtorGroup.DebtorGroupMail" class="form-control" />
+                        <span asp-validation-for="DebtorGroup.DebtorGroupMail" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="DebtorGroup.DebtorGroupPhoneNumber" class="control-label"></label>
+                        <input asp-for="DebtorGroup.DebtorGroupPhoneNumber" class="form-control" />
+                        <span asp-validation-for="DebtorGroup.DebtorGroupPhoneNumber" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="DebtorGroup.DebtorGroupMail" class="control-label"></label>
-                <input asp-for="DebtorGroup.DebtorGroupMail" class="form-control" />
-                <span asp-validation-for="DebtorGroup.DebtorGroupMail" class="text-danger"></span>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="DebtorGroup.DebtorGroupCity" class="control-label"></label>
+                        <input asp-for="DebtorGroup.DebtorGroupCity" class="form-control" />
+                        <span asp-validation-for="DebtorGroup.DebtorGroupCity" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="DebtorGroup.DebtorGSTIN" class="control-label"></label>
+                        <input asp-for="DebtorGroup.DebtorGSTIN" class="form-control" />
+                        <span asp-validation-for="DebtorGroup.DebtorGSTIN" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="DebtorGroup.DebtorGroupPhoneNumber" class="control-label"></label>
-                <input asp-for="DebtorGroup.DebtorGroupPhoneNumber" class="form-control" />
-                <span asp-validation-for="DebtorGroup.DebtorGroupPhoneNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DebtorGroup.DebtorGroupCity" class="control-label"></label>
-                <input asp-for="DebtorGroup.DebtorGroupCity" class="form-control" />
-                <span asp-validation-for="DebtorGroup.DebtorGroupCity" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DebtorGroup.DebtorGSTIN" class="control-label"></label>
-                <input asp-for="DebtorGroup.DebtorGSTIN" class="form-control" />
-                <span asp-validation-for="DebtorGroup.DebtorGSTIN" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DebtorGroup.DebtorOutstanding" class="control-label"></label>
-                <input asp-for="DebtorGroup.DebtorOutstanding" class="form-control" />
-                <span asp-validation-for="DebtorGroup.DebtorOutstanding" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DebtorGroup.BranchID" class="control-label"></label>
-                <select asp-for="DebtorGroup.BranchID" class="form-control" asp-items="ViewBag.BranchID"></select>
-                <span asp-validation-for="DebtorGroup.BranchID" class="text-danger"></span>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="DebtorGroup.DebtorOutstanding" class="control-label"></label>
+                        <input asp-for="DebtorGroup.DebtorOutstanding" class="form-control" />
+                        <span asp-validation-for="DebtorGroup.DebtorOutstanding" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label">Branch</label>
+                        <select asp-for="DebtorGroup.BranchID" class="form-control" asp-items="ViewBag.BranchID"></select>
+                    </div>
+                </div>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-default" />

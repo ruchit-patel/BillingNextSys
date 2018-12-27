@@ -19,6 +19,13 @@
             @Html.DisplayFor(model => model.Company.CompanyName)
         </dd>
         <dt>
+            Firm Logo
+        </dt>
+        <dd>
+            <img class="img-responsive full-width" src="data:image/png;base64,@Convert.ToBase64String(Model.Company.CompanyLogoImg)" />
+        </dd>
+
+        <dt>
             @Html.DisplayNameFor(model => model.Company.BillFormat)
         </dt>
         <dd>

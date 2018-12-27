@@ -29,7 +29,7 @@ namespace BillingNextSys.Pages.Company
 
         public async Task<IActionResult> OnPostAsync()
         {
-
+            Company.CreationDate = DateTime.Now;
             if (!ModelState.IsValid)
             {
                 return Page();

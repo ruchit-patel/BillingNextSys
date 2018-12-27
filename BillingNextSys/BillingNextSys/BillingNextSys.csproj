@@ -26,5 +26,6 @@
   <Folder Include="Pages\Particulars\" />
   <Folder Include="Pages\Received\" />
   <Folder Include="Pages\BillSeries\" />
+  <Folder Include="Pages\CompanySelect\" />
 </ItemGroup>
 </Project>

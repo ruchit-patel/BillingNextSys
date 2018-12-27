@@ -29,6 +29,7 @@ namespace BillingNextSys.Pages.Branch
 
         public async Task<IActionResult> OnPostAsync()
         {
+            Branch.CreationDate = DateTime.Now;
             if (!ModelState.IsValid)
             {
                 return Page();

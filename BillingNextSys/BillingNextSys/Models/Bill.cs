@@ -112,6 +112,8 @@ namespace BillingNextSys.Models
         public string SeriesName { get; set; }
         public BillSeries BillSeries { get; set; }
 
+        //add a field of issued at branch
+
         public ICollection<BillDetails> BillDetails { get; set; }
     }
 }

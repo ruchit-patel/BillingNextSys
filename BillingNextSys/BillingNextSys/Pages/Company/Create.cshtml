@@ -11,60 +11,84 @@
 <h4>Company</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-12">
         <form enctype="multipart/form-data" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Company.CompanyName" class="control-label"></label>
-                <input asp-for="Company.CompanyName" class="form-control" />
-                <span asp-validation-for="Company.CompanyName" class="text-danger"></span>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Company.CompanyName" class="control-label"></label>
+                        <input asp-for="Company.CompanyName" class="form-control" />
+                        <span asp-validation-for="Company.CompanyName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Company.CompLogo" class="control-label"></label>
+                        <input asp-for="Company.CompLogo" type="file" accept="image/x-png,image/jpeg" class="form-control" required />
+                        <span asp-validation-for="Company.CompLogo" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Company.CompLogo" class="control-label"></label>
-                <input asp-for="Company.CompLogo" type="file" accept="image/x-png,image/jpeg" class="form-control" required />
-                <span asp-validation-for="Company.CompLogo" class="text-danger"></span>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Company.BillFormat" class="control-label"></label>
+                        <select asp-for="Company.BillFormat" class="form-control" asp-items="Html.GetEnumSelectList(typeof(BillFormat))"> </select>
+                        <span asp-validation-for="Company.BillFormat" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Company.GSTIN" class="control-label"></label>
+                        <input asp-for="Company.GSTIN" class="form-control" />
+                        <span asp-validation-for="Company.GSTIN" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Company.BillFormat" class="control-label"></label>
-                <select asp-for="Company.BillFormat" class="form-control" asp-items="Html.GetEnumSelectList(typeof(BillFormat))"> </select>
-                <span asp-validation-for="Company.BillFormat" class="text-danger"></span>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Company.BankName" class="control-label"></label>
+                        <input asp-for="Company.BankName" class="form-control" />
+                        <span asp-validation-for="Company.BankName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Company.AccountType" class="control-label"></label>
+                        <select asp-for="Company.AccountType" class="form-control" asp-items="Html.GetEnumSelectList(typeof(AccountType))"> </select>
+                        <span asp-validation-for="Company.AccountType" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Company.GSTIN" class="control-label"></label>
-                <input asp-for="Company.GSTIN" class="form-control" />
-                <span asp-validation-for="Company.GSTIN" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Company.BankName" class="control-label"></label>
-                <input asp-for="Company.BankName" class="form-control" />
-                <span asp-validation-for="Company.BankName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Company.AccountType" class="control-label"></label>
-                <select asp-for="Company.AccountType" class="form-control" asp-items="Html.GetEnumSelectList(typeof(AccountType))"> </select>
-                <span asp-validation-for="Company.AccountType" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Company.AccountNumber" class="control-label"></label>
-                <input asp-for="Company.AccountNumber" class="form-control" />
-                <span asp-validation-for="Company.AccountNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Company.IFSCcode" class="control-label"></label>
-                <input asp-for="Company.IFSCcode" class="form-control" />
-                <span asp-validation-for="Company.IFSCcode" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Company.PAN" class="control-label"></label>
-                <input asp-for="Company.PAN" class="form-control" />
-                <span asp-validation-for="Company.PAN" class="text-danger"></span>
-            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Company.AccountNumber" class="control-label"></label>
+                        <input asp-for="Company.AccountNumber" class="form-control" />
+                        <span asp-validation-for="Company.AccountNumber" class="text-danger"></span>
+                    </div>
+                 </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Company.IFSCcode" class="control-label"></label>
+                        <input asp-for="Company.IFSCcode" class="form-control" />
+                        <span asp-validation-for="Company.IFSCcode" class="text-danger"></span>
+                    </div>
+                </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Company.PAN" class="control-label"></label>
+                    <input asp-for="Company.PAN" class="form-control" />
+                    <span asp-validation-for="Company.PAN" class="text-danger"></span>
+                </div>
 
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-default" />
+                </div>
 
-        </form>
+</form>
     </div>
 </div>
 
