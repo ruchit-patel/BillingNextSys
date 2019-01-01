@@ -31,5 +31,7 @@ namespace BillingNextSys.Models
         public DbSet<BillingNextSys.Models.Particulars> Particulars { get; set; }
 
         public DbSet<BillingNextSys.Models.BillSeries> BillSeries { get; set; }
+
+        public DbQuery<BillingNextSys.Models.AdHocReturn> AdHocReturns { get; set; }
     }
 }

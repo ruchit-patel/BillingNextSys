@@ -9,7 +9,7 @@ namespace BillingNextSys.Models
         public int DebtorID { get; set; }
 
         [Required(ErrorMessage = "Please Specify Debtor Name"), StringLength(150)]
-        [Display(Name = "Debtor Group Name")]
+        [Display(Name = "Debtor Name")]
         public string DebtorName { get; set; }
 
         [Required(ErrorMessage = "Please Specify Debtor Outstanding Amount. Fill 0 if not outstanding")]

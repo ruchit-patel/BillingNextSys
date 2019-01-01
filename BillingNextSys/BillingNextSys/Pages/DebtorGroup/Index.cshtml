@@ -4,75 +4,424 @@
 @{
     ViewData["Title"] = "Index";
 }
-
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/keymaster/keymaster.js"></script>
 <h2>Index</h2>
 
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
+<br>
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-DebtorG">
+    Add Debtor Info
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="add-DebtorG" tabindex="-1" role="dialog" aria-labelledby="addDebtorG" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addDebtorG">Add Debtor Information</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="dginfo" style="display:block;">
+                    <form id="insertform">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        @Html.AntiForgeryToken()
+                        <div class="form-group">
+                            <label asp-for="DebtorGroup.DebtorGroupName" class="control-label"></label>
+                            <input asp-for="DebtorGroup.DebtorGroupName" id="dname" class="form-control" />
+                            <span asp-validation-for="DebtorGroup.DebtorGroupName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="DebtorGroup.DebtorGroupAddress" class="control-label"></label>
+                            <input asp-for="DebtorGroup.DebtorGroupAddress" id="daddress" class="form-control" />
+                            <span asp-validation-for="DebtorGroup.DebtorGroupAddress" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="DebtorGroup.DebtorGroupMail" class="control-label"></label>
+                            <input asp-for="DebtorGroup.DebtorGroupMail" id="dmail" class="form-control" />
+                            <span asp-validation-for="DebtorGroup.DebtorGroupMail" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="DebtorGroup.DebtorGroupPhoneNumber" class="control-label"></label>
+                            <input asp-for="DebtorGroup.DebtorGroupPhoneNumber" id="dphone" class="form-control" />
+                            <span asp-validation-for="DebtorGroup.DebtorGroupPhoneNumber" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="DebtorGroup.DebtorGroupCity" class="control-label"></label>
+                            <input asp-for="DebtorGroup.DebtorGroupCity" id="dcity" class="form-control" />
+                            <span asp-validation-for="DebtorGroup.DebtorGroupCity" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="DebtorGroup.DebtorGSTIN" class="control-label"></label>
+                            <input asp-for="DebtorGroup.DebtorGSTIN" id="dgstin" class="form-control" />
+                            <span asp-validation-for="DebtorGroup.DebtorGSTIN" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="DebtorGroup.DebtorOutstanding" class="control-label"></label>
+                            <input asp-for="DebtorGroup.DebtorOutstanding" id="doutstand" class="form-control" />
+                            <span asp-validation-for="DebtorGroup.DebtorOutstanding" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Branch</label>
+                            <select asp-for="DebtorGroup.BranchID" id="dbranch" class="form-control" asp-items="ViewBag.BranchID"></select>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="row" id="doptions" style="display:none;">
+                    <div class="col-md-6"><button id="indideb" onclick="showdmodal();" class="btn btn-lg btn-primary">Add Individual Debtors Information (Ctrl+1)</button></div>
+                    <div class="col-md-6"><button id="newdeb" onclick="showdgmodal();" class="btn btn-lg btn-primary">Add New Debtors Information (Ctrl+2) </button></div>
+                </div>
+                <div id="debtorindi" style="display:none;">
+
+                    <form>
+                        @Html.AntiForgeryToken()
+                        <div id="manupulation">
+                            <div class="row">
+                                <div class="col-md-7 form-group">
+
+                                    <input id="dnames" asp-for="Debtor.DebtorName" placeholder="Debtor Name" class="form-control" />
+                                    <span asp-validation-for="Debtor.DebtorName" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-4 form-group">
+
+                                    <input id="doutstands" asp-for="Debtor.DebtorOutstanding" placeholder="Debtor Outstanding Amount" class="form-control" />
+                                    <span asp-validation-for="Debtor.DebtorOutstanding" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-1">
+                                    <button id="saved" type="button"><img src="~/images/add.svg" alt="Add" class="img-rounded" width="20px" height="30px"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+                <div id="msg"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="insert">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.DebtorGroup[0].DebtorGroupName)
+                @Html.DisplayNameFor(model => model.DebtorGroups[0].DebtorGroupName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DebtorGroup[0].DebtorGroupAddress)
+                @Html.DisplayNameFor(model => model.DebtorGroups[0].DebtorGroupAddress)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DebtorGroup[0].DebtorGroupMail)
+                @Html.DisplayNameFor(model => model.DebtorGroups[0].DebtorGroupMail)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DebtorGroup[0].DebtorGroupPhoneNumber)
+                @Html.DisplayNameFor(model => model.DebtorGroups[0].DebtorGroupPhoneNumber)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DebtorGroup[0].DebtorGroupCity)
+                @Html.DisplayNameFor(model => model.DebtorGroups[0].DebtorGroupCity)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DebtorGroup[0].DebtorGSTIN)
+                @Html.DisplayNameFor(model => model.DebtorGroups[0].DebtorGSTIN)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DebtorGroup[0].DebtorOutstanding)
+                @Html.DisplayNameFor(model => model.DebtorGroups[0].DebtorOutstanding)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DebtorGroup[0].Branch)
+                @Html.DisplayNameFor(model => model.DebtorGroups[0].Branch)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.DebtorGroup) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.DebtorGroupName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DebtorGroupAddress)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DebtorGroupMail)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DebtorGroupPhoneNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DebtorGroupCity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DebtorGSTIN)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DebtorOutstanding)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Branch.BranchAddress)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.DebtorGroupID">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.DebtorGroupID">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.DebtorGroupID">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.DebtorGroups)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DebtorGroupName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DebtorGroupAddress)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DebtorGroupMail)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DebtorGroupPhoneNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DebtorGroupCity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DebtorGSTIN)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DebtorOutstanding)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Branch.BranchName)
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.DebtorGroupID">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.DebtorGroupID">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.DebtorGroupID">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+
+<script>
+    var insid=0;
+        var num = 1;
+    $("#insert").click(function () {
+
+    var options = {};
+    options.url = "/DebtorGroup/Index?handler=Insert";
+    options.type = "POST";
+
+    @*var myData = $('#insertform').serializeArray();*@
+
+    var obj = {};
+    obj.DebtorGroupName = $("#dname").val();
+    obj.DebtorGroupAddress = $("#daddress").val();
+    obj.DebtorGroupMail = $("#dmail").val();
+    obj.DebtorGroupPhoneNumber = $("#dphone").val();
+    obj.DebtorGroupCity = $("#dcity").val();
+    obj.DebtorGSTIN = $("#dgstin").val();
+    obj.DebtorOutstanding = $("#doutstand").val();
+    obj.BranchID = $("#dbranch").val();
+
+
+    @*$.ajax({
+                url: 'DebtorGroup/Index?handler=Insert',
+                type: 'POST',
+                datatype: 'JSON',
+                data:  { myData:  JSON.stringify(myData)},
+                cache: false,
+                // contentType: 'application;text;charset=UTF-8',
+
+                beforeSend :  function (xhr) {
+        xhr.setRequestHeader("MY-XSRF-TOKEN",
+$('input:hidden[name="__RequestVerificationToken"]').val());
+    },
+
+                success: function (msg) {
+     $("#msg").html(msg);
+                },
+                error: function (e) {
+                    alert('error');
+                }
+            });*@
+
+
+    options.data = JSON.stringify(obj);
+    options.contentType = "application/json; charset=utf-8";
+    options.dataType = "json";
+
+    options.beforeSend = function (xhr) {
+        xhr.setRequestHeader("MY-XSRF-TOKEN",
+$('input:hidden[name="__RequestVerificationToken"]').val());
+    };
+    options.success = function (msg) {
+        var n=msg.indexOf("!");
+        insid=msg.substr(n+1);
+        var fmsg=msg.substr(0,n+1);
+
+    if (fmsg=="Debtor Added Successfully!")
+  {
+
+     document.getElementById("msg").classList.add("alert");
+     document.getElementById("msg").classList.add("alert-success");
+    $("#msg").html(fmsg);
+    document.getElementById("dginfo").style.display = "none";
+    document.getElementById("doptions").style.display = "block";
+     key('ctrl+1', function(){ document.getElementById("indideb").click(); return false });
+     key('ctrl+2', function(){ document.getElementById("newdeb").click(); return false });
+     setTimeout(function() {
+    $('#msg').fadeOut('fast');
+}, 1000);
+  }
+  else {
+     document.getElementById("msg").classList.add("alert");
+    document.getElementById("msg").classList.add("alert-danger");
+    $("#msg").html(fmsg);
+    setTimeout(function() {
+    $('#msg').fadeOut('fast');
+}, 1000);
+  }
+
+    };
+    options.error = function () {
+        $("#msg").html("Error while making Ajax call!");
+    };
+    $.ajax(options);
+});
+
+function showdgmodal()
+{
+    document.getElementById("dginfo").style.display = "block";
+    document.getElementById("doptions").style.display = "none";
+      document.getElementById("debtorindi").style.display = "none";
+}
+    function showdmodal()
+    {
+     document.getElementById("dginfo").style.display = "none";
+     document.getElementById("doptions").style.display = "none";
+    document.getElementById("debtorindi").style.display = "block";
+    }
+
+
+    $("#saved").click(function (e) {
+     e.preventDefault();
+    var options = {};
+    options.url = "/DebtorGroup/Index?handler=InsertD";
+    options.type = "POST";
+
+    @*var myData = $('#insertform').serializeArray();*@
+
+    var obj = {};
+    obj.DebtorName = $("#dnames").val();
+    obj.DebtorOutstanding = $("#doutstands").val();
+    obj.DebtorGroupID = insid;
+
+
+    @*$.ajax({
+                url: 'DebtorGroup/Index?handler=Insert',
+                type: 'POST',
+                datatype: 'JSON',
+                data:  { myData:  JSON.stringify(myData)},
+                cache: false,
+                // contentType: 'application;text;charset=UTF-8',
+
+                beforeSend :  function (xhr) {
+        xhr.setRequestHeader("MY-XSRF-TOKEN",
+$('input:hidden[name="__RequestVerificationToken"]').val());
+    },
+
+                success: function (msg) {
+     $("#msg").html(msg);
+                },
+                error: function (e) {
+                    alert('error');
+                }
+            });*@
+
+
+    options.data = JSON.stringify(obj);
+    options.contentType = "application/json; charset=utf-8";
+    options.dataType = "json";
+
+    options.beforeSend = function (xhr) {
+        xhr.setRequestHeader("MY-XSRF-TOKEN",
+$('input:hidden[name="__RequestVerificationToken"]').val());
+    };
+    options.success = function (msg) {
+    if (msg=="Individual Debtor Added Successfully!")
+  {
+
+     document.getElementById("msg").classList.add("alert");
+     document.getElementById("msg").classList.add("alert-success");
+
+addInput();
+
+    $("#msg").html(msg);
+     $("#msg").show(1000);
+    $("#msg").hide(2000);
+
+  }
+  else {
+     document.getElementById("msg").classList.add("alert");
+    document.getElementById("msg").classList.add("alert-danger");
+
+       $("#msg").html(msg);
+       $("#msg").show(1000);
+    $("#msg").hide(2000);
+
+  }
+
+    };
+    options.error = function () {
+
+     document.getElementById("msg").classList.add("alert");
+    document.getElementById("msg").classList.add("alert-danger");
+    $("#msg").html("<strong>Error.</strong> Couldn't add record");
+     $("#msg").show(1000);
+     $("#msg").hide(2000);
+    };
+    $.ajax(options);
+});
+
+    function addInput(){
+var newInput = '<div class="row"><div class="col-md-7 form-group"> <input id="dnames'+num+'" asp-for="Debtor.DebtorName" placeholder="Debtor Name" class="form-control" /> <span asp-validation-for="Debtor.DebtorName" class="text-danger"></span></div><div class="col-md-4 form-group"> <input id="doutstands'+num+'" asp-for="Debtor.DebtorOutstanding" placeholder="Debtor Outstanding Amount" class="form-control" /><span asp-validation-for="Debtor.DebtorOutstanding" class="text-danger"></span></div><div class="col-md-1"><button type="button" id="saved'+num+'" onclick="saveddetails(document.getElementById(\'dnames'+num+'\').value,document.getElementById(\'doutstands'+num+'\').value,insid);" ><img src="images/add.svg" alt="Add" class="img-rounded" width="20px" height="30px"></button></div></div>';
+   document.getElementById('manupulation').innerHTML += newInput;
+   num++;
+}
+    function saveddetails(dname,doutstanding,inid)
+    {
+    var options = {};
+    options.url = "/DebtorGroup/Index?handler=InsertD";
+    options.type = "POST";
+
+    @*var myData = $('#insertform').serializeArray();*@
+
+    var obj = {};
+    obj.DebtorName = dname;
+    obj.DebtorOutstanding = doutstanding;
+    obj.DebtorGroupID = inid;
+
+
+    options.data = JSON.stringify(obj);
+    options.contentType = "application/json; charset=utf-8";
+    options.dataType = "json";
+
+    options.beforeSend = function (xhr) {
+        xhr.setRequestHeader("MY-XSRF-TOKEN",
+$('input:hidden[name="__RequestVerificationToken"]').val());
+    };
+    options.success = function (msg) {
+    if (msg=="Individual Debtor Added Successfully!")
+  {
+
+     document.getElementById("msg").classList.add("alert");
+     document.getElementById("msg").classList.add("alert-success");
+
+addInput();
+
+    $("#msg").html(msg);
+     $("#msg").show(1000);
+    $("#msg").hide(2000);
+
+  }
+  else {
+     document.getElementById("msg").classList.add("alert");
+    document.getElementById("msg").classList.add("alert-danger");
+
+       $("#msg").html(msg);
+       $("#msg").show(1000);
+    $("#msg").hide(2000);
+
+  }
+
+    };
+    options.error = function () {
+
+     document.getElementById("msg").classList.add("alert");
+    document.getElementById("msg").classList.add("alert-danger");
+    $("#msg").html("<strong>Error.</strong> Couldn't add record");
+     $("#msg").show(1000);
+     $("#msg").hide(2000);
+    };
+    $.ajax(options);
+    }
+</script>
