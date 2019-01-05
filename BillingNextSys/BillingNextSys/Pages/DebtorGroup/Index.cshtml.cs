@@ -29,6 +29,7 @@ namespace BillingNextSys.Pages.DebtorGroup
         public Models.Debtor Debtor { get; set; }
 
         public IList<Models.DebtorGroup> DebtorGroups { get;set; }
+        public IList<Models.Debtor> Debtors { get; set; }
 
         public async Task OnGetAsync()
         {
@@ -37,7 +38,7 @@ namespace BillingNextSys.Pages.DebtorGroup
             DebtorGroups = await _context.DebtorGroup
                 .Include(d => d.Branch).ToListAsync();
 
-
+            Debtors = await _context.Debtor.ToListAsync();
         }
         //public async Task<IActionResult> OnPostAsync()
         //{
@@ -69,5 +70,57 @@ namespace BillingNextSys.Pages.DebtorGroup
             _context.SaveChanges();
             return new JsonResult("Individual Debtor Added Successfully!");
         }
+        public IActionResult OnGetSelectAll(int id)
+        {
+            List<Models.Debtor> data = _context.Debtor.Where(a => a.DebtorGroupID.Equals(id)).ToList();
+            return new JsonResult(data);
+        }
+
+        public IActionResult OnGetAllDebtorG()
+        {
+            List<Models.DebtorGroup> data = _context.DebtorGroup.ToList();
+            return new JsonResult(data);
+        }
+
+        public IActionResult OnDeleteDeleteDebtor(int id)
+        {
+            Debtor = _context.Debtor.Find(id);
+
+            if (Debtor != null)
+            {
+                _context.Debtor.Remove(Debtor);
+                 _context.SaveChangesAsync();
+                return new JsonResult("Deleted Success");
+            }
+            return new JsonResult("Delete Unsuccess");
+        }
+
+        public IActionResult OnPutUpdate(int id, [FromBody]Models.Debtor obj)
+        {
+            _context.Attach(obj).State = EntityState.Modified;
+
+            try
+            {
+                 _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!DebtorExists(obj.DebtorID))
+                {
+             
+                    return new JsonResult("Debtor Update Error!");
+                }
+                else
+                {
+                    return new JsonResult("Debtor Update Error!");
+                }
+            }
+            return new JsonResult("Debtor Information Updated!");
+        }
+        private bool DebtorExists(int id)
+        {
+            return _context.Debtor.Any(e => e.DebtorID == id);
+        }
+
     }
 }

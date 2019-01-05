@@ -6,6 +6,14 @@
 }
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/lib/keymaster/keymaster.js"></script>
+@*<!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.13.1/bootstrap-table.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.13.1/bootstrap-table.min.js"></script>
+
+    <!-- Latest compiled and minified Locales -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.13.1/locale/bootstrap-table-en-US.min.js"></script>*@
 <h2>Index</h2>
 
 <br>
@@ -71,18 +79,34 @@
 
                     </form>
                 </div>
+
+                <div id="showdet" style="display:none;">
+                    <h2 id="tabname">(Name of Debtor Group)</h2>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Outstanding Amount</th>
+                                <th>Options</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rowbody"></tbody>
+                    </table>
+                </div>
+
                 <div class="row" id="doptions" style="display:none;">
                     <div class="col-md-6"><button id="indideb" onclick="showdmodal();" class="btn btn-lg btn-primary">Add Individual Debtors Information (Ctrl+1)</button></div>
                     <div class="col-md-6"><button id="newdeb" onclick="showdgmodal();" class="btn btn-lg btn-primary">Add New Debtors Information (Ctrl+2) </button></div>
                 </div>
                 <div id="debtorindi" style="display:none;">
 
-                    <form>
+                    <form id="indiform">
                         @Html.AntiForgeryToken()
                         <div id="manupulation">
                             <div class="row">
+                                
                                 <div class="col-md-7 form-group">
-
+                                    <input type="hidden" id="didorg" />
                                     <input id="dnames" asp-for="Debtor.DebtorName" placeholder="Debtor Name" class="form-control" />
                                     <span asp-validation-for="Debtor.DebtorName" class="text-danger"></span>
                                 </div>
@@ -99,6 +123,7 @@
                     </form>
 
                 </div>
+
                 <div id="msg"></div>
             </div>
             <div class="modal-footer">
@@ -108,80 +133,533 @@
         </div>
     </div>
 </div>
-<br>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.DebtorGroups[0].DebtorGroupName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DebtorGroups[0].DebtorGroupAddress)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DebtorGroups[0].DebtorGroupMail)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DebtorGroups[0].DebtorGroupPhoneNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DebtorGroups[0].DebtorGroupCity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DebtorGroups[0].DebtorGSTIN)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DebtorGroups[0].DebtorOutstanding)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DebtorGroups[0].Branch)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.DebtorGroups)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DebtorGroupName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DebtorGroupAddress)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DebtorGroupMail)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DebtorGroupPhoneNumber)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DebtorGroupCity)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DebtorGSTIN)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DebtorOutstanding)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Branch.BranchName)
-                </td>
-                <td>
-                    <a asp-page="./Edit" asp-route-id="@item.DebtorGroupID">Edit</a> |
-                    <a asp-page="./Details" asp-route-id="@item.DebtorGroupID">Details</a> |
-                    <a asp-page="./Delete" asp-route-id="@item.DebtorGroupID">Delete</a>
-                </td>
-            </tr>
+
+
+<!-- Modal -->
+<div class="modal" id="my_modal" tabindex='-1'>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Debtor Details</h4>
+            </div>
+
+            <div id="showdetails" style="padding:5px;">
+                <h2 id="tabname1">(Name of Debtor Group)</h2>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Outstanding Amount</th>
+                            <th>Options</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rowbody1"></tbody>
+                </table>
+            </div>
+            <div id="debtorindividual" style="padding:5px;">
+
+                <form id="indidet">
+                    @Html.AntiForgeryToken()
+                    <div id="manupulationdoin">
+                        <div class="row">
+                            <div class="col-md-7 form-group">
+                                <input type="hidden" id="dId" />
+                                <input id="dnamess" asp-for="Debtor.DebtorName" placeholder="Debtor Name" class="form-control" />
+                                <span asp-validation-for="Debtor.DebtorName" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-4 form-group">
+
+                                <input id="doutstandss" asp-for="Debtor.DebtorOutstanding" placeholder="Debtor Outstanding Amount" class="form-control" />
+                                <span asp-validation-for="Debtor.DebtorOutstanding" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-1">
+                                <button id="savedall" type="button"><img src="~/images/add.svg" alt="Add" class="img-rounded" width="20px" height="30px"></button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div id="msg1"></div>
+            @*<div class="modal-body">
+                    <p>some content</p>
+                    <input type="text" name="bookId" value="" />
+                </div>*@
+            <div class="modal-footer">
+                <button type="button" id="closedet" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal" id="modal_edit" tabindex='-1'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Edit Individual Debtor</h4>
+            </div>
+
+            <div id="debtorindividualedit">
+
+                <form id="indidetedit">
+                    @Html.AntiForgeryToken()
+                    <div id="manupulationdoinedit" style="padding:5px;">
+                        <div class="form-group">
+                            <input type="hidden" id="dIdedit" />
+                            <label for="dnamessedit">Name Of Individual Debtor</label>
+                            <input id="dnamessedit" asp-for="Debtor.DebtorName" placeholder="Debtor Name" class="form-control" />
+                            <span asp-validation-for="Debtor.DebtorName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="doutstandssedit">Individual Debtor Outstanding</label>
+                            <input id="doutstandssedit" asp-for="Debtor.DebtorOutstanding" placeholder="Debtor Outstanding Amount" class="form-control" />
+                            <span asp-validation-for="Debtor.DebtorOutstanding" class="text-danger"></span>
+                        </div>
+                        <div>
+                            <button class="btn btn-primary" id="savedalledit" type="button">Update</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div id="msg2"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<br /><br />
+
+@(Html
+                                                                    .Grid(Model.DebtorGroups)
+                                                                    .Build(columns =>
+                                                                    {
+                                                                        columns.Add(model => model.DebtorGroupName).Titled("Debtor Group Name");
+                                                                        columns.Add(model => model.DebtorOutstanding).Titled("Outstanding Amount");
+                                                                        columns.Add(model => model.DebtorGroupAddress).Titled("Debtor Group Address");
+                                                                        columns.Add(model => model.DebtorGroupPhoneNumber).Titled("Debtor Group Phone Number");
+                                                                        columns.Add(model => model.DebtorGSTIN).Titled("Debtor GSTIN");
+                                                                        columns.Add(model => model.DebtorGroupMail).Titled("Mail Id");
+                                                                        columns.Add(model => model.DebtorGroupCity).Titled("City");
+                                                                        columns.Add(model => model.DebtorGroupID).Titled("Options").Encoded(false).RenderedAs(model => "<a href='/DebtorGroup/Edit?id=" + model.DebtorGroupID + "'>Edit</a> | <a href='#my_modal' data-toggle='modal' data-did='" + model.DebtorGroupID + "' data-dname='" + model.DebtorGroupName + "' >More Details</a> | <a href='/DebtorGroup/Delete?id=" + model.DebtorGroupID + "'>Delete</a>");
+                                                                    })
+
+                                                                    .Empty("No data found")
+                                                                    .Filterable()
+                                                                    .Sortable()
+                                                                    .Pageable()
+                                                                    .Css("table-hover") // Overwrites all classes with the new ones
+
+)
+      <script>
+    var didoo;
+          $(document).ready(function() {
+    $('#my_modal').on('show.bs.modal', function(e) {
+    var dId = $(e.relatedTarget).data('did');
+           var dname = $(e.relatedTarget).data('dname');
+          $("#dId").val(dId);
+
+          displaymoredetails(dId,dname);
+});
+    $('#modal_edit').on('show.bs.modal', function(e) {
+    var dId = $(e.relatedTarget).data('did');
+           var dname = $(e.relatedTarget).data('dname');
+           var doutstan = $(e.relatedTarget).data('doutstan');
+          $("#dIdedit").val(dId);
+           didoo=$(e.relatedTarget).data('dgid');
+          $("#dnamessedit").val(dname);
+          $("#doutstandssedit").val(doutstan);
+});
+          });
+      </script>
+@*<div id="toolbar">
+        <button id="remove" class="btn btn-danger" disabled>
+            <i class="glyphicon glyphicon-remove"></i> Delete
+        </button>
+    </div>
+    <table id="table"
+           data-toolbar="#toolbar"
+           data-search="true"
+           data-show-refresh="true"
+           data-show-toggle="true"
+           data-show-columns="true"
+           data-show-export="true"
+           data-detail-view="true"
+           data-detail-formatter="detailFormatter"
+           data-minimum-count-columns="2"
+           data-show-pagination-switch="true"
+           data-pagination="true"
+           data-id-field="id"
+           data-page-list="[10, 25, 50, 100, ALL]"
+           data-side-pagination="client"
+           data-url="https://localhost:5001/DebtorGroup/Index?handler=AllDebtorG"
+           data-response-handler="responseHandler">
+
+           </table>
+    <script>
+        const $table = $('#table');
+    const $remove = $('#remove');
+    let selections = [];
+
+    function initTable() {
+      $table.bootstrapTable({
+        height: getHeight(),
+        columns: [
+          [
+            {
+              field: 'state',
+              checkbox: true,
+              rowspan: 2,
+              align: 'center',
+              valign: 'middle'
+            }, {
+              title: 'Debtor ID',
+              field: 'debtorGroupID',
+              rowspan: 2,
+              align: 'center',
+              valign: 'middle',
+              sortable: true
+            }, {
+              title: 'Item Detail',
+              colspan: 3,
+              align: 'center'
+            }
+          ],
+          [
+            {
+              field: 'debtorGroupName',
+              title: 'Debtor Name',
+              sortable: true,
+              editable: true,
+              align: 'center'
+            }, {
+              field: 'debtorGroupAddress',
+              title: 'Address',
+              sortable: true,
+              align: 'center',
+              editable: {
+                type: 'text',
+                title: 'Item Price',
+                validate(value) {
+                  value = $.trim(value);
+                  if (!value) {
+                    return 'This field is required';
+                  }
+                  if (!/^\$/.test(value)) {
+                    return 'This field needs to start width $.'
+                  }
+                  const data = $table.bootstrapTable('getData');
+                  const index = $(this).parents('tr').data('index');
+                  console.log(data[index]);
+                  return '';
+                }
+              },
+              footerFormatter: totalPriceFormatter
+            }, {
+              field: 'operate',
+              title: 'Item Operate',
+              align: 'center',
+              events: operateEvents,
+              formatter: operateFormatter
+            }
+          ]
+        ]
+      });
+      // sometimes footer render error.
+      setTimeout(() => {
+        $table.bootstrapTable('resetView');
+      }, 200);
+      $table.on('check.bs.table uncheck.bs.table ' +
+                'check-all.bs.table uncheck-all.bs.table', () => {
+        $remove.prop('disabled', !$table.bootstrapTable('getSelections').length);
+
+        // save your data, here just save the current page
+        selections = getIdSelections();
+        // push or splice the selections if you want to save all data selections
+      });
+      $table.on('expand-row.bs.table', (e, index, row, $detail) => {
+        if (index < -1) {
+          $detail.html('Loading from ajax request...');
+          $.get('LICENSE', res => {
+            $detail.html(res.replace(/\n/g, '<br>'));
+          });
         }
-    </tbody>
-</table>
+      });
+      $table.on('all.bs.table', (e, name, args) => {
+        console.log(name, args);
+      });
+      $remove.click(() => {
+        const ids = getIdSelections();
+        $table.bootstrapTable('remove', {
+          field: 'debtorGroupID',
+          values: ids
+        });
+        $remove.prop('disabled', true);
+      });
+      $(window).resize(() => {
+        $table.bootstrapTable('resetView', {
+          height: getHeight()
+        });
+      });
+    }
+
+
+
+    function getIdSelections() {
+      return $.map($table.bootstrapTable('getSelections'), ({id}) => id);
+    }
+
+    function responseHandler(res) {
+      $.each(res.rows, (i, row) => {
+        row.state = $.inArray(row.id, selections) !== -1;
+      });
+      return res;
+    }
+
+    function detailFormatter(index, row) {
+      const html = [];
+      $.each(row, (key, value) => {
+        html.push(`<p><b>${key}:</b> ${value}</p>`);
+      });
+      return html.join('');
+    }
+
+    function operateFormatter(value, row, index) {
+      return [
+        '<a class="like" href="javascript:void(0)" title="Like">',
+        '<i class="glyphicon glyphicon-heart"></i>',
+        '</a>  ',
+        '<a class="remove" href="javascript:void(0)" title="Remove">',
+        '<i class="glyphicon glyphicon-remove"></i>',
+        '</a>'
+      ].join('');
+    }
+
+    window.operateEvents = {
+      'click .like': function (e, value, row, index) {
+        alert(`You click like action, row: ${JSON.stringify(row)}`);
+      },
+      'click .remove': function(e, value, {id}, index) {
+        $table.bootstrapTable('remove', {
+          field: 'debtorGroupID',
+          values: [id]
+        });
+      }
+    };
+
+    function totalPriceFormatter(data) {
+      let total = 0;
+      $.each(data, (i, {price}) => {
+        total += +(price.substring(1));
+      });
+      return `$${total}`;
+    }
+
+    function getHeight() {
+      return $(window).height() - $('h1').outerHeight(true);
+    }
+
+    $(() => {
+        initTable();
+    })
+    </script>*@
+@*<table id="table"
+                 data-detail-view="true">
+              <thead>
+                  <tr>
+                      <th data-field="id">ID</th>
+                      <th data-field="name">Item Name</th>
+                      <th data-field="price">Item Price</th>
+                  </tr>
+              </thead>
+          </table>
+          <script>
+        var $table = $('#table');
+
+    $(function () {
+      buildTable($table, 7, 1);
+
+    });
+
+    function expandTable($detail, cells) {
+      buildTable($detail.html('<table></table>').find('table'), cells, 1);
+
+    }
+
+    function buildTable($el, cells, rows) {
+      var i, j, row,
+          columns = [],
+          data = [];
+
+
+        columns.push({
+          field: 'field' + i,
+          title: 'Debtor Name',
+          sortable: true
+        },
+        {
+               field: 'field' + i,
+          title: 'Debtor Outstanding Amount',
+          sortable: true
+        },
+        {
+               field: 'field' + i,
+          title: 'Debtor GSTIN',
+          sortable: true
+        }
+        );
+
+
+      for (i = 0; i < rows; i++) {
+        row = {};
+        for (j = 0; j < cells; j++) {
+
+                   var options = {};
+        options.url = "/DebtorGroup/Index?handler=AllDebtorG";
+        options.type = "GET";
+        options.dataType = "json";
+        options.success = function (data) {
+
+               data.forEach(function (element) {
+              alert(element.debtorName);
+              row['field' + j] =element.debtorName;
+
+               });
+        };
+        options.error = function () {
+            alert("Error while making Ajax call!");
+        };
+        $.ajax(options);
+
+
+               }
+
+        }
+        data.push(row);
+
+      $el.bootstrapTable({
+        columns: columns,
+        data: data,
+        detailView: cells > 1,
+        onExpandRow: function (index, row, $detail) {
+          expandTable($detail, cells - 1);
+        }
+      });
+              }         </script>*@
+
+@*<table class="table table-hover" data-toggle="table" data-pagination="true" data-search="true">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.DebtorGroups[0].DebtorGroupName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DebtorGroups[0].DebtorGroupAddress)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DebtorGroups[0].DebtorGroupMail)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DebtorGroups[0].DebtorGroupPhoneNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DebtorGroups[0].DebtorGroupCity)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DebtorGroups[0].DebtorGSTIN)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DebtorGroups[0].DebtorOutstanding)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DebtorGroups[0].Branch)
+                </th>
+                <th></th>
+            </tr>
+
+        </thead>
+        <tbody>
+            @foreach (var item in Model.DebtorGroups)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DebtorGroupName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DebtorGroupAddress)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DebtorGroupMail)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DebtorGroupPhoneNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DebtorGroupCity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DebtorGSTIN)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DebtorOutstanding)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Branch.BranchName)
+                    </td>
+                    <td>
+                        <a asp-page="./Edit" asp-route-id="@item.DebtorGroupID">Edit</a> |
+                        <a asp-page="./Details" asp-route-id="@item.DebtorGroupID">Details</a> |
+                        <a asp-page="./Delete" asp-route-id="@item.DebtorGroupID">Delete</a>
+                    </td>
+
+
+                <tr>
+                    <td>
+                        <table class="table table-hover">
+                            @{int counter = 0;}
+                            @foreach (var ditem in Model.Debtors)
+                            {
+
+                                @if (ditem.DebtorGroupID == item.DebtorGroupID)
+                                {
+                                    @if (counter == 0)
+                                    {
+
+                                        <tr>
+                                            <th></th>
+                                            <th>@Html.DisplayNameFor(model => model.Debtors[0].DebtorName)</th>
+                                            <th>@Html.DisplayNameFor(model => model.Debtors[0].DebtorOutstanding)</th>
+                                        </tr>
+                                        counter++;
+                                    }
+
+                                    <tr>
+                                        <td></td>
+                                        <td>@Html.DisplayFor(modelItem => ditem.DebtorName)</td>
+                                        <td>@Html.DisplayFor(modelItem => ditem.DebtorOutstanding) </td>
+                                    </tr>
+                                }
+                            }
+                        </table>
+                    </td>
+                </tr>
+                </tr>
+            }
+        </tbody>
+    </table>*@
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
 
 
-<script>
+      <script>
+
+    var tabname="";
     var insid=0;
         var num = 1;
     $("#insert").click(function () {
@@ -240,30 +718,39 @@ $('input:hidden[name="__RequestVerificationToken"]').val());
 
     if (fmsg=="Debtor Added Successfully!")
   {
-
+    tabname=obj.DebtorGroupName;
      document.getElementById("msg").classList.add("alert");
      document.getElementById("msg").classList.add("alert-success");
     $("#msg").html(fmsg);
+     document.getElementById("insert").style.display = "none";
+     $("#didorg").val(insid);
+     $(':input','#insertform')
+  .not(':button, :submit, :reset, :hidden')
+  .val('')
+  .prop('checked', false)
+  .prop('selected', false);
     document.getElementById("dginfo").style.display = "none";
     document.getElementById("doptions").style.display = "block";
      key('ctrl+1', function(){ document.getElementById("indideb").click(); return false });
      key('ctrl+2', function(){ document.getElementById("newdeb").click(); return false });
-     setTimeout(function() {
-    $('#msg').fadeOut('fast');
-}, 1000);
+    $("#msg").show(1000);
+     $("#msg").hide(2000);
   }
   else {
      document.getElementById("msg").classList.add("alert");
     document.getElementById("msg").classList.add("alert-danger");
     $("#msg").html(fmsg);
-    setTimeout(function() {
-    $('#msg').fadeOut('fast');
-}, 1000);
+       $("#msg").show(1000);
+     $("#msg").hide(2000);
   }
 
     };
     options.error = function () {
+    document.getElementById("msg").classList.add("alert");
+    document.getElementById("msg").classList.add("alert-danger");
         $("#msg").html("Error while making Ajax call!");
+    $("#msg").show(1000);
+     $("#msg").hide(2000);
     };
     $.ajax(options);
 });
@@ -273,12 +760,16 @@ function showdgmodal()
     document.getElementById("dginfo").style.display = "block";
     document.getElementById("doptions").style.display = "none";
       document.getElementById("debtorindi").style.display = "none";
+    document.getElementById("showdet").style.display = "none";
+     document.getElementById("insert").style.display = "inline-block";
 }
     function showdmodal()
     {
+     document.getElementById("insert").style.display = "none";
      document.getElementById("dginfo").style.display = "none";
      document.getElementById("doptions").style.display = "none";
     document.getElementById("debtorindi").style.display = "block";
+
     }
 
 
@@ -296,28 +787,6 @@ function showdgmodal()
     obj.DebtorGroupID = insid;
 
 
-    @*$.ajax({
-                url: 'DebtorGroup/Index?handler=Insert',
-                type: 'POST',
-                datatype: 'JSON',
-                data:  { myData:  JSON.stringify(myData)},
-                cache: false,
-                // contentType: 'application;text;charset=UTF-8',
-
-                beforeSend :  function (xhr) {
-        xhr.setRequestHeader("MY-XSRF-TOKEN",
-$('input:hidden[name="__RequestVerificationToken"]').val());
-    },
-
-                success: function (msg) {
-     $("#msg").html(msg);
-                },
-                error: function (e) {
-                    alert('error');
-                }
-            });*@
-
-
     options.data = JSON.stringify(obj);
     options.contentType = "application/json; charset=utf-8";
     options.dataType = "json";
@@ -329,11 +798,14 @@ $('input:hidden[name="__RequestVerificationToken"]').val());
     options.success = function (msg) {
     if (msg=="Individual Debtor Added Successfully!")
   {
-
+    $(':input','#indiform')
+  .not(':button, :submit, :reset, :hidden')
+  .val('')
+  .prop('checked', false)
+  .prop('selected', false);
      document.getElementById("msg").classList.add("alert");
      document.getElementById("msg").classList.add("alert-success");
-
-addInput();
+     displaydetails(insid);
 
     $("#msg").html(msg);
      $("#msg").show(1000);
@@ -362,18 +834,16 @@ addInput();
     $.ajax(options);
 });
 
-    function addInput(){
+    @*function addInput(){
 var newInput = '<div class="row"><div class="col-md-7 form-group"> <input id="dnames'+num+'" asp-for="Debtor.DebtorName" placeholder="Debtor Name" class="form-control" /> <span asp-validation-for="Debtor.DebtorName" class="text-danger"></span></div><div class="col-md-4 form-group"> <input id="doutstands'+num+'" asp-for="Debtor.DebtorOutstanding" placeholder="Debtor Outstanding Amount" class="form-control" /><span asp-validation-for="Debtor.DebtorOutstanding" class="text-danger"></span></div><div class="col-md-1"><button type="button" id="saved'+num+'" onclick="saveddetails(document.getElementById(\'dnames'+num+'\').value,document.getElementById(\'doutstands'+num+'\').value,insid);" ><img src="images/add.svg" alt="Add" class="img-rounded" width="20px" height="30px"></button></div></div>';
    document.getElementById('manupulation').innerHTML += newInput;
    num++;
-}
-    function saveddetails(dname,doutstanding,inid)
+}*@
+    @*function saveddetails(dname,doutstanding,inid)
     {
     var options = {};
     options.url = "/DebtorGroup/Index?handler=InsertD";
     options.type = "POST";
-
-    @*var myData = $('#insertform').serializeArray();*@
 
     var obj = {};
     obj.DebtorName = dname;
@@ -395,8 +865,7 @@ $('input:hidden[name="__RequestVerificationToken"]').val());
 
      document.getElementById("msg").classList.add("alert");
      document.getElementById("msg").classList.add("alert-success");
-
-addInput();
+    displaydetails(inid);
 
     $("#msg").html(msg);
      $("#msg").show(1000);
@@ -423,5 +892,211 @@ addInput();
      $("#msg").hide(2000);
     };
     $.ajax(options);
+    }*@
+
+    function displaydetails(inid)
+    {
+         
+     document.getElementById("showdet").style.display = "block";
+     var newInput="";
+    var options = {};
+    options.url = "/DebtorGroup/Index?id="+inid +"&&handler=SelectAll";
+    options.type = "GET";
+    options.dataType = "json";
+    options.success = function (data) {
+    data.forEach(function (element) {
+    newInput +="<tr><td>"+element.debtorName+"</td><td>"+element.debtorOutstanding+"</td><td><button style='padding: 0;border: none;background: none;' onclick='delindidet("+element.debtorID+")'><img src='/images/delete.png' alt='delete' height='20px' width='20px' /></button>&nbsp;&nbsp;&nbsp;&nbsp;<a href='#modal_edit' data-toggle='modal' data-did='"+element.debtorID+"' data-dname='"+element.debtorName+"' data-doutstan='"+element.debtorOutstanding+"' data-dgid='"+element.debtorGroupID+"' ><img src='/images/edit.svg' alt='Edit Record' height='20px' width='20px' /></a></td></tr>";
+
+           });
+    document.getElementById('rowbody').innerHTML = newInput;
+    document.getElementById('tabname').innerHTML = tabname;
+          @*$("#companyname").val(data.companyName);
+        $("#contactname").val(data.contactName);
+        $("#country").val(data.country);*@
+    };
+    options.error = function () {
+        $("#msg").html("Error while making Ajax call!");
+    };
+    $.ajax(options);
     }
-</script>
+
+          function displaycusdetails(inid)
+    {
+
+     var newInput="";
+    var options = {};
+    options.url = "/DebtorGroup/Index?id="+inid +"&&handler=SelectAll";
+    options.type = "GET";
+    options.dataType = "json";
+    options.success = function (data) {
+          alert("Im here");
+    data.forEach(function (element) {
+    newInput +="<tr><td>"+element.debtorName+"</td><td>"+element.debtorOutstanding+"</td><td><button style='padding: 0;border: none;background: none;' onclick='delindidet("+element.debtorID+")'><img src='/images/delete.png' alt='delete' height='20px' width='20px' /></button>&nbsp;&nbsp;&nbsp;&nbsp;<a href='#modal_edit' data-toggle='modal' data-did='"+element.debtorID+"' data-dname='"+element.debtorName+"' data-doutstan='"+element.debtorOutstanding+"' data-dgid='"+element.debtorGroupID+"' ><img src='/images/edit.svg' alt='Edit Record' height='20px' width='20px' /></a></td></tr>";
+
+           });
+    document.getElementById('rowbody1').innerHTML = newInput;
+
+          @*$("#companyname").val(data.companyName);
+        $("#contactname").val(data.contactName);
+        $("#country").val(data.country);*@
+    };
+    options.error = function () {
+        $("#msg1").html("Error while making Ajax call!");
+    };
+    $.ajax(options);
+    }
+
+   function displaymoredetails(inid,dname)
+    {
+
+     var newInput="";
+    var options = {};
+    options.url = "/DebtorGroup/Index?id="+inid +"&&handler=SelectAll";
+    options.type = "GET";
+    options.dataType = "json";
+    options.success = function (data) {
+    data.forEach(function (element) {
+    newInput +="<tr><td>"+element.debtorName+"</td><td>"+element.debtorOutstanding+"</td><td><button style='padding: 0;border: none;background: none;' onclick='delindidet("+element.debtorID+")'><img src='/images/delete.png' alt='delete' height='20px' width='20px' /></button>&nbsp;&nbsp;&nbsp;&nbsp;<a href='#modal_edit' data-toggle='modal' data-did='"+element.debtorID+"' data-dname='"+element.debtorName+"' data-doutstan='"+element.debtorOutstanding+"' data-dgid='"+element.debtorGroupID+"' ><img src='/images/edit.svg' alt='Edit Record' height='20px' width='20px' /></a></td></tr>";
+
+           });
+    document.getElementById('rowbody1').innerHTML = newInput;
+    document.getElementById('tabname1').innerHTML = dname;
+          @*$("#companyname").val(data.companyName);
+        $("#contactname").val(data.contactName);
+        $("#country").val(data.country);*@
+    };
+    options.error = function () {
+        $("#msg1").html("Error while making Ajax call!");
+    };
+    $.ajax(options);
+    }
+      
+ $("#savedall").click(function (e) {
+     e.preventDefault();
+    var options = {};
+    options.url = "/DebtorGroup/Index?handler=InsertD";
+    options.type = "POST";
+
+    @*var myData = $('#insertform').serializeArray();*@
+
+    var obj = {};
+    obj.DebtorName = $("#dnamess").val();
+    obj.DebtorOutstanding = $("#doutstandss").val();
+    obj.DebtorGroupID = $("#dId").val();
+
+
+    options.data = JSON.stringify(obj);
+    options.contentType = "application/json; charset=utf-8";
+    options.dataType = "json";
+
+    options.beforeSend = function (xhr) {
+        xhr.setRequestHeader("MY-XSRF-TOKEN",
+$('input:hidden[name="__RequestVerificationToken"]').val());
+    };
+    options.success = function (msg) {
+    if (msg=="Individual Debtor Added Successfully!")
+  {
+
+     document.getElementById("msg1").classList.add("alert");
+     document.getElementById("msg1").classList.add("alert-success");
+      displaycusdetails( obj.DebtorGroupID)
+        $(':input','#indidet')
+  .not(':button, :submit, :reset, :hidden')
+  .val('')
+  .prop('checked', false)
+  .prop('selected', false);
+    $("#msg1").html(msg);
+     $("#msg1").show(1000);
+    $("#msg1").hide(2000);
+
+  }
+  else {
+     document.getElementById("msg1").classList.add("alert");
+    document.getElementById("msg1").classList.add("alert-danger");
+
+       $("#msg1").html(msg);
+       $("#msg1").show(1000);
+    $("#msg1").hide(2000);
+
+  }
+
+    };
+    options.error = function () {
+
+     document.getElementById("msg1").classList.add("alert");
+    document.getElementById("msg1").classList.add("alert-danger");
+    $("#msg1").html("<strong>Error.</strong> Couldn't add record");
+     $("#msg1").show(1000);
+     $("#msg1").hide(2000);
+    };
+    $.ajax(options);
+});
+
+
+function delindidet(id){
+    var options = {};
+    options.url = "/DebtorGroup/Index?id="+id+"&&handler=DeleteDebtor";
+    options.type = "DELETE";
+    options.dataType = "html";
+    options.beforeSend = function (xhr) {
+        xhr.setRequestHeader("MY-XSRF-TOKEN",
+$('input:hidden[name="__RequestVerificationToken"]').val());
+    };
+    options.success = function (msg) {
+        @*$("#msg").html(msg);*@
+          if(msg=='"Deleted Success"')
+          {
+          var did=$("#dId").val();
+            displaycusdetails(did);
+            displaydetails(did);
+          }
+    };
+    options.error = function () {
+        $("#msg").html("Error while making Ajax call!");
+    };
+    $.ajax(options);
+}
+
+
+$("#savedalledit").click(function () {
+    var options = {};
+
+     var id=$("#dIdedit").val();
+    options.url = "/DebtorGroup/Index?id="+id+"&&handler=Update";
+    options.type = "PUT";
+
+    var obj = {};
+    obj.DebtorID = $("#dIdedit").val();
+    obj.DebtorName = $("#dnamessedit").val();
+    obj.DebtorOutstanding = $("#doutstandssedit").val();
+    obj.DebtorGroupID =  didoo;
+
+    options.data = JSON.stringify(obj);
+    options.contentType = "application/json";
+    options.dataType = "html";
+
+    options.beforeSend = function (xhr) {
+        xhr.setRequestHeader("MY-XSRF-TOKEN",
+$('input:hidden[name="__RequestVerificationToken"]').val());
+    };
+    options.success = function (msg) {
+        $('#modal_edit').modal('hide');
+         document.getElementById("msg1").classList.add("alert");
+     document.getElementById("msg1").classList.add("alert-success");
+        $("#msg1").html(msg.replace('"', "").replace('"',""));
+          $("#msg1").show(1000);
+     $("#msg1").hide(2000);
+          displaycusdetails(obj.DebtorGroupID);
+           displaydetails(obj.DebtorGroupID);
+    };
+    options.error = function () {
+            document.getElementById("msg2").classList.add("alert");
+     document.getElementById("msg2").classList.add("alert-danger");
+          $("#msg2").html("Error in Connecting to Server!");
+          $("#msg2").show(1000);
+     $("#msg2").hide(2000);
+
+    };
+    $.ajax(options);
+});
+      </script>

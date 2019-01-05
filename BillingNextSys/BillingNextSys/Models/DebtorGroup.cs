@@ -22,9 +22,9 @@ namespace BillingNextSys.Models
         [Display(Name = "Debtor Group Email Address")]
         public string DebtorGroupMail { get; set; }
 
-        [Required(ErrorMessage = "Please Specify Debtor Group Contact Number.")]
+        [Required(ErrorMessage = "Please Specify Debtor Group Contact Number. Whatsapp Messages will be sent via this number")]
         [DataType(DataType.PhoneNumber)]
-        [Display(Name = "Debtor Group Contact Number. Whatsapp Messages will be sent via this number")]
+        [Display(Name = "Debtor Group Whatsapp Contact Number.")]
         public string DebtorGroupPhoneNumber { get; set; }
 
         [Required(ErrorMessage = "Please Specify Debtor Group City.")]

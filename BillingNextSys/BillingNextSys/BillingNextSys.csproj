@@ -10,6 +10,7 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.1.2" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.Design" Version="1.1.1" />
+    <PackageReference Include="NonFactors.Grid.Mvc6" Version="4.0.2" />
   </ItemGroup>
 <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
@@ -28,5 +29,6 @@
   <Folder Include="Pages\Received\" />
   <Folder Include="Pages\BillSeries\" />
   <Folder Include="Pages\CompanySelect\" />
+  <Folder Include="wwwroot\Content\" />
 </ItemGroup>
 </Project>
