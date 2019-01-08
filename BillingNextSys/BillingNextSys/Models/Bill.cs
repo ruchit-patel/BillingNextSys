@@ -93,13 +93,15 @@ namespace BillingNextSys.Models
         [Display(Name = "Note:")]
         public string Note { get; set; }
 
-
         [Display(Name = "Invoice Date")]
         [DataType(DataType.Date)]
         public DateTime InvoiceDate { get; set; }
-      
+
         [Display(Name = "Place Of Supply")]
         public PlaceOfSupply? PlaceOfSupply { get; set; }
+
+        [DataType(DataType.Date)]
+        public DateTime BillDate { get; set; }
 
         public int DebtorGroupID { get; set; }
 

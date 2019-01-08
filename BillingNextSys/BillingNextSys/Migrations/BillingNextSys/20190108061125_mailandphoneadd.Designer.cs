@@ -3,15 +3,17 @@ using System;
 using BillingNextSys.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace BillingNextSys.Migrations.BillingNextSys
 {
     [DbContext(typeof(BillingNextSysContext))]
-    partial class BillingNextSysContextModelSnapshot : ModelSnapshot
+    [Migration("20190108061125_mailandphoneadd")]
+    partial class mailandphoneadd
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,8 +26,6 @@ namespace BillingNextSys.Migrations.BillingNextSys
                     b.Property<string>("BillNumber");
 
                     b.Property<double>("BillAmount");
-
-                    b.Property<DateTime>("BillDate");
 
                     b.Property<string>("BilledTo")
                         .IsRequired();
@@ -161,10 +161,6 @@ namespace BillingNextSys.Migrations.BillingNextSys
                     b.Property<byte[]>("CompanyLogoImg");
 
                     b.Property<string>("CompanyName")
-                        .IsRequired()
-                        .HasMaxLength(100);
-
-                    b.Property<string>("CompanyOwner")
                         .IsRequired()
                         .HasMaxLength(100);
 

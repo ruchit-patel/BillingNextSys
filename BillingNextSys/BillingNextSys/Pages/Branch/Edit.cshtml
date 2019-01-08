@@ -30,6 +30,16 @@
                 <span asp-validation-for="Branch.CompanyID" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Branch.BranchPhone" class="control-label"></label>
+                <textarea asp-for="Branch.BranchPhone" class="form-control"></textarea>
+                <span asp-validation-for="Branch.BranchPhone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Branch.BranchEmail" class="control-label"></label>
+                <textarea asp-for="Branch.BranchEmail" class="form-control"></textarea>
+                <span asp-validation-for="Branch.BranchEmail" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-default" />
             </div>
         </form>

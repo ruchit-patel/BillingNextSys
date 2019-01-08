@@ -20,11 +20,11 @@
                 <input asp-for="Company.CompanyName" class="form-control" />
                 <span asp-validation-for="Company.CompanyName" class="text-danger"></span>
             </div>
-           
-            <img class="img-responsive full-width" src="data:image/png;base64,@Convert.ToBase64String(Model.Company.CompanyLogoImg)" />
-            <div class="form-group" >
 
-                <input asp-for="Company.CompLogo" type="file" accept="image/x-png,image/jpeg" class="form-control"/>
+            <img class="img-responsive full-width" src="data:image/png;base64,@Convert.ToBase64String(Model.Company.CompanyLogoImg)" />
+            <div class="form-group">
+
+                <input asp-for="Company.CompLogo" type="file" accept="image/x-png,image/jpeg" class="form-control" />
 
             </div>
             <div class="form-group">
@@ -62,8 +62,24 @@
                 <input asp-for="Company.PAN" class="form-control" />
                 <span asp-validation-for="Company.PAN" class="text-danger"></span>
             </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Company.PAN" class="control-label"></label>
+                        <input asp-for="Company.PAN" class="form-control" />
+                        <span asp-validation-for="Company.PAN" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Company.CompanyOwner" class="control-label"></label>
+                        <input asp-for="Company.CompanyOwner" class="form-control" />
+                        <span asp-validation-for="Company.CompanyOwner" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-default"  />
+                <input type="submit" value="Save" class="btn btn-default" />
             </div>
         </form>
     </div>

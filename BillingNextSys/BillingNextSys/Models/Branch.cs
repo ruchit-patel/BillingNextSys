@@ -18,7 +18,16 @@ namespace BillingNextSys.Models
         [DataType(DataType.MultilineText)]
         [Display(Name = "Branch Address")]
         public string BranchAddress { get; set; }
-      
+
+        [Required(ErrorMessage = "Please Specify Branch Email"), StringLength(200)]
+        [DataType(DataType.EmailAddress)]
+        [Display(Name = "Branch Email Address")]
+        public string BranchEmail { get; set; }
+
+        [Required(ErrorMessage = "Please Specify Branch Contact Number")]
+        [DataType(DataType.PhoneNumber)]
+        [Display(Name = "Branch Contact Number")]
+        public string BranchPhone { get; set; }
 
         [ScaffoldColumn(false)]
         [DataType(DataType.DateTime)]

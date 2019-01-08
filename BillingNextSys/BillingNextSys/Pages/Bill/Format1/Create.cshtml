@@ -1,0 +1,273 @@
+@page
+@using BillingNextSys.Models
+@model BillingNextSys.Pages.Bill.Format1.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+<link rel="stylesheet" src="/css/print.css" type="text/css" media="all" />
+<h2>Create</h2>
+
+<h4>Bill</h4>
+<hr />
+<style>
+    .invoice-title h2, .invoice-title h3 {
+        display: inline-block;
+    }
+
+    .table > tbody > tr > .no-line {
+        border-top: none;
+    }
+
+    .table > thead > tr > .no-line {
+        border-bottom: none;
+    }
+
+    .table > tbody > tr > .thick-line {
+        border-top: 2px solid;
+    }
+</style>
+<input type="hidden" id="billnum" value="@Model.lastbillnumber"/>
+<div class="container print">
+    <form>
+        <div class="row">
+            <div class="jumbotron" style="padding: 5px;">
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <img class="img-responsive full-width" src="data:image/png;base64,@Convert.ToBase64String(Model.Companies.FirstOrDefault().CompanyLogoImg)" /> @*<img src="https://images-na.ssl-images-amazon.com/images/I/713t5BMNwdL._SX425_.jpg" height="250px" width="300px" style="padding:10px;" />*@
+                    </div>
+                    <div class="col-md-9">
+                        <h1>@Html.DisplayFor(model => model.Companies.FirstOrDefault().CompanyName)</h1>
+                        <h2>CHARTERED ACCOUNTANTS</h2>
+                        <h4>@Html.DisplayFor(model => model.Branches.FirstOrDefault().BranchAddress)</h4>
+                        <div class="row">
+                            <div class="col-md-6"><h4> <img src="/images/mail.svg" alt="Mail:" width="20px" height="20px" />&nbsp; @Html.DisplayFor(model => model.Branches.FirstOrDefault().BranchEmail)</h4></div>
+                            <div class="col-md-6"><h4> <img src="/images/mobile.png" alt="Mobile Number:" width="20px" height="20px" />&nbsp; @Html.DisplayFor(model => model.Branches.FirstOrDefault().BranchPhone)</h4></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2"></div> <div class="col-md-10"><h3>GSTIN:@Html.DisplayFor(model => model.Companies.FirstOrDefault().GSTIN)</h3></div>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <center><h3>Tax Invoice</h3></center>
+            </div>
+
+            <div class="col-xs-12">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <address>
+                            <strong>Billed To:</strong><br>
+                            <div id="to"> <input id="toinfo" class="form-control" style="width:300px;" list="tosearch" autocomplete="off" onchange="fillvalues($(this).val());" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" onfocusout="filladress()"> <datalist id="tosearch"></datalist></div>
+                            <div><p id="toaddress"></p></div><br>
+                            <strong>GSTIN: </strong><div><p id="togstin"></p></div>
+                        </address>
+                    </div>
+                    <div class="col-xs-6 text-right">
+                        <address>
+                            <strong>Invoice Number:</strong> <div id="invoicenum"><input id="invoiceseries" style="width:50px;" list="Series" autocomplete="off" onchange="fillseries();" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();"><datalist id="Series"></datalist>/<input type="text" id="yearser" style="width:50px;" />/<input type="number" id="bnum" style="width:50px;" readonly /></div><br>
+                            <strong>Invoice Date:</strong> <div id="invoicedate"><input asp-for="Bill.InvoiceDate" value="@string.Format("{0:yyyy-MM-dd}",DateTime.Now)" style="width:initial; border-radius:4px; height:35px;" /></div><br>
+                            <strong>Place Of Supply:</strong> <div id="placeofsupply"><select asp-for="Bill.PlaceOfSupply" asp-items="Html.GetEnumSelectList(typeof(PlaceOfSupply))" style="width:initial; border-radius:4px; height:35px;"> </select></div><br>
+                        </address>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><strong>Bill summary</strong></h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <td><strong>Description of Service</strong></td>
+                                        <td class="text-center"><strong>SAC Code</strong></td>
+                                        <td class="text-center"><strong>Taxable Value</strong></td>
+                                        <td class="text-center"><strong>CGST &#64 9 &#37 </strong></td>
+                                        <td class="text-center"><strong>SGST &#64 9 &#37</strong></td>
+                                        <td class="text-right"><strong>Amount</strong></td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- foreach ($order->lineItems as $line) or some such thing here -->
+                                    <tr>
+                                        <td>BS-200</td>
+                                        <td class="text-center">$10.99</td>
+                                        <td class="text-center">1</td>
+                                        <td class="text-center">1</td>
+                                        <td class="text-center">1</td>
+                                        <td class="text-right">$10.99</td>
+                                    </tr>
+                                    <tr>
+                                        <td>BS-400</td>
+                                        <td class="text-center">$20.00</td>
+                                        <td class="text-center">3</td>
+                                        <td class="text-center">3</td>
+                                        <td class="text-center">3</td>
+                                        <td class="text-right">$60.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>BS-1000</td>
+                                        <td class="text-center">$600.00</td>
+                                        <td class="text-center">1</td>
+                                        <td class="text-center">3</td>
+                                        <td class="text-center">3</td>
+                                        <td class="text-right">$600.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="thick-line"></td>
+                                        <td class="thick-line"></td>
+                                        <td class="thick-line"></td>
+                                        <td class="thick-line"></td>
+                                        <td class="thick-line text-center"><strong>Total</strong></td>
+                                        <td class="thick-line text-right">$670.99</td>
+                                    </tr>
+                                    @*<tr>
+                                            <td class="no-line text-left"><strong>Amount In Words:</strong></td>
+                                            <td class="no-line text-center">Seven Thousand Six Hundred Seventy.</td>
+                                            <td class="no-line"></td>
+                                            <td class="no-line"></td>
+                                            <td class="no-line"></td>
+                                            <td class="no-line"></td>
+                                        </tr>*@
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <address>
+                                            <strong>Company's PAN:</strong> &nbsp;<div style="display:inline;" id="pan"> @Html.DisplayFor(model => model.Companies.FirstOrDefault().PAN)</div><br>
+                                            <strong>Bank Name:</strong> &nbsp;<div style="display:inline;" id="bname">@Html.DisplayFor(model => model.Companies.FirstOrDefault().BankName)</div><br>
+                                            <strong>Account Type:</strong> &nbsp;<div style="display:inline;" id="atype">@Html.DisplayFor(model => model.Companies.FirstOrDefault().AccountType)</div><br>
+                                            <strong>Account Number:</strong> &nbsp;<div style="display:inline;" id="anum">@Html.DisplayFor(model => model.Companies.FirstOrDefault().AccountNumber)</div><br>
+                                            <strong>IFSC Code:</strong> &nbsp;<div style="display:inline;" id="ifsc">@Html.DisplayFor(model => model.Companies.FirstOrDefault().IFSCcode)</div><br>
+                                        </address>
+                                    </div>
+                                    <div class="col-xs-6 text-right">
+                                        <address>
+                                            <strong>Amount In Words: </strong> <div style="display:inline;" id="inwords">Seven Thousand Six Hundred Seventy.</div><br>
+                                            <strong>For <div style="display:inline;" id="cname">@Html.DisplayFor(model => model.Companies.FirstOrDefault().CompanyName)</div></strong><br>
+                                            <br /><br /><br />
+                                            <strong>@Html.DisplayFor(model => model.Companies.FirstOrDefault().CompanyOwner) <br> (Authorised Signatory)</strong><br>
+
+                                        </address>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<script>
+    window.onload = function() {
+        fillseries();
+         var lastbnum=$("#billnum").val();
+         $("#bnum").val(+(lastbnum.split('/')[2])+1);
+         $("#yearser").val(lastbnum.split('/')[1]);
+     };
+    function fillvalues(dname)
+    {
+    var dataList = document.getElementById('tosearch');
+
+    var options = {};
+    options.url = "/Bill/Format1/Create?str="+dname+"&&handler=BillTo";
+    options.type = "GET";
+    options.dataType = "json";
+    options.success = function (data) {
+
+     $("#tosearch").empty();
+    data.forEach(function (element) {
+    @*newInput +="<tr><td>"+element.debtorName+"</td><td>"+element.debtorOutstanding+"</td><td><button style='padding: 0;border: none;background: none;' onclick='delindidet("+element.debtorID+")'><img src='/images/delete.png' alt='delete' height='20px' width='20px' /></button>&nbsp;&nbsp;&nbsp;&nbsp;<a href='#modal_edit' data-toggle='modal' data-did='"+element.debtorID+"' data-dname='"+element.debtorName+"' data-doutstan='"+element.debtorOutstanding+"' data-dgid='"+element.debtorGroupID+"' ><img src='/images/edit.svg' alt='Edit Record' height='20px' width='20px' /></a></td></tr>";*@
+
+     var option = document.createElement('option');
+                @*// Set the value using the item in the JSON array.*@
+          option.value = element.debtorGroupName;
+             option.id = element.debtorGroupID;
+                @*// Add the <option> element to the <datalist>.*@
+       dataList.appendChild(option);
+
+           });
+
+    };
+    options.error = function () {
+     var option = document.createElement('option');
+                @*// Set the value using the item in the JSON array.*@
+          option.value = "Couldn't Fetch Debtor Information";
+                @*// Add the <option> element to the <datalist>.*@
+       dataList.appendChild(option);
+    };
+    $.ajax(options);
+    }
+
+    function fillseries()
+    {
+    var dataList = document.getElementById('Series');
+
+    var options = {};
+    options.url = "/Bill/Format1/Create?handler=Series";
+    options.type = "GET";
+    options.dataType = "json";
+    options.success = function (data) {
+    $("#Series").empty();
+    data.forEach(function (element) {
+    @*newInput +="<tr><td>"+element.debtorName+"</td><td>"+element.debtorOutstanding+"</td><td><button style='padding: 0;border: none;background: none;' onclick='delindidet("+element.debtorID+")'><img src='/images/delete.png' alt='delete' height='20px' width='20px' /></button>&nbsp;&nbsp;&nbsp;&nbsp;<a href='#modal_edit' data-toggle='modal' data-did='"+element.debtorID+"' data-dname='"+element.debtorName+"' data-doutstan='"+element.debtorOutstanding+"' data-dgid='"+element.debtorGroupID+"' ><img src='/images/edit.svg' alt='Edit Record' height='20px' width='20px' /></a></td></tr>";*@
+
+     var option = document.createElement('option');
+                @*// Set the value using the item in the JSON array.*@
+          option.value = element.seriesName;
+                @*// Add the <option> element to the <datalist>.*@
+       dataList.appendChild(option);
+
+           });
+
+    };
+    options.error = function () {
+     var option = document.createElement('option');
+                @*// Set the value using the item in the JSON array.*@
+          option.value = "Couldn't Fetch Series Information";
+                @*// Add the <option> element to the <datalist>.*@
+       dataList.appendChild(option);
+    };
+    $.ajax(options);
+    }
+
+
+    function filladress()
+    {
+
+    var dinfoa = $("#tosearch option[value='" + $('#toinfo').val() + "']").attr('id');
+    var options = {};
+    options.url = "/Bill/Format1/Create?id="+dinfoa+"&&handler=BillToDetails";
+    options.type = "GET";
+    options.dataType = "json";
+    options.success = function (data) {
+        document.getElementById('toaddress').innerHTML = data.debtorGroupAddress;
+        document.getElementById('togstin').innerHTML = data.debtorGSTIN;
+    };
+    options.error = function () {
+     $("#toaddress").val("Couldn't load data");
+     $("#togstin").val("Couldn't load data");
+    };
+    $.ajax(options);
+
+    }
+</script>

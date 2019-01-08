@@ -25,7 +25,17 @@
             </div>
             <div class="form-group">
                 <label asp-for="Branch.CompanyID" class="control-label"></label>
-                <select asp-for="Branch.CompanyID" class ="form-control" asp-items="ViewBag.CompanyID"></select>
+                <select asp-for="Branch.CompanyID" class="form-control" asp-items="ViewBag.CompanyID"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Branch.BranchPhone" class="control-label"></label>
+                <textarea asp-for="Branch.BranchPhone" class="form-control"></textarea>
+                <span asp-validation-for="Branch.BranchPhone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Branch.BranchEmail" class="control-label"></label>
+                <textarea asp-for="Branch.BranchEmail" class="form-control"></textarea>
+                <span asp-validation-for="Branch.BranchEmail" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-default" />

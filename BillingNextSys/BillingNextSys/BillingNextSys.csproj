@@ -30,5 +30,7 @@
   <Folder Include="Pages\BillSeries\" />
   <Folder Include="Pages\CompanySelect\" />
   <Folder Include="wwwroot\Content\" />
+  <Folder Include="Pages\Bill\Format1\" />
+  <Folder Include="Pages\Bill\Format2\" />
 </ItemGroup>
 </Project>
