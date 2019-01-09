@@ -75,5 +75,34 @@ namespace BillingNextSys.Pages.Bill.Format1
             List<Models.BillSeries> data = _context.BillSeries.ToList();
             return new JsonResult(data);
         }
+
+        public IActionResult OnGetParticulars(string str)
+        {
+            List<Models.Particulars> data = _context.Particulars.Where(a => a.ParticularsName.ToLower().Contains(str.ToLower())).ToList();
+            return new JsonResult(data);
+        }
+
+        public IActionResult OnGetParticularsDetails(int id)
+        {
+            Models.Particulars data = _context.Particulars.Find(id);
+            return new JsonResult(data);
+        }
+
+        public IActionResult OnPostInsertBillDetails([FromBody] Models.BillDetails obj)
+        {
+            obj.CompanyID= (int)_session.GetInt32("Cid");
+            _context.BillDetails.Add(obj);
+            _context.SaveChanges();
+            return new JsonResult("Added Successfully!");
+        }
+
+        public IActionResult OnPostInsertBill([FromBody] Models.Bill obj)
+        {
+            obj.CompanyID = (int)_session.GetInt32("Cid");
+            obj.BillDate = DateTime.Now;
+            _context.Bill.Add(obj);
+            _context.SaveChanges();
+            return new JsonResult("Added Successfully!");
+        }
     }
 }
