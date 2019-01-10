@@ -14,6 +14,12 @@ namespace BillingNextSys.Models
         {
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Bill>()
+            .HasIndex(p => new { p.BillActNum}).IsUnique();
+        }
+
         public DbSet<BillingNextSys.Models.Company> Company { get; set; }
 
         public DbSet<BillingNextSys.Models.Branch> Branch { get; set; }

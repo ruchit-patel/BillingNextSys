@@ -31,6 +31,7 @@
 <input type="hidden" id="billnum" value="@Model.lastbillnumber"/>
 <div class="container">
     <form onsubmit="return false;">
+        @Html.AntiForgeryToken()
         <div class="row">
             <div class="jumbotron" style="padding: 5px;">
 
@@ -86,7 +87,9 @@
                         <div class="">
                             <table class="table table-condensed order-list" id="billdet">
                                 <thead>
-                                    <tr><button class="text-right" id="addoperations" onclick="addInput();"><img src="~/images/add.svg" height='20px' width='20px' />  </button>&nbsp;&nbsp;<button class="text-right" id="deloperation" onclick="removeRow()"><img src="~/images/minus.png" height='20px' width='20px' />  </button>
+                                    <tr>
+                                        <button class="text-right" id="addoperations" onclick="addInput();"><img src="~/images/add.svg" height='20px' width='20px' />  </button>&nbsp;&nbsp;
+                                        <button class="text-right" id="deloperation" onclick="removeRow()"><img src="~/images/minus.png" height='20px' width='20px' />  </button>
                                         <td><strong>Description of Service</strong></td>
                                         <td class="text-center"><strong>SAC Code</strong></td>
                                         <td class="text-center"><strong>Taxable Value</strong></td>
@@ -107,23 +110,23 @@
                                         <td class="text-right count-me" id="pamount-1"></td>
 
                                     </tr>
-                                   
+
                                     <tr>
                                         <td class="thick-line"></td>
                                         <td class="thick-line"></td>
                                         <td class="thick-line"></td>
                                         <td class="thick-line"></td>
                                         <td class="thick-line text-center"><strong>Total</strong></td>
-                                        <td class="thick-line text-right" id="grandtotal" ></td>
+                                        <td class="thick-line text-right" id="grandtotal"></td>
                                     </tr>
                                     @*<tr>
-            <td class="no-line text-left"><strong>Amount In Words:</strong></td>
-            <td class="no-line text-center">Seven Thousand Six Hundred Seventy.</td>
-            <td class="no-line"></td>
-            <td class="no-line"></td>
-            <td class="no-line"></td>
-            <td class="no-line"></td>
-        </tr>*@
+                                        <td class="no-line text-left"><strong>Amount In Words:</strong></td>
+                                        <td class="no-line text-center">Seven Thousand Six Hundred Seventy.</td>
+                                        <td class="no-line"></td>
+                                        <td class="no-line"></td>
+                                        <td class="no-line"></td>
+                                        <td class="no-line"></td>
+                                    </tr>*@
                                 </tbody>
                             </table>
                         </div>
@@ -145,7 +148,7 @@
                                             <strong>For <div style="display:inline;" id="cname">@Html.DisplayFor(model => model.Companies.FirstOrDefault().CompanyName)</div></strong><br>
                                             <br /><br /><br />
                                             <strong>@Html.DisplayFor(model => model.Companies.FirstOrDefault().CompanyOwner) <br> (Authorised Signatory)</strong><br>
-                                            
+
                                         </address>
                                     </div>
                                 </div>
@@ -161,7 +164,7 @@
     <input type="button" value="Create Bill" id="btncreate" class="btn btn-default" onclick="savebill()"/>
 </div>
 <div>
-    <a asp-page="Index">Back to List</a>
+    <a asp-page="/Bill/Index">Back to List</a>
 </div>
 
 @section Scripts {
@@ -171,6 +174,7 @@
     window.onload = function() {
         fillseries();
          var lastbnum=$("#billnum").val();
+
          $("#bnum").val(+(lastbnum.split('/')[2])+1);
          $("#yearser").val(lastbnum.split('/')[1]);
            document.getElementById("deloperation").style.display = "none";
@@ -188,6 +192,7 @@
     options.url = "/Bill/Format1/Create?str="+pname+"&&handler=Particulars";
     options.type = "GET";
     options.dataType = "json";
+
     options.success = function (data) {
 
      $("#parti"+idval).empty();
@@ -197,6 +202,7 @@
                 option.value = element.particularsName;
              option.id = element.particularsID;
        dataList.appendChild(option);
+
 
            });
 
@@ -494,15 +500,17 @@ function convertNumberToWords(amount) {
 
 
     var obj = {};
-    obj.BillNumber =  ($("#Series option[value='" + $('#invoiceseries').val() + "']").val())+($('#yearser').val())+($('#bnum').val());
+    obj.BillNumber =  ($("#Series option[value='" + $('#invoiceseries').val() + "']").val())+"/"+($('#yearser').val())+"/"+($('#bnum').val());
     obj.BilledTo = $("#tosearch option[value='" + $('#toinfo').val() + "']").val();
-    obj.BillAmount=$('#grandtotal').text();
+    obj.BillAmount=  $('#grandtotal').text().substring(1, $('#grandtotal').text().length);
     obj.InvoiceDate = $('#invcdt').val();;
     obj.PlaceOfSupply= $('#placeofsup').find(":selected").val();
     obj.SeriesName=$("#Series option[value='" + $('#invoiceseries').val() + "']").val();
     obj.DebtorGroupID=$("#tosearch option[value='" + $('#toinfo').val() + "']").attr('id');
+    obj.BillActNum=$('#bnum').val();
 
     options.data = JSON.stringify(obj);
+
     options.contentType = "application/json; charset=utf-8";
     options.dataType = "json";
 
@@ -511,30 +519,11 @@ function convertNumberToWords(amount) {
 $('input:hidden[name="__RequestVerificationToken"]').val());
     };
     options.success = function (msg) {
-    alert(msg);
 
-    };
-    options.error = function () {
-
-    alert("error in bill");
-    };
-    $.ajax(options);
-
-
-
-    var TableData="";
+    if(msg=="Added Successfully!")
+    {
     $('#billdet tr').each(function(row, tr){
     if(typeof($(tr).find('td:eq(0)').find("input").val())!=="undefined"){
-    TableData =  $(tr).find('td:eq(0)').find("input").val() + ' '
-        + $(tr).find('td:eq(1)').find("input").val() + ' '
-        + $(tr).find('td:eq(2)').find("input").val() + ' '
-        + $(tr).find('td:eq(3)').text() + ' '
-        + $(tr).find('td:eq(4)').text() + ' '
-        + $(tr).find('td:eq(5)').text() + ' ';
-    alert(TableData);
-
-
-
 
     var options = {};
     options.url = "/Bill/Format1/Create?handler=InsertBillDetails";
@@ -548,8 +537,11 @@ $('input:hidden[name="__RequestVerificationToken"]').val());
     obj.CGSTAmount=$(tr).find('td:eq(3)').text();
     obj.SGSTAmount = $(tr).find('td:eq(4)').text();
     obj.TaxableValue= $(tr).find('td:eq(2)').find("input").val();
-    obj.ParticularsID=$(tr).find('td:eq(0)').find("input").attr('id');
-    obj.BillNumber=($("#Series option[value='" + $('#invoiceseries').val() + "']").val())+($('#yearser').val())+($('#bnum').val());
+   var inputid=$(tr).find('td:eq(0)').find("input").val();
+
+    obj.ParticularsID= $(tr).find('td:eq(0)').find("datalist").find('option[value="' + inputid + '"]').attr('id');
+
+    obj.BillNumber=($("#Series option[value='" + $('#invoiceseries').val() + "']").val())+"/"+($('#yearser').val())+"/"+($('#bnum').val());
     obj.DebtorGroupID=$("#tosearch option[value='" + $('#toinfo').val() + "']").attr('id');
 
     options.data = JSON.stringify(obj);
@@ -561,7 +553,7 @@ $('input:hidden[name="__RequestVerificationToken"]').val());
 $('input:hidden[name="__RequestVerificationToken"]').val());
     };
     options.success = function (msg) {
-    alert(msg);
+
 
     };
     options.error = function () {
@@ -569,12 +561,26 @@ $('input:hidden[name="__RequestVerificationToken"]').val());
     alert("error");
     };
     $.ajax(options);
-
-
-
-
     }
+
 });
-
     }
+    else if(msg=="Update 1")
+    {
+    alert("updating 1");
+   var curr= $('#bnum').val();
+    var curr=(+curr+1);
+    $('#bnum').val(curr);
+     alert("updating done");
+    savebill();
+    }
+    //redirect
+    window.location.pathname="/Bill/Index";
+    };
+    options.error = function () {
+
+    alert("error in bill");
+    };
+    $.ajax(options);
+}
 </script>

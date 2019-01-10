@@ -103,6 +103,8 @@ namespace BillingNextSys.Models
         [DataType(DataType.Date)]
         public DateTime BillDate { get; set; }
 
+        public int? BillActNum { get; set; }
+
         public int DebtorGroupID { get; set; }
 
         public DebtorGroup DebtorGroup { get; set; }

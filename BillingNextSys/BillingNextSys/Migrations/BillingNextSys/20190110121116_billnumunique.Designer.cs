@@ -3,15 +3,17 @@ using System;
 using BillingNextSys.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace BillingNextSys.Migrations.BillingNextSys
 {
     [DbContext(typeof(BillingNextSysContext))]
-    partial class BillingNextSysContextModelSnapshot : ModelSnapshot
+    [Migration("20190110121116_billnumunique")]
+    partial class billnumunique
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -23,7 +25,7 @@ namespace BillingNextSys.Migrations.BillingNextSys
                 {
                     b.Property<string>("BillNumber");
 
-                    b.Property<int?>("BillActNum");
+                    b.Property<int>("BillActNum");
 
                     b.Property<double>("BillAmount");
 

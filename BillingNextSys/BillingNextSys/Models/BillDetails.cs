@@ -21,11 +21,11 @@ namespace BillingNextSys.Models
         [Display(Name = "Particulars")]
         public string ParticularsName { get; set; }
 
-        [Required(ErrorMessage = "Please Specify Financial Year")]
+
         [Display(Name = "Period")]
         public string Period { get; set; }
 
-        [Required(ErrorMessage = "Please Specify Year")]
+      
         [Display(Name = "Year")]
         public YearInfo? YearInfo { get; set; }
 
@@ -60,7 +60,7 @@ namespace BillingNextSys.Models
         public string BillNumber { get; set; }
         public Bill Bill { get; set; }
 
-        public int DebtorID { get; set; }
+        public int? DebtorID { get; set; }
         public Debtor Debtor { get; set; }
 
         public int DebtorGroupID { get; set; }

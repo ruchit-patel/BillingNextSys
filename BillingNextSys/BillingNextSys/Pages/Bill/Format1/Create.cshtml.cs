@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using BillingNextSys.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace BillingNextSys.Pages.Bill.Format1
 {
@@ -98,11 +99,19 @@ namespace BillingNextSys.Pages.Bill.Format1
 
         public IActionResult OnPostInsertBill([FromBody] Models.Bill obj)
         {
-            obj.CompanyID = (int)_session.GetInt32("Cid");
-            obj.BillDate = DateTime.Now;
-            _context.Bill.Add(obj);
-            _context.SaveChanges();
-            return new JsonResult("Added Successfully!");
+            try
+            {
+                obj.CompanyID = (int)_session.GetInt32("Cid");
+                obj.BillDate = DateTime.Now;
+                _context.Bill.Add(obj);
+                _context.SaveChanges();
+                return new JsonResult("Added Successfully!");
+            }
+            catch(DbUpdateException exception)
+            {
+                string exce= "Update 1";
+                return new JsonResult(exce);
+            }
         }
     }
 }
