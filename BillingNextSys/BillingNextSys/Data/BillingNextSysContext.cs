@@ -19,6 +19,10 @@ namespace BillingNextSys.Models
             modelBuilder.Entity<Bill>()
             .HasIndex(p => new { p.BillActNum}).IsUnique();
 
+            modelBuilder.Entity<BillDetails>()
+             .HasOne(p => p.Bill)
+             .WithMany(b => b.BillDetails)
+             .OnDelete(DeleteBehavior.Cascade);
         }
 
         public DbSet<BillingNextSys.Models.Company> Company { get; set; }
