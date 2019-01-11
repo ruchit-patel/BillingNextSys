@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
-namespace BillingNextSys.Pages.Bill.Format1
+namespace BillingNextSys.Pages.Bill.Format2
 {
     public class CreateModel : PageModel
     {
@@ -34,7 +34,7 @@ namespace BillingNextSys.Pages.Bill.Format1
             Companies = _context.Company.Where(ab => ab.CompanyID.Equals(cid)).ToList();
             Branches = _context.Branch.Where(a => a.BranchID.Equals(bid)).ToList();
 
-            lastbillnumber = _context.Bill.Where(ab=>ab.BillActNum.HasValue).OrderByDescending(a => a.BillDate).Select(c => c.BillNumber).FirstOrDefault().ToString();
+            lastbillnumber = _context.Bill.Where(ab=> !(ab.BillActNum.HasValue)).OrderByDescending(a => a.BillDate).Select(c => c.BillNumber).FirstOrDefault().ToString();
 
             return Page();
         }
