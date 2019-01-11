@@ -18,6 +18,7 @@ namespace BillingNextSys.Models
         {
             modelBuilder.Entity<Bill>()
             .HasIndex(p => new { p.BillActNum}).IsUnique();
+
         }
 
         public DbSet<BillingNextSys.Models.Company> Company { get; set; }

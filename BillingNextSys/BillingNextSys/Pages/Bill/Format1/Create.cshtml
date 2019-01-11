@@ -503,7 +503,7 @@ function convertNumberToWords(amount) {
     obj.BillNumber =  ($("#Series option[value='" + $('#invoiceseries').val() + "']").val())+"/"+($('#yearser').val())+"/"+($('#bnum').val());
     obj.BilledTo = $("#tosearch option[value='" + $('#toinfo').val() + "']").val();
     obj.BillAmount=  $('#grandtotal').text().substring(1, $('#grandtotal').text().length);
-    obj.InvoiceDate = $('#invcdt').val();;
+    obj.InvoiceDate = $('#invcdt').val();
     obj.PlaceOfSupply= $('#placeofsup').find(":selected").val();
     obj.SeriesName=$("#Series option[value='" + $('#invoiceseries').val() + "']").val();
     obj.DebtorGroupID=$("#tosearch option[value='" + $('#toinfo').val() + "']").attr('id');

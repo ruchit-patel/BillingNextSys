@@ -34,6 +34,9 @@
         <div class="row">
             <div class="jumbotron" style="padding: 5px;">
                 <input type="hidden" id="billtoid" asp-for="Bill.DebtorGroupID"/>
+                <input type="hidden" id="seriesinfo" asp-for="Bill.SeriesName" />
+                <input type="hidden" id="billdate" asp-for="Bill.BillDate" />
+                <input type="hidden" id="billactnum" asp-for="Bill.BillActNum" />
                 <div class="row">
                     <div class="col-md-3">
                         <img class="img-responsive full-width" src="data:image/png;base64,@Convert.ToBase64String(Model.Companies.FirstOrDefault().CompanyLogoImg)" /> @*<img src="https://images-na.ssl-images-amazon.com/images/I/713t5BMNwdL._SX425_.jpg" height="250px" width="300px" style="padding:10px;" />*@
@@ -195,7 +198,7 @@
     </form>
 </div>
 <div class="form-group">
-    <input type="button" value="Create Bill" id="btncreate" class="btn btn-default" onclick="savebill()" />
+    <input type="button" value="Edit Bill" id="btnedit" class="btn btn-default" onclick="editbill()" />
 </div>
 <div>
     <a asp-page="/Bill/Index">Back to List</a>
@@ -296,14 +299,14 @@
             obj.SGSTAmount =  $("#sgst-"+btnid.substring(5)).text();
             obj.Amount =  $("#pamount-"+btnid.substring(5)).text();
 
-            
+
              var pinfoa=$("#parti-"+btnid.substring(5)).find('option[value="' + obj.ParticularsName + '"]').attr('id');
                  if(pinfoa==null || pinfoa==="undefined")
                 {
                 pinfoa=$('#pid-'+btnid.substring(5)).val();
                 }
                  $('#pid-'+btnid.substring(5)).val(pinfoa);
-            
+
 
             obj.ParticularsID =pinfoa;
             obj.DebtorGroupID =$('#billtoid').val();;
@@ -336,9 +339,8 @@
                  document.getElementById("saccode-"+btnid.substring(5)).style.display = "none";
                  document.getElementById("ptamount-"+btnid.substring(5)).style.display = "inline-block";
                  document.getElementById("taxableval-"+btnid.substring(5)).style.display = "none";
-
-                alert('pp-'+countid+"dfwef"+obj.TaxableValue+"and"+countid);
                  
+
             };
             options.error = function () {
                 alert("Error Occured while updating.");
@@ -507,7 +509,7 @@ function calcamount(pamount,idval)
 }
     function removeRow()
     {
-    var comval= $('#lastcount').val()
+    var comval= $('#lastcount').val();
 
         if(counter==comval)
          {
@@ -626,94 +628,90 @@ function convertNumberToWords(amount) {
 }
 
 
-    function savebill()
+    function editbill()
     {
-
+    var billlid=$('#invoicenum').text();
      var options = {};
-    options.url = "/Bill/Format1/Create?handler=InsertBill";
-    options.type = "POST";
+    options.url = "/Bill/Format1/Edit?id="+billlid+"&&handler=UpdateBill";
+    options.type = "PUT";
+
+            var obj = {};
+            obj.BillNumber = billlid;
+            obj.BilledTo = document.getElementById('toinfo').value;
+            obj.BillAmount = $('#grandtotal').text().substring(1, $('#grandtotal').text().length);
+            obj.InvoiceDate = $('#invcdt').val();
+            obj.PlaceOfSupply = $('#placeofsup').find(":selected").val();
+            obj.DebtorGroupID =  $('#billtoid').val();
+            obj.SeriesName =  $('#seriesinfo').val();
+            obj.BillDate =  $('#billdate').val();
+            obj.BillActNum =  $('#billactnum').val();
 
 
-    var obj = {};
-    obj.BillNumber =  ($("#Series option[value='" + $('#invoiceseries').val() + "']").val())+"/"+($('#yearser').val())+"/"+($('#bnum').val());
-    obj.BilledTo = $("#tosearch option[value='" + $('#toinfo').val() + "']").val();
-    obj.BillAmount=  $('#grandtotal').text().substring(1, $('#grandtotal').text().length);
-    obj.InvoiceDate = $('#invcdt').val();;
-    obj.PlaceOfSupply= $('#placeofsup').find(":selected").val();
-    obj.SeriesName=$("#Series option[value='" + $('#invoiceseries').val() + "']").val();
-    obj.DebtorGroupID=$("#tosearch option[value='" + $('#toinfo').val() + "']").attr('id');
-    obj.BillActNum=$('#bnum').val();
+            options.data = JSON.stringify(obj);
+            options.contentType = "application/json";
+            options.dataType = "html";
 
-    options.data = JSON.stringify(obj);
+            options.beforeSend = function (xhr) {
+                xhr.setRequestHeader("MY-XSRF-TOKEN",
+                $('input:hidden[name="__RequestVerificationToken"]').val());
+                };
+            options.success = function (msg) {
 
-    options.contentType = "application/json; charset=utf-8";
-    options.dataType = "json";
+                     $('#billdet tr').each(function(row, tr){
 
-    options.beforeSend = function (xhr) {
-        xhr.setRequestHeader("MY-XSRF-TOKEN",
-$('input:hidden[name="__RequestVerificationToken"]').val());
-    };
-    options.success = function (msg) {
+                     if(typeof($(tr).find('td:eq(0)').find("input").val())!=="undefined")
+                      {
+                         var comval= $('#lastcount').val();
+                         var rowid=$(tr).attr('id').substring(4);
+                         if(rowid>=comval)
+                         {
 
-    if(msg=="Added Successfully!")
-    {
-    $('#billdet tr').each(function(row, tr){
-    if(typeof($(tr).find('td:eq(0)').find("input").val())!=="undefined"){
+                                var options = {};
+                                options.url = "/Bill/Format1/Create?handler=InsertBillDetails";
+                                options.type = "POST";
+                                
 
-    var options = {};
-    options.url = "/Bill/Format1/Create?handler=InsertBillDetails";
-    options.type = "POST";
+                                var obj = {};
+                                obj.ParticularsName =  $(tr).find('td:eq(0)').find("input").val();
+                                obj.Amount =  $(tr).find('td:eq(5)').text();
+                                obj.CGSTAmount=$(tr).find('td:eq(3)').text();
+                                obj.SGSTAmount = $(tr).find('td:eq(4)').text();
+                                obj.TaxableValue= $(tr).find('td:eq(2)').find("input").val();
+                               var inputid=$(tr).find('td:eq(0)').find("input").val();
 
-    @*var myData = $('#insertform').serializeArray();*@
+                                obj.ParticularsID= $(tr).find('td:eq(0)').find("datalist").find('option[value="' + inputid + '"]').attr('id');
 
-    var obj = {};
-    obj.ParticularsName =  $(tr).find('td:eq(0)').find("input").val();
-    obj.Amount =  $(tr).find('td:eq(5)').text();
-    obj.CGSTAmount=$(tr).find('td:eq(3)').text();
-    obj.SGSTAmount = $(tr).find('td:eq(4)').text();
-    obj.TaxableValue= $(tr).find('td:eq(2)').find("input").val();
-   var inputid=$(tr).find('td:eq(0)').find("input").val();
+                                obj.BillNumber=$('#invoicenum').text();
+                                obj.DebtorGroupID=$('#billtoid').val();
 
-    obj.ParticularsID= $(tr).find('td:eq(0)').find("datalist").find('option[value="' + inputid + '"]').attr('id');
+                                options.data = JSON.stringify(obj);
+                                options.contentType = "application/json; charset=utf-8";
+                                options.dataType = "json";
 
-    obj.BillNumber=($("#Series option[value='" + $('#invoiceseries').val() + "']").val())+"/"+($('#yearser').val())+"/"+($('#bnum').val());
-    obj.DebtorGroupID=$("#tosearch option[value='" + $('#toinfo').val() + "']").attr('id');
-
-    options.data = JSON.stringify(obj);
-    options.contentType = "application/json; charset=utf-8";
-    options.dataType = "json";
-
-    options.beforeSend = function (xhr) {
-        xhr.setRequestHeader("MY-XSRF-TOKEN",
-$('input:hidden[name="__RequestVerificationToken"]').val());
-    };
-    options.success = function (msg) {
+                                options.beforeSend = function (xhr) {
+                                    xhr.setRequestHeader("MY-XSRF-TOKEN",
+                                    $('input:hidden[name="__RequestVerificationToken"]').val());
+                                };
+                                options.success = function (msg) {
 
 
-    };
-    options.error = function () {
+                                };
+                                options.error = function () {
 
-    alert("error");
-    };
-    $.ajax(options);
-    }
+                                alert("error");
+                                };
+                                $.ajax(options);
+                        }
+                      }
 
-});
-    }
-    else if(msg=="Update 1")
-    {
-   var curr= $('#bnum').val();
-    var curr=(+curr+1);
-    $('#bnum').val(curr);
-    savebill();
-    }
-    //redirect
-    window.location.pathname="/Bill/Index";
-    };
-    options.error = function () {
+                    });
+                window.location.pathname="/Bill/Index";
+            };
+            options.error = function () {
+                alert("Error Occured while updating.");
+            };
+            $.ajax(options);
 
-    alert("error in bill");
-    };
-    $.ajax(options);
+
 }
 </script>

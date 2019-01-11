@@ -56,38 +56,38 @@ namespace BillingNextSys.Pages.Bill.Format1
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
-        {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
+        //public async Task<IActionResult> OnPostAsync()
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return Page();
+        //    }
 
-            _context.Attach(Bill).State = EntityState.Modified;
+        //    _context.Attach(Bill).State = EntityState.Modified;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!BillExists(Bill.BillNumber))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+        //    try
+        //    {
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!BillExists(Bill.BillNumber))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
 
-            return RedirectToPage("./Index");
-        }
+        //    return RedirectToPage("./Index");
+        //}
 
-        private bool BillExists(string id)
-        {
-            return _context.Bill.Any(e => e.BillNumber == id);
-        }
+        //private bool BillExists(string id)
+        //{
+        //    return _context.Bill.Any(e => e.BillNumber == id);
+        //}
 
 
 
@@ -127,6 +127,33 @@ namespace BillingNextSys.Pages.Bill.Format1
             return _context.BillDetails.Any(e => e.BillDetailsID == id);
         }
 
+
+        public IActionResult OnPutUpdateBill(int id, [FromBody]Models.Bill obj)
+        {
+            obj.CompanyID = (int)_session.GetInt32("Cid");
+            _context.Attach(obj).State = EntityState.Modified;
+
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!BillExists(obj.BillNumber))
+                {
+                    return new JsonResult("Update Error!");
+                }
+                else
+                {
+                    return new JsonResult("Update Error!");
+                }
+            }
+            return new JsonResult("Bill Information Updated!");
+        }
+        private bool BillExists(string id)
+        {
+            return _context.Bill.Any(e => e.BillNumber == id);
+        }
 
     }
 }
