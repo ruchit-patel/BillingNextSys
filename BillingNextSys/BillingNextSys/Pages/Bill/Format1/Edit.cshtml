@@ -1,13 +1,13 @@
-@page
+﻿@page
 @using BillingNextSys.Models
-@model BillingNextSys.Pages.Bill.Format1.CreateModel
-
+@model EditModel
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
 }
+
 <link rel="stylesheet" src="/css/print.css" type="text/css" media="all" />
 <script src="~/lib/keymaster/keymaster.js"></script>
-<h2>Create</h2>
+<h2>Edit</h2>
 
 <h4>Bill</h4>
 <hr />
@@ -28,13 +28,12 @@
         border-top: 2px solid;
     }
 </style>
-<input type="hidden" id="billnum" value="@Model.lastbillnumber"/>
 <div class="container">
     <form onsubmit="return false;">
         @Html.AntiForgeryToken()
         <div class="row">
             <div class="jumbotron" style="padding: 5px;">
-
+                <input type="hidden" id="billtoid" asp-for="Bill.DebtorGroupID"/>
                 <div class="row">
                     <div class="col-md-3">
                         <img class="img-responsive full-width" src="data:image/png;base64,@Convert.ToBase64String(Model.Companies.FirstOrDefault().CompanyLogoImg)" /> @*<img src="https://images-na.ssl-images-amazon.com/images/I/713t5BMNwdL._SX425_.jpg" height="250px" width="300px" style="padding:10px;" />*@
@@ -61,16 +60,16 @@
                     <div class="col-xs-6">
                         <address>
                             <strong>Billed To:</strong><br>
-                            <div id="to"> <input id="toinfo" class="form-control" style="width:300px;" list="tosearch" autocomplete="off" onchange="fillvalues($(this).val());" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" onfocusout="filladress()"> <datalist id="tosearch"></datalist></div>
+                            <div id="to"> <input id="toinfo" class="form-control" style="width:300px;" list="tosearch" autocomplete="off" onchange="fillvalues($(this).val());" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" onfocusout="filladress()" value="@Html.DisplayFor(model=>model.Bill.BilledTo)"> <datalist id="tosearch"></datalist></div>
                             <div><p id="toaddress"></p></div><br>
                             <strong>GSTIN: </strong><div><p id="togstin"></p></div>
                         </address>
                     </div>
                     <div class="col-xs-6 text-right">
                         <address>
-                            <strong>Invoice Number:</strong> <div id="invoicenum"><input id="invoiceseries" style="width:50px;" list="Series" autocomplete="off" onchange="fillseries();" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();"><datalist id="Series"></datalist>/<input type="text" id="yearser" style="width:50px;" />/<input type="number" id="bnum" style="width:50px;" readonly /></div><br>
-                            <strong>Invoice Date:</strong> <div id="invoicedate"><input asp-for="Bill.InvoiceDate" id="invcdt" value="@string.Format("{0:yyyy-MM-dd}",DateTime.Now)" style="width:initial; border-radius:4px; height:35px;" /></div><br>
-                            <strong>Place Of Supply:</strong> <div id="placeofsupply"><select id="placeofsup" asp-items="Html.GetEnumSelectList(typeof(PlaceOfSupply))" style="width:initial; border-radius:4px; height:35px;"> </select></div><br>
+                            <strong>Invoice Number:</strong> <div id="invoicenum">@Html.DisplayFor(model=>model.Bill.BillNumber)</div><br>
+                            <strong>Invoice Date:</strong> <div id="invoicedate"><input asp-for="Bill.InvoiceDate" id="invcdt" style="width:initial; border-radius:4px; height:35px;" /></div><br>
+                            <strong>Place Of Supply:</strong> <div id="placeofsupply"><select id="placeofsup" asp-for="Bill.PlaceOfSupply" asp-items="Html.GetEnumSelectList(typeof(PlaceOfSupply))" style="width:initial; border-radius:4px; height:35px;"> </select></div><br>
                         </address>
                     </div>
                 </div>
@@ -88,28 +87,62 @@
                             <table class="table table-condensed order-list" id="billdet">
                                 <thead>
                                     <tr>
-                                        <button class="text-right" id="addoperations" onclick="addInput();"><img src="~/images/add.svg" height='20px' width='20px' />  </button>&nbsp;&nbsp;
-                                        <button class="text-right" id="deloperation" onclick="removeRow()"><img src="~/images/minus.png" height='20px' width='20px' />  </button>
+                                        <button class="text-right btn btn-default" id="addoperations" onclick="addInput();"><img src="~/images/add.svg" height='20px' width='20px' />  </button>&nbsp;&nbsp;
+                                        <button class="text-right btn btn-default" id="deloperation" onclick="removeRow()"><img src="~/images/minus.png" height='20px' width='20px' />  </button>
                                         <td><strong>Description of Service</strong></td>
                                         <td class="text-center"><strong>SAC Code</strong></td>
                                         <td class="text-center"><strong>Taxable Value</strong></td>
                                         <td class="text-center"><strong>CGST &#64 9 &#37 </strong></td>
                                         <td class="text-center"><strong>SGST &#64 9 &#37</strong></td>
-                                        <td class="text-right"><strong>Amount</strong></td>
+                                        <td class="text-center"><strong>Amount</strong></td>
+                                        <td class="text-right"><strong>Operation</strong></td>
                                     </tr>
                                 </thead>
                                 <tbody id="manupulation">
                                     <!-- foreach ($order->lineItems as $line) or some such thing here -->
 
-                                    <tr id="row-1" class="">
-                                        <td><input id="particulars-1" style="width:250px;" placeholder="Particulars.." list="parti-1" autocomplete="off" onchange="fillparticulars($(this).val(),-1);" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" onfocusout="fillpdetails(-1)"><datalist id="parti-1"></datalist></td>
-                                        <td class="text-center"><input style="width:65px;" placeholder="SAC Code.." type="number" id="saccode-1" /></td>
-                                        <td class="text-center"><input style="width:65px;" type="number" placeholder="Amount.." id="taxableval-1" onchange="calcamount($(this).val(),-1);" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" /></td>
-                                        <td class="text-center" id="cgst-1"></td>
-                                        <td class="text-center" id="sgst-1"></td>
-                                        <td class="text-right count-me" id="pamount-1"></td>
+                                    @{
+                                        var counter = -1;
+                                    }
 
-                                    </tr>
+                                    @foreach (var item in Model.BillDetailss)
+                                    {
+                                <tr id="row-@counter">
+                                    <td>
+                                     <p id="pp-@counter" style="display:inline-block;">@Html.DisplayFor(modelItem=>item.ParticularsName)</p>   <input style="display:none;" id="particulars-@counter" style="width:250px;" placeholder="Particulars.." value="@Html.DisplayFor(modelItem => item.ParticularsName)" list="parti-@counter" autocomplete="off" onchange="fillparticulars($(this).val(),@counter);" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" onfocusout="fillpdetails(@counter)"><datalist id="parti-@counter"></datalist>       
+                                        <input type="hidden" id="pid-@counter" value="@Html.DisplayFor(modelItem=>item.ParticularsID)"/>
+                                     </td>
+                                    <td class="text-center">
+                                       <p id="psac-@counter" style="display: inline-block;">@Html.DisplayFor(modelItem=>item.Particulars.SACCode)</p>   <input style="display:none; width:65px;" placeholder="SAC Code.." value="@Html.DisplayFor(modelItem => item.Particulars.SACCode)" type="number" id="saccode-@counter" />  
+                                    </td>
+                                    <td class="text-center">
+                                      <p id="ptamount-@counter" style="display: inline-block;">@Html.DisplayFor(modelItem=>item.TaxableValue)</p>    <input style="width:65px; display:none;" type="text" value="@Html.DisplayFor(modelItem => item.TaxableValue)" placeholder="Amount.." id="taxableval-@counter" onchange="calcamount($(this).val(),@counter);" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" />  
+                                    </td>
+                                    <td class="text-center" id="cgst-@counter">
+                                        @Html.DisplayFor(modelItem => item.CGSTAmount)
+                                    </td>
+                                    <td class="text-center" id="sgst-@counter">
+                                        @Html.DisplayFor(modelItem => item.SGSTAmount)
+                                    </td>
+                                    <td class="text-right count-me" id="pamount-@counter">
+                                        @Html.DisplayFor(modelItem => item.Amount)
+                                    </td>
+                                    <td class="text-right" id="opr-@counter">
+                                        <button onclick="editcont(this.id,@counter)" id="et-@Html.DisplayFor(modelItem => item.BillDetailsID)" class="btn btn-default"><img src="/images/edit.svg" height="20px" width="20px" class="img-responsive" /></button>  <button style="display:none;" onclick="savecont(this.id,@Html.DisplayFor(modelItem => item.BillDetailsID))" id="save-@counter" class="btn btn-default"><img src="/images/save.png" height="20px" width="20px" /></button> <button onclick="delcont(this.id,@Html.DisplayFor(modelItem => item.BillDetailsID))" id="del-@counter" class="btn btn-default"><img src="/images/delete.png" height="20px" width="20px" class="img-responsive" /></button>  
+                                    </td>
+                                </tr>
+                                    counter++;
+                                    }
+
+                                    @*<tr id="row-1" class="">
+            <td><input id="particulars-1" style="width:250px;" placeholder="Particulars.." list="parti-1" autocomplete="off" onchange="fillparticulars($(this).val(),-1);" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" onfocusout="fillpdetails(-1)"><datalist id="parti-1"></datalist></td>
+            <td class="text-center"><input style="width:65px;" placeholder="SAC Code.." type="number" id="saccode-1" /></td>
+            <td class="text-center"><input style="width:65px;" type="number" placeholder="Amount.." id="taxableval-1" onchange="calcamount($(this).val(),-1);" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" /></td>
+            <td class="text-center" id="cgst-1"></td>
+            <td class="text-center" id="sgst-1"></td>
+            <td class="text-right count-me" id="pamount-1"></td>
+
+        </tr>*@
 
                                     <tr>
                                         <td class="thick-line"></td>
@@ -120,15 +153,16 @@
                                         <td class="thick-line text-right" id="grandtotal"></td>
                                     </tr>
                                     @*<tr>
-                                        <td class="no-line text-left"><strong>Amount In Words:</strong></td>
-                                        <td class="no-line text-center">Seven Thousand Six Hundred Seventy.</td>
-                                        <td class="no-line"></td>
-                                        <td class="no-line"></td>
-                                        <td class="no-line"></td>
-                                        <td class="no-line"></td>
-                                    </tr>*@
+            <td class="no-line text-left"><strong>Amount In Words:</strong></td>
+            <td class="no-line text-center">Seven Thousand Six Hundred Seventy.</td>
+            <td class="no-line"></td>
+            <td class="no-line"></td>
+            <td class="no-line"></td>
+            <td class="no-line"></td>
+        </tr>*@
                                 </tbody>
                             </table>
+                            <input type="hidden" value="@counter" id="lastcount" />
                         </div>
                         <div class="row">
                             <div class="col-xs-12">
@@ -161,7 +195,7 @@
     </form>
 </div>
 <div class="form-group">
-    <input type="button" value="Create Bill" id="btncreate" class="btn btn-default" onclick="savebill()"/>
+    <input type="button" value="Create Bill" id="btncreate" class="btn btn-default" onclick="savebill()" />
 </div>
 <div>
     <a asp-page="/Bill/Index">Back to List</a>
@@ -171,22 +205,152 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
 <script>
+    var counter=0;
     window.onload = function() {
-        fillseries();
-         var lastbnum=$("#billnum").val();
-
-         $("#bnum").val(+(lastbnum.split('/')[2])+1);
-         $("#yearser").val(lastbnum.split('/')[1]);
+     filladress();
            document.getElementById("deloperation").style.display = "none";
         key('ctrl+1', function(){ document.getElementById("addoperations").click(); return false });
         key('ctrl+2', function(){ document.getElementById("deloperation").click(); return false });
+    counter = +($('#lastcount').val())-1;
+    resizeel();
+    calculateGrandTotal();
      };
-    var counter = -1;
+
+    function resizeel()
+    {
+    for (i = -1; i <= counter; i++)
+        {
+                    var particulars=document.getElementById('particulars-'+i);
+                if(particulars.value.length>0){
+                    particulars.style.width = ((particulars.value.length + 1) * 8) + 'px';
+                }else{
+                  particulars.style.width = ((particulars.getAttribute('placeholder').length + 1) * 8) + 'px';
+                }
+
+                var taxableval=document.getElementById('taxableval-'+i);
+                if(taxableval.value.length>0){
+                    taxableval.style.width = ((taxableval.value.length + 3) * 8) + 'px';
+                }else{
+                  taxableval.style.width = ((taxableval.getAttribute('placeholder').length + 3) * 8) + 'px';
+                }
+        }
+    }
+
+    function editcont(btnid,count)
+    {
+      document.getElementById(btnid).style.display = "none";
+     document.getElementById("save-"+count).style.display = "inline-block";
+      document.getElementById("pp-"+count).style.display = "none";
+     document.getElementById("particulars-"+count).style.display = "inline-block";
+     document.getElementById("psac-"+count).style.display = "none";
+     document.getElementById("saccode-"+count).style.display = "inline-block";
+     document.getElementById("ptamount-"+count).style.display = "none";
+    document.getElementById("taxableval-"+count).style.display = "inline-block";
+    $('#taxableval-'+count).val($('#taxableval-'+count).val().replace(/[^0-9.]/g,''));
+    $('#cgst-'+count).val($('#cgst-'+count).val().replace(/[^0-9.]/g,''));
+    $('#sgst-'+count).val($('#sgst-'+count).val().replace(/[^0-9.]/g,''));
+    $('#pamount-'+count).val($('#pamount-'+count).val().replace(/[^0-9.]/g,''));
+    }
+
+
+    function delcont(btnid,count)
+    {
+           var options = {};
+           options.url = "/Bill/Format1/Edit?id="+count+"&&handler=DeleteBillDetails";
+           options.type = "DELETE";
+           options.dataType = "html";
+           options.beforeSend = function (xhr) {
+           xhr.setRequestHeader("MY-XSRF-TOKEN",
+           $('input:hidden[name="__RequestVerificationToken"]').val());
+           };
+           options.success = function (msg) {
+
+            if(msg=='"Deleted Successfully! Remove Row."')
+             {
+                  document.getElementById("row-"+btnid.substring(4)).style.display = "none";
+             }
+            else
+             {
+                alert("Exception occured while handling the return data.");
+             }
+            };
+           options.error = function () {
+                alert("Error Occured while deleting.");
+            };
+       $.ajax(options);
+    }
+
+
+    function savecont(btnid,billid)
+    {
+                var options = {};
+            options.url = "/Bill/Format1/Edit?id="+billid+"&&handler=UpdateBillDetails";
+            options.type = "PUT";
+
+
+            var obj = {};
+            obj.BillDetailsID = billid;
+            obj.ParticularsName = $("#particulars-"+btnid.substring(5)).val();
+            obj.TaxableValue = $("#taxableval-"+btnid.substring(5)).val();
+            obj.CGSTAmount = $("#cgst-"+btnid.substring(5)).text();
+            obj.SGSTAmount =  $("#sgst-"+btnid.substring(5)).text();
+            obj.Amount =  $("#pamount-"+btnid.substring(5)).text();
+
+            
+             var pinfoa=$("#parti-"+btnid.substring(5)).find('option[value="' + obj.ParticularsName + '"]').attr('id');
+                 if(pinfoa==null || pinfoa==="undefined")
+                {
+                pinfoa=$('#pid-'+btnid.substring(5)).val();
+                }
+                 $('#pid-'+btnid.substring(5)).val(pinfoa);
+            
+
+            obj.ParticularsID =pinfoa;
+            obj.DebtorGroupID =$('#billtoid').val();;
+            obj.BillNumber=$('#invoicenum').text();
+
+
+            options.data = JSON.stringify(obj);
+            alert(options.data);
+            options.contentType = "application/json";
+            options.dataType = "html";
+
+            options.beforeSend = function (xhr) {
+                xhr.setRequestHeader("MY-XSRF-TOKEN",
+                $('input:hidden[name="__RequestVerificationToken"]').val());
+                };
+            options.success = function (msg) {
+                 var countid=btnid.substring(5);
+                    @*$('pp-'+countid).text(''+obj.ParticularsName);
+                     $('ptamount-'+countid).text(''+obj.TaxableValue);*@
+                     document.getElementById("pp-"+countid).innerHTML=obj.ParticularsName;
+                     document.getElementById("ptamount-"+countid).innerHTML=obj.TaxableValue;
+                     $('cgst-'+countid).text(''+obj.CGSTAmount);
+                     $('sgst-'+countid).text(''+obj.SGSTAmount);
+                     $('pamount-'+countid).text(''+obj.Amount);
+                 document.getElementById(btnid).style.display = "none";
+                 document.getElementById("et-"+billid).style.display = "inline-block";
+                 document.getElementById("pp-"+btnid.substring(5)).style.display = "inline-block";
+                 document.getElementById("particulars-"+btnid.substring(5)).style.display = "none";
+                 document.getElementById("psac-"+btnid.substring(5)).style.display = "inline-block";
+                 document.getElementById("saccode-"+btnid.substring(5)).style.display = "none";
+                 document.getElementById("ptamount-"+btnid.substring(5)).style.display = "inline-block";
+                 document.getElementById("taxableval-"+btnid.substring(5)).style.display = "none";
+
+                alert('pp-'+countid+"dfwef"+obj.TaxableValue+"and"+countid);
+                 
+            };
+            options.error = function () {
+                alert("Error Occured while updating.");
+            };
+            $.ajax(options);
+
+    }
 
     function fillparticulars(pname,idval)
     {
 
-      var dataList = document.getElementById("parti"+idval);
+      var dataList = document.getElementById("parti-"+idval);
 
     var options = {};
     options.url = "/Bill/Format1/Create?str="+pname+"&&handler=Particulars";
@@ -195,7 +359,7 @@
 
     options.success = function (data) {
 
-     $("#parti"+idval).empty();
+     $("#parti-"+idval).empty();
     data.forEach(function (element) {
 
      var option = document.createElement('option');
@@ -252,43 +416,17 @@
     $.ajax(options);
     }
 
-    function fillseries()
-    {
-    var dataList = document.getElementById('Series');
-
-    var options = {};
-    options.url = "/Bill/Format1/Create?handler=Series";
-    options.type = "GET";
-    options.dataType = "json";
-    options.success = function (data) {
-    $("#Series").empty();
-    data.forEach(function (element) {
-    @*newInput +="<tr><td>"+element.debtorName+"</td><td>"+element.debtorOutstanding+"</td><td><button style='padding: 0;border: none;background: none;' onclick='delindidet("+element.debtorID+")'><img src='/images/delete.png' alt='delete' height='20px' width='20px' /></button>&nbsp;&nbsp;&nbsp;&nbsp;<a href='#modal_edit' data-toggle='modal' data-did='"+element.debtorID+"' data-dname='"+element.debtorName+"' data-doutstan='"+element.debtorOutstanding+"' data-dgid='"+element.debtorGroupID+"' ><img src='/images/edit.svg' alt='Edit Record' height='20px' width='20px' /></a></td></tr>";*@
-
-     var option = document.createElement('option');
-                @*// Set the value using the item in the JSON array.*@
-          option.value = element.seriesName;
-                @*// Add the <option> element to the <datalist>.*@
-       dataList.appendChild(option);
-
-           });
-
-    };
-    options.error = function () {
-     var option = document.createElement('option');
-                @*// Set the value using the item in the JSON array.*@
-          option.value = "Couldn't Fetch Series Information";
-                @*// Add the <option> element to the <datalist>.*@
-       dataList.appendChild(option);
-    };
-    $.ajax(options);
-    }
-
 
     function filladress()
     {
 
     var dinfoa = $("#tosearch option[value='" + $('#toinfo').val() + "']").attr('id');
+
+    if(dinfoa==null || dinfoa==="undefined")
+    {
+    dinfoa=$('#billtoid').val();
+    }
+     $('#billtoid').val(dinfoa);
     var options = {};
     options.url = "/Bill/Format1/Create?id="+dinfoa+"&&handler=BillToDetails";
     options.type = "GET";
@@ -307,32 +445,32 @@
 
     function fillpdetails(idval)
     {
-    var particulars=document.getElementById('particulars'+idval);
+    var particulars=document.getElementById('particulars-'+idval);
     if(particulars.value.length>0){
         particulars.style.width = ((particulars.value.length + 1) * 8) + 'px';
     }else{
       particulars.style.width = ((particulars.getAttribute('placeholder').length + 1) * 8) + 'px';
     }
-     var pinfoa = $("#parti"+idval+" option[value='" + $('#particulars'+idval).val() + "']").attr('id');
+     var pinfoa = $("#parti-"+idval+" option[value='" + $('#particulars-'+idval).val() + "']").attr('id');
     var options = {};
     options.url = "/Bill/Format1/Create?id="+pinfoa+"&&handler=ParticularsDetails";
     options.type = "GET";
     options.dataType = "json";
     options.success = function (data) {
-        $("#saccode"+idval).val(data.sacCode);
-        $("#taxableval"+idval).val(data.amount);
+        $("#saccode-"+idval).val(data.sacCode);
+        $("#taxableval-"+idval).val(data.amount);
         calcamount(data.amount,idval);
     };
     options.error = function () {
-     $("#toaddress"+idval).val("-1");
-     $("#taxableval"+idval).val("-1");
+     $("#saccode-"+idval).val("-1");
+     $("#taxableval-"+idval).val("-1");
     };
     $.ajax(options);
   }
 
 function calcamount(pamount,idval)
     {
-    var taxableval=document.getElementById('taxableval'+idval);
+    var taxableval=document.getElementById('taxableval-'+idval);
     if(taxableval.value.length>0){
         taxableval.style.width = ((taxableval.value.length + 3) * 8) + 'px';
     }else{
@@ -342,23 +480,23 @@ function calcamount(pamount,idval)
     var cgst= (+(pamount)*9)/100;
         var sgst=cgst;
         var total=+pamount+cgst+sgst;
-     document.getElementById('cgst'+idval).innerHTML =cgst.toFixed(2);
-    document.getElementById('sgst'+idval).innerHTML = sgst.toFixed(2);
-    document.getElementById('pamount'+idval).innerHTML = total.toFixed(0);
+     document.getElementById('cgst-'+idval).innerHTML =cgst.toFixed(2);
+    document.getElementById('sgst-'+idval).innerHTML = sgst.toFixed(2);
+    document.getElementById('pamount-'+idval).innerHTML = total.toFixed(0);
     calculateGrandTotal();
     }
 
   function addInput(){
        counter++;
-    var rowid='row'+counter;
-       var newRow = $("<tr id='row"+counter+"'>");
+    var rowid='row-'+counter;
+       var newRow = $("<tr id='row-"+counter+"'>");
         var cols = "";
-         cols+='<td><input id="particulars' + counter + '" style="width:250px;" placeholder="Particulars.." list="parti' + counter + '" autocomplete="off" onchange="fillparticulars($(this).val(),' + counter + ');" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" onfocusout="fillpdetails(' + counter + ')"><datalist id="parti' + counter + '"></datalist></td>';
-          cols+='<td class="text-center"><input style="width:65px;" type="number" placeholder="SAC Code.." id="saccode' + counter + '" /></td>';
-             cols+='<td class="text-center"><input style="width:65px;" type="number" placeholder="Amount.." id="taxableval' + counter + '" onchange="calcamount($(this).val(),' + counter + ');" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" /></td>';
-                cols+= '<td class="text-center" id="cgst' + counter + '"></td>';
-                  cols+='<td class="text-center" id="sgst' + counter + '"></td>';
-                    cols+= '<td class="text-right count-me" id="pamount' + counter + '"></td>';
+         cols+='<td><input id="particulars-' + counter + '" style="width:250px;" placeholder="Particulars.." list="parti-' + counter + '" autocomplete="off" onchange="fillparticulars($(this).val(),' + counter + ');" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" onfocusout="fillpdetails(' + counter + ')"><datalist id="parti-' + counter + '"></datalist></td>';
+          cols+='<td class="text-center"><input style="width:65px;" type="number" placeholder="SAC Code.." id="saccode-' + counter + '" /></td>';
+             cols+='<td class="text-center"><input style="width:65px;" type="number" placeholder="Amount.." id="taxableval-' + counter + '" onchange="calcamount($(this).val(),' + counter + ');" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" /></td>';
+                cols+= '<td class="text-center" id="cgst-' + counter + '"></td>';
+                  cols+='<td class="text-center" id="sgst-' + counter + '"></td>';
+                    cols+= '<td class="text-right count-me" id="pamount-' + counter + '"></td>';
 
      document.getElementById("deloperation").style.display = "inline";
         newRow.append(cols);
@@ -369,21 +507,18 @@ function calcamount(pamount,idval)
 }
     function removeRow()
     {
-        if(counter==0)
+    var comval= $('#lastcount').val()
+
+        if(counter==comval)
          {
             document.getElementById("deloperation").style.display = "none";
-            $('#row'+counter).remove();
+            $('#row-'+counter).remove();
             counter -= 1;
-            calculateGrandTotal();
-         }
-        else if(counter==-1)
-         {
-            document.getElementById("deloperation").style.display = "none";
             calculateGrandTotal();
          }
         else
         {
-            $('#row'+counter).remove();
+            $('#row-'+counter).remove();
             counter -= 1;
             calculateGrandTotal();
         }
@@ -395,7 +530,7 @@ function calcamount(pamount,idval)
     $('tr').each(function () {
    // var sum = 0;
     $(this).find('.count-me').each(function () {
-      var combat = $(this).text();
+      var combat = $(this).text().replace(/[^0-9.]/g,'');
       if (!isNaN(combat) && combat.length !== 0) {
         grandTotal += parseFloat(combat);
       }
