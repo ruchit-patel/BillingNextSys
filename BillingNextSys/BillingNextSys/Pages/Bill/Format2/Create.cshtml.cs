@@ -59,35 +59,15 @@ namespace BillingNextSys.Pages.Bill.Format2
             return RedirectToPage("./Index");
         }
 
-        public IActionResult OnGetBillTo(string str)
+
+
+        public IActionResult OnGetBillToDebtorInfo(int id)
         {
-            List<Models.DebtorGroup> data = _context.DebtorGroup.Where(a => a.DebtorGroupName.ToLower().Contains(str.ToLower())).ToList();
+            List<Models.Debtor> data = _context.Debtor.Where(a => a.DebtorGroupID.Equals(id)).ToList();
             return new JsonResult(data);
         }
 
-        public IActionResult OnGetBillToDetails(int id)
-        {
-           Models.DebtorGroup data = _context.DebtorGroup.Find(id);
-            return new JsonResult(data);
-        }
 
-        public IActionResult OnGetSeries()
-        {
-            List<Models.BillSeries> data = _context.BillSeries.ToList();
-            return new JsonResult(data);
-        }
-
-        public IActionResult OnGetParticulars(string str)
-        {
-            List<Models.Particulars> data = _context.Particulars.Where(a => a.ParticularsName.ToLower().Contains(str.ToLower())).ToList();
-            return new JsonResult(data);
-        }
-
-        public IActionResult OnGetParticularsDetails(int id)
-        {
-            Models.Particulars data = _context.Particulars.Find(id);
-            return new JsonResult(data);
-        }
 
         public IActionResult OnPostInsertBillDetails([FromBody] Models.BillDetails obj)
         {

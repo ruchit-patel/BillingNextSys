@@ -36,19 +36,19 @@
             <div class="jumbotron" style="padding: 5px;">
 
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-xs-3">
                         <img class="img-responsive full-width" src="data:image/png;base64,@Convert.ToBase64String(Model.Companies.FirstOrDefault().CompanyLogoImg)" /> @*<img src="https://images-na.ssl-images-amazon.com/images/I/713t5BMNwdL._SX425_.jpg" height="250px" width="300px" style="padding:10px;" />*@
                     </div>
-                    <div class="col-md-9">
+                    <div class="col-xs-9">
                         <h1>@Html.DisplayFor(model => model.Companies.FirstOrDefault().CompanyName)</h1>
                         <h2>CHARTERED ACCOUNTANTS</h2>
                         <h4>@Html.DisplayFor(model => model.Branches.FirstOrDefault().BranchAddress)</h4>
                         <div class="row">
-                            <div class="col-md-6"><h4> <img src="/images/mail.svg" alt="Mail:" width="20px" height="20px" />&nbsp; @Html.DisplayFor(model => model.Branches.FirstOrDefault().BranchEmail)</h4></div>
-                            <div class="col-md-6"><h4> <img src="/images/mobile.png" alt="Mobile Number:" width="20px" height="20px" />&nbsp; @Html.DisplayFor(model => model.Branches.FirstOrDefault().BranchPhone)</h4></div>
+                            <div class="col-xs-6"><h4> <img src="/images/mail.svg" alt="Mail:" width="20px" height="20px" />&nbsp; @Html.DisplayFor(model => model.Branches.FirstOrDefault().BranchEmail)</h4></div>
+                            <div class="col-xs-6"><h4> <img src="/images/mobile.png" alt="Mobile Number:" width="20px" height="20px" />&nbsp; @Html.DisplayFor(model => model.Branches.FirstOrDefault().BranchPhone)</h4></div>
                         </div>
                         <div class="row">
-                            <div class="col-md-2"></div> <div class="col-md-10"><h3>GSTIN:@Html.DisplayFor(model => model.Companies.FirstOrDefault().GSTIN)</h3></div>
+                            <div class="col-xs-2"></div> <div class="col-xs-10"><h3>GSTIN:@Html.DisplayFor(model => model.Companies.FirstOrDefault().GSTIN)</h3></div>
                         </div>
                     </div>
                 </div>
@@ -68,7 +68,7 @@
                     </div>
                     <div class="col-xs-6 text-right">
                         <address>
-                            <strong>Invoice Number:</strong> <div id="invoicenum"><input id="invoiceseries" style="width:50px;" list="Series" autocomplete="off" onchange="fillseries();" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();"><datalist id="Series"></datalist>/<input type="text" id="yearser" style="width:50px;" />/<input type="number" id="bnum" style="width:50px;" readonly /></div><br>
+                            <strong>Invoice Number:</strong> <div id="invoicenum"><input id="invoiceseries" style="width:50px;" list="Series" autocomplete="off" ><datalist id="Series"></datalist>/<input type="text" id="yearser" style="width:50px;" />/<input type="number" id="bnum" style="width:50px;" readonly /></div><br>
                             <strong>Invoice Date:</strong> <div id="invoicedate"><input asp-for="Bill.InvoiceDate" id="invcdt" value="@string.Format("{0:yyyy-MM-dd}",DateTime.Now)" style="width:initial; border-radius:4px; height:35px;" /></div><br>
                             <strong>Place Of Supply:</strong> <div id="placeofsupply"><select id="placeofsup" asp-items="Html.GetEnumSelectList(typeof(PlaceOfSupply))" style="width:initial; border-radius:4px; height:35px;"> </select></div><br>
                         </address>
@@ -78,7 +78,7 @@
         </div>
 
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-xs-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3 class="panel-title"><strong>Bill summary</strong></h3>
@@ -288,6 +288,15 @@
     function filladress()
     {
 
+     var x = document.getElementById("tosearch");
+    var i;
+    for (i = 0; i < x.options.length; i++) {
+        if(x.options[i].value!= $('#toinfo').val())
+        {
+            $('#toinfo').val('');
+        }
+    }
+
     var dinfoa = $("#tosearch option[value='" + $('#toinfo').val() + "']").attr('id');
     var options = {};
     options.url = "/Bill/Format1/Create?id="+dinfoa+"&&handler=BillToDetails";
@@ -307,6 +316,15 @@
 
     function fillpdetails(idval)
     {
+     var x = document.getElementById("parti"+idval);
+    var i;
+    for (i = 0; i < x.options.length; i++) {
+        if(x.options[i].value!= $('#particulars'+idval).val())
+        {
+            $('#particulars'+idval).val('');
+        }
+    }
+
     var particulars=document.getElementById('particulars'+idval);
     if(particulars.value.length>0){
         particulars.style.width = ((particulars.value.length + 1) * 8) + 'px';

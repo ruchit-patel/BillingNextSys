@@ -65,14 +65,12 @@
                             <strong>Billed To:</strong><br>
                             <div id="to"> <input id="toinfo" class="form-control" style="width:300px;" list="tosearch" autocomplete="off" onchange="fillvalues($(this).val());" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" onfocusout="filladress()" value="@Html.DisplayFor(model=>model.Bill.BilledTo)"> <datalist id="tosearch"></datalist></div>
                             <div><p id="toaddress"></p></div><br>
-                            <strong>GSTIN: </strong><div><p id="togstin"></p></div>
                         </address>
                     </div>
                     <div class="col-xs-6 text-right">
                         <address>
                             <strong>Invoice Number:</strong> <div id="invoicenum">@Html.DisplayFor(model=>model.Bill.BillNumber)</div><br>
                             <strong>Invoice Date:</strong> <div id="invoicedate"><input asp-for="Bill.InvoiceDate" id="invcdt" style="width:initial; border-radius:4px; height:35px;" /></div><br>
-                            <strong>Place Of Supply:</strong> <div id="placeofsupply"><select id="placeofsup" asp-for="Bill.PlaceOfSupply" asp-items="Html.GetEnumSelectList(typeof(PlaceOfSupply))" style="width:initial; border-radius:4px; height:35px;"> </select></div><br>
                         </address>
                     </div>
                 </div>
@@ -92,11 +90,11 @@
                                     <tr>
                                         <button class="text-right btn btn-default" id="addoperations" onclick="addInput();"><img src="~/images/add.svg" height='20px' width='20px' />  </button>&nbsp;&nbsp;
                                         <button class="text-right btn btn-default" id="deloperation" onclick="removeRow()"><img src="~/images/minus.png" height='20px' width='20px' />  </button>
-                                        <td><strong>Description of Service</strong></td>
-                                        <td class="text-center"><strong>SAC Code</strong></td>
-                                        <td class="text-center"><strong>Taxable Value</strong></td>
-                                        <td class="text-center"><strong>CGST &#64 9 &#37 </strong></td>
-                                        <td class="text-center"><strong>SGST &#64 9 &#37</strong></td>
+                                       
+                                        <td><strong>Debtor Name</strong></td>
+                                        <td class="text-left"><strong>Particulars</strong></td>
+                                        <td class="text-center"><strong>Year</strong></td>
+                                        <td class="text-center"><strong>Period</strong></td>
                                         <td class="text-center"><strong>Amount</strong></td>
                                         <td class="text-right"><strong>Operation</strong></td>
                                     </tr>
@@ -111,25 +109,25 @@
                                     @foreach (var item in Model.BillDetailss)
                                     {
                                 <tr id="row-@counter">
+                                     <td>
+                                     <p id="dt-@counter" style="display:inline-block;">@Html.DisplayFor(modelItem=>item.Debtor.DebtorName)</p>   <input style="display:none;" id="dname-@counter" style="width:250px;" placeholder="Debtor Name.." value="@Html.DisplayFor(modelItem => item.Debtor.DebtorName)" list="debname-@counter" autocomplete="off"><datalist id="debname-@counter"></datalist>       
+                                        <input type="hidden" id="did-@counter" value="@Html.DisplayFor(modelItem=>item.DebtorID)"/>
+                                     </td>
                                     <td>
-                                     <p id="pp-@counter" style="display:inline-block;">@Html.DisplayFor(modelItem=>item.ParticularsName)</p>   <input style="display:none;" id="particulars-@counter" style="width:250px;" placeholder="Particulars.." value="@Html.DisplayFor(modelItem => item.ParticularsName)" list="parti-@counter" autocomplete="off" onchange="fillparticulars($(this).val(),@counter);" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" onfocusout="fillpdetails(@counter)"><datalist id="parti-@counter"></datalist>       
+                                     <p id="pp-@counter" style="display:inline-block;">@Html.DisplayFor(modelItem=>item.ParticularsName)</p>   <input  id="particulars-@counter" style="width:250px;display:none;" placeholder="Particulars.." value="@Html.DisplayFor(modelItem => item.ParticularsName)" list="parti-@counter" autocomplete="off" onchange="fillparticulars($(this).val(),@counter);" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" onfocusout="fillpdetails(@counter)"><datalist id="parti-@counter"></datalist>       
                                         <input type="hidden" id="pid-@counter" value="@Html.DisplayFor(modelItem=>item.ParticularsID)"/>
                                      </td>
                                     <td class="text-center">
-                                       <p id="psac-@counter" style="display: inline-block;">@Html.DisplayFor(modelItem=>item.Particulars.SACCode)</p>   <input style="display:none; width:65px;" placeholder="SAC Code.." value="@Html.DisplayFor(modelItem => item.Particulars.SACCode)" type="number" id="saccode-@counter" />  
+                                    
+                                       <p id="year-@counter" style="display: inline-block;">@Html.DisplayFor(modelItem=>item.YearInfo)</p>  <select style="display:none;" id="yearsel-@counter" class="form-control" asp-items="Html.GetEnumSelectList(typeof(YearInfo))"> </select>  
                                     </td>
                                     <td class="text-center">
-                                      <p id="ptamount-@counter" style="display: inline-block;">@Html.DisplayFor(modelItem=>item.TaxableValue)</p>    <input style="width:65px; display:none;" type="text" value="@Html.DisplayFor(modelItem => item.TaxableValue)" placeholder="Amount.." id="taxableval-@counter" onchange="calcamount($(this).val(),@counter);" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" />  
+                                      <p id="period-@counter" style="display: inline-block;">@Html.DisplayFor(modelItem=>item.Period)</p>    <input style="width:65px; display:none;" type="text" value="@Html.DisplayFor(modelItem => item.Period)" placeholder="Period.." id="periodinput-@counter" />  
                                     </td>
-                                    <td class="text-center" id="cgst-@counter">
-                                        @Html.DisplayFor(modelItem => item.CGSTAmount)
+                                    <td class="text-center count-me">
+                                        <p id="amount-@counter" style="display: inline-block;">@Html.DisplayFor(modelItem => item.Amount)</p>    <input style="width:65px; display:none;" type="text" value="@Html.DisplayFor(modelItem => item.Amount)" placeholder="Amount.." id="amountinput-@counter" onchange="calcamount($(this).val(),@counter);" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" />
                                     </td>
-                                    <td class="text-center" id="sgst-@counter">
-                                        @Html.DisplayFor(modelItem => item.SGSTAmount)
-                                    </td>
-                                    <td class="text-right count-me" id="pamount-@counter">
-                                        @Html.DisplayFor(modelItem => item.Amount)
-                                    </td>
+
                                     <td class="text-right" id="opr-@counter">
                                         <button onclick="editcont(this.id,@counter)" id="et-@Html.DisplayFor(modelItem => item.BillDetailsID)" class="btn btn-default"><img src="/images/edit.svg" height="20px" width="20px" class="img-responsive" /></button>  <button style="display:none;" onclick="savecont(this.id,@Html.DisplayFor(modelItem => item.BillDetailsID))" id="save-@counter" class="btn btn-default"><img src="/images/save.png" height="20px" width="20px" /></button> <button onclick="delcont(this.id,@Html.DisplayFor(modelItem => item.BillDetailsID))" id="del-@counter" class="btn btn-default"><img src="/images/delete.png" height="20px" width="20px" class="img-responsive" /></button>  
                                     </td>
@@ -151,9 +149,8 @@
                                         <td class="thick-line"></td>
                                         <td class="thick-line"></td>
                                         <td class="thick-line"></td>
-                                        <td class="thick-line"></td>
                                         <td class="thick-line text-center"><strong>Total</strong></td>
-                                        <td class="thick-line text-right" id="grandtotal"></td>
+                                        <td class="thick-line text-center" id="grandtotal"></td>
                                     </tr>
                                     @*<tr>
             <td class="no-line text-left"><strong>Amount In Words:</strong></td>
@@ -422,6 +419,16 @@
     function filladress()
     {
 
+    var x = document.getElementById("tosearch");
+    var i;
+    for (i = 0; i < x.options.length; i++) {
+        if(x.options[i].value!= $('#toinfo').val())
+        {
+            $('#toinfo').val('');
+        }
+    }
+    document.getElementById("demo").innerHTML = txt;
+
     var dinfoa = $("#tosearch option[value='" + $('#toinfo').val() + "']").attr('id');
 
     if(dinfoa==null || dinfoa==="undefined")
@@ -447,6 +454,14 @@
 
     function fillpdetails(idval)
     {
+       var x = document.getElementById("parti-"+idval);
+    var i;
+    for (i = 0; i < x.options.length; i++) {
+        if(x.options[i].value!= $('#particulars-'+idval).val())
+        {
+            $('#particulars-'+idval).val('');
+        }
+    }
     var particulars=document.getElementById('particulars-'+idval);
     if(particulars.value.length>0){
         particulars.style.width = ((particulars.value.length + 1) * 8) + 'px';

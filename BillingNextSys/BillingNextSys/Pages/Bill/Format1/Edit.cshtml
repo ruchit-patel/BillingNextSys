@@ -422,6 +422,15 @@
     function filladress()
     {
 
+     var x = document.getElementById("tosearch");
+    var i;
+    for (i = 0; i < x.options.length; i++) {
+        if(x.options[i].value!= $('#toinfo').val())
+        {
+            $('#toinfo').val('');
+        }
+    }
+
     var dinfoa = $("#tosearch option[value='" + $('#toinfo').val() + "']").attr('id');
 
     if(dinfoa==null || dinfoa==="undefined")
@@ -447,6 +456,15 @@
 
     function fillpdetails(idval)
     {
+       var x = document.getElementById("parti"+idval);
+    var i;
+    for (i = 0; i < x.options.length; i++) {
+        if(x.options[i].value!= $('#particulars'+idval).val())
+        {
+            $('#particulars'+idval).val('');
+        }
+    }
+
     var particulars=document.getElementById('particulars-'+idval);
     if(particulars.value.length>0){
         particulars.style.width = ((particulars.value.length + 1) * 8) + 'px';

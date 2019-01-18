@@ -85,9 +85,9 @@
                                         <button class="text-right btn btn-default" id="addoperations" onclick="addInput();"><img src="~/images/add.svg" height='20px' width='20px' />  </button>&nbsp;&nbsp;
                                         <button class="text-right btn btn-default" id="deloperation" onclick="removeRow()"><img src="~/images/minus.png" height='20px' width='20px' />  </button>
                                         <td><strong>Debtor Name</strong></td>
-                                        <td class="text-center"><strong>Particulars</strong></td>
-                                        <td class="text-center"><strong>Year</strong></td>
-                                        <td class="text-center"><strong>Period</strong></td>
+                                        <td class="text-left"><strong>Particulars</strong></td>
+                                        <td class="text-left"><strong>Year</strong></td>
+                                        <td class="text-left"><strong>Period</strong></td>
                                         <td class="text-right"><strong>Amount</strong></td>
                                     </tr>
                                 </thead>
@@ -95,11 +95,11 @@
                                     <!-- foreach ($order->lineItems as $line) or some such thing here -->
 
                                     <tr id="row-1" class="">
-                                        <td id="debtorName"></td>
-                                        <td class="text-center" ><input id="particulars-1" style="width:250px;" placeholder="Particulars.." list="parti-1" autocomplete="off" onchange="fillparticulars($(this).val(),-1);" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" onfocusout="fillpdetails(-1)"><datalist id="parti-1"></datalist></td>
-                                        <td class="text-center" id="year-1"></td>
-                                        <td class="text-center" id="period-1"></td>
-                                        <td class="text-right count-me" id="pamount-1"></td>
+                                        <td><input id="dname-1" style="width:250px;" class="form-control" placeholder="Debtor Name.." list="debname-1" autocomplete="off" ><datalist id="debname-1"></datalist></td>
+                                        <td ><input id="particulars-1" class="form-control" style="width:250px;" placeholder="Particulars.." list="parti-1" autocomplete="off" onchange="fillparticulars($(this).val(),-1);" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" onfocusout="fillpdetails(-1)"><datalist id="parti-1"></datalist></td>
+                                        <td class="text-center"><select id="year-1" class="form-control" asp-items="Html.GetEnumSelectList(typeof(YearInfo))"> </select> </td>
+                                        <td class="text-center"> <input id="period-1" class="form-control" style="width:120px;" placeholder="E.g. 2018-19 " list="periodlist-1" ><datalist id="periodlist-1"></datalist></td>
+                                        <td class="text-right count-me" ><input class="form-control pull-right" style="text-align:right; width:120px; " type="number" id="pamount-1" onchange="calcamount($(this).val(),-1);" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();"/></td>
 
                                     </tr>
 
@@ -107,18 +107,9 @@
                                         <td class="thick-line"></td>
                                         <td class="thick-line"></td>
                                         <td class="thick-line"></td>
-                                        <td class="thick-line"></td>
                                         <td class="thick-line text-center"><strong>Total</strong></td>
                                         <td class="thick-line text-right" id="grandtotal"></td>
                                     </tr>
-                                    @*<tr>
-                                        <td class="no-line text-left"><strong>Amount In Words:</strong></td>
-                                        <td class="no-line text-center">Seven Thousand Six Hundred Seventy.</td>
-                                        <td class="no-line"></td>
-                                        <td class="no-line"></td>
-                                        <td class="no-line"></td>
-                                        <td class="no-line"></td>
-                                    </tr>*@
                                 </tbody>
                             </table>
                         </div>
@@ -164,7 +155,7 @@
 }
 <script>
     window.onload = function() {
-        fillseries();
+
          var lastbnum=$("#billnum").val();
 
          $("#bnum").val(+lastbnum+1);
@@ -210,6 +201,7 @@
 
     }
 
+
     function fillvalues(dname)
     {
     var dataList = document.getElementById('tosearch');
@@ -244,61 +236,88 @@
     $.ajax(options);
     }
 
-    function fillseries()
-    {
-    var dataList = document.getElementById('Series');
 
-    var options = {};
-    options.url = "/Bill/Format1/Create?handler=Series";
-    options.type = "GET";
-    options.dataType = "json";
-    options.success = function (data) {
-    $("#Series").empty();
-    data.forEach(function (element) {
-    @*newInput +="<tr><td>"+element.debtorName+"</td><td>"+element.debtorOutstanding+"</td><td><button style='padding: 0;border: none;background: none;' onclick='delindidet("+element.debtorID+")'><img src='/images/delete.png' alt='delete' height='20px' width='20px' /></button>&nbsp;&nbsp;&nbsp;&nbsp;<a href='#modal_edit' data-toggle='modal' data-did='"+element.debtorID+"' data-dname='"+element.debtorName+"' data-doutstan='"+element.debtorOutstanding+"' data-dgid='"+element.debtorGroupID+"' ><img src='/images/edit.svg' alt='Edit Record' height='20px' width='20px' /></a></td></tr>";*@
-
-     var option = document.createElement('option');
-                @*// Set the value using the item in the JSON array.*@
-          option.value = element.seriesName;
-                @*// Add the <option> element to the <datalist>.*@
-       dataList.appendChild(option);
-
-           });
-
-    };
-    options.error = function () {
-     var option = document.createElement('option');
-                @*// Set the value using the item in the JSON array.*@
-          option.value = "Couldn't Fetch Series Information";
-                @*// Add the <option> element to the <datalist>.*@
-       dataList.appendChild(option);
-    };
-    $.ajax(options);
-    }
 
 
     function filladress()
     {
 
-    var dinfoa = $("#tosearch option[value='" + $('#toinfo').val() + "']").attr('id');
-    var options = {};
-    options.url = "/Bill/Format1/Create?id="+dinfoa+"&&handler=BillToDetails";
-    options.type = "GET";
-    options.dataType = "json";
-    options.success = function (data) {
-        document.getElementById('toaddress').innerHTML = data.debtorGroupAddress;
-        document.getElementById('togstin').innerHTML = data.debtorGSTIN;
-    };
-    options.error = function () {
-     $("#toaddress").val("Couldn't load data");
-     $("#togstin").val("Couldn't load data");
-    };
-    $.ajax(options);
+         var x = document.getElementById("tosearch");
+        var i;
+        for (i = 0; i < x.options.length; i++) {
+            if(x.options[i].value!= $('#toinfo').val())
+            {
+                $('#toinfo').val('');
+            }
+        }
+
+        var dinfoa = $("#tosearch option[value='" + $('#toinfo').val() + "']").attr('id');
+        var options = {};
+        options.url = "/Bill/Format1/Create?id="+dinfoa+"&&handler=BillToDetails";
+        options.type = "GET";
+        options.dataType = "json";
+        options.success = function (data) {
+            document.getElementById('toaddress').innerHTML = data.debtorGroupAddress;
+            fillDebtorInfo(-1);
+
+        };
+        options.error = function () {
+         $("#toaddress").val("Couldn't load data");
+         $("#togstin").val("Couldn't load data");
+        };
+        $.ajax(options);
 
     }
 
+
+    function fillDebtorInfo(idval)
+    {
+                    var dataList = document.getElementById('debname'+idval);
+                    var dinfoa = $("#tosearch option[value='" + $('#toinfo').val() + "']").attr('id');
+                    var opt = {};
+                    opt.url = "/Bill/Format2/Create?id="+dinfoa+"&&handler=BillToDebtorInfo";
+                    opt.type = "GET";
+
+                    opt.dataType = "json";
+
+                    opt.success = function (data) {
+
+                        $("#debname"+idval).empty();
+                        data.forEach(function (element) {
+
+                                var option = document.createElement('option');
+
+                                option.value = element.debtorName;
+                                option.id = element.debtorID;
+
+                                 dataList.appendChild(option);
+                        });
+
+                    };
+                    opt.error = function () {
+
+                             var option = document.createElement('option');
+
+                              option.value = "Couldn't Fetch Debtor Information";
+
+                              dataList.appendChild(option);
+                    };
+                    $.ajax(opt);
+
+    }
+
+
     function fillpdetails(idval)
     {
+       var x = document.getElementById("parti"+idval);
+    var i;
+    for (i = 0; i < x.options.length; i++) {
+        if(x.options[i].value!= $('#particulars'+idval).val())
+        {
+            $('#particulars'+idval).val('');
+        }
+    }
+
     var particulars=document.getElementById('particulars'+idval);
     if(particulars.value.length>0){
         particulars.style.width = ((particulars.value.length + 1) * 8) + 'px';
@@ -311,8 +330,7 @@
     options.type = "GET";
     options.dataType = "json";
     options.success = function (data) {
-        $("#saccode"+idval).val(data.sacCode);
-        $("#taxableval"+idval).val(data.amount);
+        $("#pamount"+idval).val(data.amount);
         calcamount(data.amount,idval);
     };
     options.error = function () {
@@ -324,19 +342,12 @@
 
 function calcamount(pamount,idval)
     {
-    var taxableval=document.getElementById('taxableval'+idval);
-    if(taxableval.value.length>0){
-        taxableval.style.width = ((taxableval.value.length + 3) * 8) + 'px';
+    var pamount=document.getElementById('pamount'+idval);
+    if(pamount.value.length>0){
+        pamount.style.width = ((pamount.value.length + 6) * 8) + 'px';
     }else{
-      taxableval.style.width = ((taxableval.getAttribute('placeholder').length + 3) * 8) + 'px';
+      pamount.style.width = ((pamount.getAttribute('placeholder').length + 3) * 8) + 'px';
     }
-
-    var cgst= (+(pamount)*9)/100;
-        var sgst=cgst;
-        var total=+pamount+cgst+sgst;
-     document.getElementById('cgst'+idval).innerHTML =cgst.toFixed(2);
-    document.getElementById('sgst'+idval).innerHTML = sgst.toFixed(2);
-    document.getElementById('pamount'+idval).innerHTML = total.toFixed(0);
     calculateGrandTotal();
     }
 
@@ -345,18 +356,18 @@ function calcamount(pamount,idval)
     var rowid='row'+counter;
        var newRow = $("<tr id='row"+counter+"'>");
         var cols = "";
-         cols+='<td><input id="particulars' + counter + '" style="width:250px;" placeholder="Particulars.." list="parti' + counter + '" autocomplete="off" onchange="fillparticulars($(this).val(),' + counter + ');" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" onfocusout="fillpdetails(' + counter + ')"><datalist id="parti' + counter + '"></datalist></td>';
-          cols+='<td class="text-center"><input style="width:65px;" type="number" placeholder="SAC Code.." id="saccode' + counter + '" /></td>';
-             cols+='<td class="text-center"><input style="width:65px;" type="number" placeholder="Amount.." id="taxableval' + counter + '" onchange="calcamount($(this).val(),' + counter + ');" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" /></td>';
-                cols+= '<td class="text-center" id="cgst' + counter + '"></td>';
-                  cols+='<td class="text-center" id="sgst' + counter + '"></td>';
-                    cols+= '<td class="text-right count-me" id="pamount' + counter + '"></td>';
+        cols+='<td><input id="dname' + counter + '" style="width:250px;" class="form-control" placeholder="Debtor Name.." list="debname' + counter + '" autocomplete="off" ><datalist id="debname' + counter + '"></datalist></td>';
+         cols+='<td ><input id="particulars' + counter + '" class="form-control" style="width:250px;" placeholder="Particulars.." list="parti' + counter + '" autocomplete="off" onchange="fillparticulars($(this).val(),' + counter + ');" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" onfocusout="fillpdetails(' + counter + ')"><datalist id="parti' + counter + '"></datalist></td>';
+          cols+= '<td class="text-center"><select id="year' + counter + '" class="form-control" > </select></td>';
+           cols+='<td class="text-center"> <input id="period' + counter + '" class="form-control" style="width:120px;" placeholder="E.g. 2018-19 " list="periodlist' + counter + '" ><datalist id="periodlist' + counter + '"></datalist></td>';
+            cols+= '<td class="text-right count-me" ><input class="form-control pull-right" style="text-align:right; width:120px; " type="number" id="pamount' + counter + '" onchange="calcamount($(this).val(),' + counter + ');" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();"/></td>';
 
      document.getElementById("deloperation").style.display = "inline";
         newRow.append(cols);
         $('#billdet > tbody > tr').eq( counter ).after(newRow);
-       // $("table.order-list").append(newRow);
-
+    var $optionss = $("#year-1 > option").clone();
+    $('#year'+counter).append($optionss);
+    fillDebtorInfo(counter);
 
 }
     function removeRow()
@@ -387,7 +398,7 @@ function calcamount(pamount,idval)
     $('tr').each(function () {
    // var sum = 0;
     $(this).find('.count-me').each(function () {
-      var combat = $(this).text();
+      var combat = $(this).find("input").val();
       if (!isNaN(combat) && combat.length !== 0) {
         grandTotal += parseFloat(combat);
       }
@@ -492,14 +503,12 @@ function convertNumberToWords(amount) {
 
 
     var obj = {};
-    obj.BillNumber =  ($("#Series option[value='" + $('#invoiceseries').val() + "']").val())+"/"+($('#yearser').val())+"/"+($('#bnum').val());
+    obj.BillNumber = $('#bnum').val();
     obj.BilledTo = $("#tosearch option[value='" + $('#toinfo').val() + "']").val();
     obj.BillAmount=  $('#grandtotal').text().substring(1, $('#grandtotal').text().length);
     obj.InvoiceDate = $('#invcdt').val();
-    obj.PlaceOfSupply= $('#placeofsup').find(":selected").val();
-    obj.SeriesName=$("#Series option[value='" + $('#invoiceseries').val() + "']").val();
     obj.DebtorGroupID=$("#tosearch option[value='" + $('#toinfo').val() + "']").attr('id');
-    obj.BillActNum=$('#bnum').val();
+
 
     options.data = JSON.stringify(obj);
 
@@ -511,7 +520,6 @@ function convertNumberToWords(amount) {
 $('input:hidden[name="__RequestVerificationToken"]').val());
     };
     options.success = function (msg) {
-
     if(msg=="Added Successfully!")
     {
     $('#billdet tr').each(function(row, tr){
@@ -524,19 +532,24 @@ $('input:hidden[name="__RequestVerificationToken"]').val());
     @*var myData = $('#insertform').serializeArray();*@
 
     var obj = {};
-    obj.ParticularsName =  $(tr).find('td:eq(0)').find("input").val();
-    obj.Amount =  $(tr).find('td:eq(5)').text();
-    obj.CGSTAmount=$(tr).find('td:eq(3)').text();
-    obj.SGSTAmount = $(tr).find('td:eq(4)').text();
-    obj.TaxableValue= $(tr).find('td:eq(2)').find("input").val();
-   var inputid=$(tr).find('td:eq(0)').find("input").val();
+    obj.ParticularsName =  $(tr).find('td:eq(1)').find("input").val();
+    obj.YearInfo = $(tr).find('td:eq(2)').find("select").val();
+    obj.Period=$(tr).find('td:eq(3)').find("input").val();
+    obj.Amount =  $(tr).find('td:eq(4)').find("input").val();
+    obj.TaxableValue=$(tr).find('td:eq(4)').find("input").val();
 
-    obj.ParticularsID= $(tr).find('td:eq(0)').find("datalist").find('option[value="' + inputid + '"]').attr('id');
+   var inputid=$(tr).find('td:eq(1)').find("input").val();
 
-    obj.BillNumber=($("#Series option[value='" + $('#invoiceseries').val() + "']").val())+"/"+($('#yearser').val())+"/"+($('#bnum').val());
+    obj.ParticularsID= $(tr).find('td:eq(1)').find("datalist").find('option[value="' + inputid + '"]').attr('id');
+
+    obj.BillNumber=$('#bnum').val();
     obj.DebtorGroupID=$("#tosearch option[value='" + $('#toinfo').val() + "']").attr('id');
 
+    var debid=$(tr).find('td:eq(0)').find("input").val();
+    obj.DebtorID= $(tr).find('td:eq(0)').find("datalist").find('option[value="' + debid + '"]').attr('id');
+
     options.data = JSON.stringify(obj);
+    alert(options.data);
     options.contentType = "application/json; charset=utf-8";
     options.dataType = "json";
 

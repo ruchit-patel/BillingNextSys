@@ -51,7 +51,7 @@ namespace BillingNextSys.Pages.Bill.Format2
             int bid = (int)_session.GetInt32("Bid");
             Companies = _context.Company.Where(ab => ab.CompanyID.Equals(cid)).ToList();
             Branches = _context.Branch.Where(a => a.BranchID.Equals(bid)).ToList();
-            BillDetailss = _context.BillDetails.Where(a => a.BillNumber.Equals(id)).Include(b => b.Particulars).ToList();
+            BillDetailss = _context.BillDetails.Where(a => a.BillNumber.Equals(id)).Include(b => b.Particulars).Include(c=>c.Debtor).ToList();
 
             return Page();
         }
