@@ -9,6 +9,11 @@ using BillingNextSys.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
+using BillingNextSys.Services;
+using Microsoft.Extensions.Options;
+using Twilio;
+using Twilio.Rest.Api.V2010.Account;
+using Twilio.Types;
 
 namespace BillingNextSys.Pages.Bill.Format1
 {
@@ -17,18 +22,19 @@ namespace BillingNextSys.Pages.Bill.Format1
         private readonly IHttpContextAccessor _httpContextAccessor;
         private ISession _session => _httpContextAccessor.HttpContext.Session;
         private readonly BillingNextSys.Models.BillingNextSysContext _context;
+        private readonly IWhatsappSender _smsSender;
 
-        public CreateModel(BillingNextSys.Models.BillingNextSysContext context, IHttpContextAccessor httpContextAccessor)
+        public CreateModel(BillingNextSys.Models.BillingNextSysContext context, IHttpContextAccessor httpContextAccessor, IOptions<Whatsappoptions> optionsAccessor)
         {
             _context = context;
             _httpContextAccessor = httpContextAccessor;
+            Options = optionsAccessor.Value;
         }
+        public Whatsappoptions Options { get; }
 
         public IActionResult OnGet()
         {
-        ViewData["SeriesName"] = new SelectList(_context.BillSeries, "SeriesName", "SeriesName");
-        ViewData["CompanyID"] = new SelectList(_context.Company, "CompanyID", "CompanyName");
-        ViewData["DebtorGroupID"] = new SelectList(_context.DebtorGroup, "DebtorGroupID", "DebtorGroupName");
+        
             int cid = (int)_session.GetInt32("Cid");
             int bid = (int)_session.GetInt32("Bid");
             Companies = _context.Company.Where(ab => ab.CompanyID.Equals(cid)).ToList();
@@ -105,13 +111,31 @@ namespace BillingNextSys.Pages.Bill.Format1
                 obj.BillDate = DateTime.Now;
                 _context.Bill.Add(obj);
                 _context.SaveChanges();
+                var DebtorGroupPhone = _context.DebtorGroup.Where(a => a.DebtorGroupID.Equals(obj.DebtorGroupID)).Select(a=>a.DebtorGroupPhoneNumber).FirstOrDefault();
+                SendSmsAsync("whatsapp:" + DebtorGroupPhone, obj.BilledTo, obj.BillAmount);
                 return new JsonResult("Added Successfully!");
             }
-            catch(DbUpdateException exception)
+            catch(DbUpdateException )
             {
                 string exce= "Update 1";
                 return new JsonResult(exce);
             }
+        }
+
+        public Task SendSmsAsync(string number,string debtorname, double message)
+        {
+            // Plug in your SMS service here to send a text message.
+            // Your Account SID from twilio.com/console
+            var accountSid = Options.WhatsappAccountIdentification;
+            // Your Auth Token from twilio.com/console
+            var authToken = Options.WhatsappAccountPassword;
+
+            TwilioClient.Init(accountSid, authToken);
+
+            return MessageResource.CreateAsync(
+            to: new PhoneNumber(number),
+            from: new PhoneNumber(Options.WhatsappAccountFrom),
+             body: $"Hey! {debtorname}. Your bill has been generated for ₹{message}");
         }
     }
 }

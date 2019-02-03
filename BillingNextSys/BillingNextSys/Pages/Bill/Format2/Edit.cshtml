@@ -36,7 +36,7 @@
                 <input type="hidden" id="billtoid" asp-for="Bill.DebtorGroupID"/>
                 <input type="hidden" id="seriesinfo" asp-for="Bill.SeriesName" />
                 <input type="hidden" id="billdate" asp-for="Bill.BillDate" />
-                <input type="hidden" id="billactnum" asp-for="Bill.BillActNum" />
+                <input type="hidden" id="toinfo" asp-for="Bill.DebtorGroupID" />
                 <div class="row">
                     <div class="col-md-3">
                         <img class="img-responsive full-width" src="data:image/png;base64,@Convert.ToBase64String(Model.Companies.FirstOrDefault().CompanyLogoImg)" /> @*<img src="https://images-na.ssl-images-amazon.com/images/I/713t5BMNwdL._SX425_.jpg" height="250px" width="300px" style="padding:10px;" />*@
@@ -63,8 +63,8 @@
                     <div class="col-xs-6">
                         <address>
                             <strong>Billed To:</strong><br>
-                            <div id="to"> <input id="toinfo" class="form-control" style="width:300px;" list="tosearch" autocomplete="off" onchange="fillvalues($(this).val());" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" onfocusout="filladress()" value="@Html.DisplayFor(model=>model.Bill.BilledTo)"> <datalist id="tosearch"></datalist></div>
-                            <div><p id="toaddress"></p></div><br>
+                            <div id="to"><h4> @Html.DisplayFor(model=>model.Bill.BilledTo)</h4> </div>
+                            <div><p id="toaddress">@Html.DisplayFor(model=>model.Bill.DebtorGroup.DebtorGroupAddress)</p></div><br>
                         </address>
                     </div>
                     <div class="col-xs-6 text-right">
@@ -206,12 +206,14 @@
 }
 <script>
     var counter=0;
+    var arrele={};
     window.onload = function() {
-     filladress();
+     //filladress();
            document.getElementById("deloperation").style.display = "none";
         key('ctrl+1', function(){ document.getElementById("addoperations").click(); return false });
         key('ctrl+2', function(){ document.getElementById("deloperation").click(); return false });
     counter = +($('#lastcount').val())-1;
+    fillDebtorInfo(-1);
     resizeel();
     calculateGrandTotal();
      };
@@ -226,30 +228,67 @@
                 }else{
                   particulars.style.width = ((particulars.getAttribute('placeholder').length + 1) * 8) + 'px';
                 }
-
-                var taxableval=document.getElementById('taxableval-'+i);
-                if(taxableval.value.length>0){
-                    taxableval.style.width = ((taxableval.value.length + 3) * 8) + 'px';
-                }else{
-                  taxableval.style.width = ((taxableval.getAttribute('placeholder').length + 3) * 8) + 'px';
-                }
         }
+    }
+
+
+     function fillDebtorInfo(num)
+    {
+                    var dataList = document.getElementById('debname-'+num);
+
+                    var dinfoa = $("#billtoid").val();
+                    var opt = {};
+                    opt.url = "/Bill/Format2/Create?id="+dinfoa+"&&handler=BillToDebtorInfo";
+                    opt.type = "GET";
+
+                    opt.dataType = "json";
+
+                    opt.success = function (data) {
+                        $("#debname-"+num).empty();
+
+                         data.forEach(function (element) {
+                                var option = document.createElement('option');
+
+                                option.value = element.debtorName;
+                                option.id = element.debtorID;
+
+                                 dataList.appendChild(option);
+                        });
+                    };
+                    opt.error = function () {
+
+                             var option = document.createElement('option');
+
+                              option.value = "Couldn't Fetch Debtor Information";
+
+                              dataList.appendChild(option);
+                    };
+                    $.ajax(opt);
+
+
     }
 
     function editcont(btnid,count)
     {
+     setSelectedIndex(document.getElementById("yearsel-"+count),$('#year-'+count).text());
       document.getElementById(btnid).style.display = "none";
      document.getElementById("save-"+count).style.display = "inline-block";
+    document.getElementById("dt-"+count).style.display = "none";
+     document.getElementById("dname-"+count).style.display = "inline-block";
       document.getElementById("pp-"+count).style.display = "none";
      document.getElementById("particulars-"+count).style.display = "inline-block";
-     document.getElementById("psac-"+count).style.display = "none";
-     document.getElementById("saccode-"+count).style.display = "inline-block";
-     document.getElementById("ptamount-"+count).style.display = "none";
-    document.getElementById("taxableval-"+count).style.display = "inline-block";
-    $('#taxableval-'+count).val($('#taxableval-'+count).val().replace(/[^0-9.]/g,''));
+     document.getElementById("year-"+count).style.display = "none";
+     document.getElementById("yearsel-"+count).style.display = "inline-block";
+     document.getElementById("period-"+count).style.display = "none";
+    document.getElementById("periodinput-"+count).style.display = "inline-block";
+     document.getElementById("amount-"+count).style.display = "none";
+    document.getElementById("amountinput-"+count).style.display = "inline-block";
+    fillDebtorInfo(count);
+
+    @*$('#taxableval-'+count).val($('#taxableval-'+count).val().replace(/[^0-9.]/g,''));
     $('#cgst-'+count).val($('#cgst-'+count).val().replace(/[^0-9.]/g,''));
     $('#sgst-'+count).val($('#sgst-'+count).val().replace(/[^0-9.]/g,''));
-    $('#pamount-'+count).val($('#pamount-'+count).val().replace(/[^0-9.]/g,''));
+    $('#pamount-'+count).val($('#pamount-'+count).val().replace(/[^0-9.]/g,''));*@
     }
 
 
@@ -290,11 +329,12 @@
 
             var obj = {};
             obj.BillDetailsID = billid;
+
             obj.ParticularsName = $("#particulars-"+btnid.substring(5)).val();
-            obj.TaxableValue = $("#taxableval-"+btnid.substring(5)).val();
-            obj.CGSTAmount = $("#cgst-"+btnid.substring(5)).text();
-            obj.SGSTAmount =  $("#sgst-"+btnid.substring(5)).text();
-            obj.Amount =  $("#pamount-"+btnid.substring(5)).text();
+            obj.TaxableValue = $("#amountinput-"+btnid.substring(5)).val();
+            obj.Period = $("#periodinput-"+btnid.substring(5)).val();
+            obj.YearInfo =  $("#yearsel-"+btnid.substring(5)).val();
+            obj.Amount =  $("#amountinput-"+btnid.substring(5)).val();
 
 
              var pinfoa=$("#parti-"+btnid.substring(5)).find('option[value="' + obj.ParticularsName + '"]').attr('id');
@@ -306,8 +346,19 @@
 
 
             obj.ParticularsID =pinfoa;
-            obj.DebtorGroupID =$('#billtoid').val();;
+            obj.DebtorGroupID =$('#billtoid').val();
             obj.BillNumber=$('#invoicenum').text();
+
+            var dnamm= $("#dname-"+btnid.substring(5)).val();
+              var dinfoa=$("#debname-"+btnid.substring(5)).find('option[value="' + dnamm + '"]').attr('id');
+                 if(dinfoa==null || dinfoa==="undefined")
+                {
+                dinfoa=$('#did-'+btnid.substring(5)).val();
+                }
+                 $('#did-'+btnid.substring(5)).val(dinfoa);
+
+
+            obj.DebtorID=dinfoa;
 
 
             options.data = JSON.stringify(obj);
@@ -324,19 +375,26 @@
                     @*$('pp-'+countid).text(''+obj.ParticularsName);
                      $('ptamount-'+countid).text(''+obj.TaxableValue);*@
                      document.getElementById("pp-"+countid).innerHTML=obj.ParticularsName;
-                     document.getElementById("ptamount-"+countid).innerHTML=obj.TaxableValue;
-                     $('cgst-'+countid).text(''+obj.CGSTAmount);
-                     $('sgst-'+countid).text(''+obj.SGSTAmount);
-                     $('pamount-'+countid).text(''+obj.Amount);
+                     document.getElementById("dt-"+countid).innerHTML=$('#dname-'+btnid.substring(5)).val();
+                     document.getElementById("amountinput-"+countid).innerHTML=obj.TaxableValue;
+                     //$('#year-'+countid).text(''+);
+                     $('#period-'+countid).text(''+obj.Period);
+                     $('#amount-'+countid).text(''+obj.TaxableValue);
+                     $('#year-'+countid).text($("#yearsel-"+countid+" option:selected").text());
+
                  document.getElementById(btnid).style.display = "none";
                  document.getElementById("et-"+billid).style.display = "inline-block";
+                 document.getElementById("dt-"+btnid.substring(5)).style.display = "inline-block";
+                 document.getElementById("dname-"+btnid.substring(5)).style.display = "none";
                  document.getElementById("pp-"+btnid.substring(5)).style.display = "inline-block";
                  document.getElementById("particulars-"+btnid.substring(5)).style.display = "none";
-                 document.getElementById("psac-"+btnid.substring(5)).style.display = "inline-block";
-                 document.getElementById("saccode-"+btnid.substring(5)).style.display = "none";
-                 document.getElementById("ptamount-"+btnid.substring(5)).style.display = "inline-block";
-                 document.getElementById("taxableval-"+btnid.substring(5)).style.display = "none";
-                 
+                 document.getElementById("period-"+btnid.substring(5)).style.display = "inline-block";
+                 document.getElementById("periodinput-"+btnid.substring(5)).style.display = "none";
+                 document.getElementById("year-"+btnid.substring(5)).style.display = "inline-block";
+                document.getElementById("yearsel-"+btnid.substring(5)).style.display = "none";
+                 document.getElementById("amount-"+btnid.substring(5)).style.display = "inline-block";
+                 document.getElementById("amountinput-"+btnid.substring(5)).style.display = "none";
+
 
             };
             options.error = function () {
@@ -345,6 +403,29 @@
             $.ajax(options);
 
     }
+
+
+    function setSelectedIndex(s, v)
+
+        {
+
+                for ( var i = 0; i < s.options.length; i++ ) {
+
+                    if ( s.options[i].text == v ) {
+
+                        s.options[i].selected = true;
+
+                        return;
+
+                    }
+
+                }
+
+        }
+
+
+
+
 
     function fillparticulars(pname,idval)
     {
@@ -416,7 +497,7 @@
     }
 
 
-    function filladress()
+    @*function filladress()
     {
 
     var x = document.getElementById("tosearch");
@@ -427,7 +508,6 @@
             $('#toinfo').val('');
         }
     }
-    document.getElementById("demo").innerHTML = txt;
 
     var dinfoa = $("#tosearch option[value='" + $('#toinfo').val() + "']").attr('id');
 
@@ -442,7 +522,6 @@
     options.dataType = "json";
     options.success = function (data) {
         document.getElementById('toaddress').innerHTML = data.debtorGroupAddress;
-        document.getElementById('togstin').innerHTML = data.debtorGSTIN;
     };
     options.error = function () {
      $("#toaddress").val("Couldn't load data");
@@ -450,7 +529,7 @@
     };
     $.ajax(options);
 
-    }
+    }*@
 
     function fillpdetails(idval)
     {
@@ -474,8 +553,7 @@
     options.type = "GET";
     options.dataType = "json";
     options.success = function (data) {
-        $("#saccode-"+idval).val(data.sacCode);
-        $("#taxableval-"+idval).val(data.amount);
+        $("#amountinput-"+idval).val(data.amount);
         calcamount(data.amount,idval);
     };
     options.error = function () {
@@ -487,37 +565,41 @@
 
 function calcamount(pamount,idval)
     {
-    var taxableval=document.getElementById('taxableval-'+idval);
-    if(taxableval.value.length>0){
-        taxableval.style.width = ((taxableval.value.length + 3) * 8) + 'px';
-    }else{
-      taxableval.style.width = ((taxableval.getAttribute('placeholder').length + 3) * 8) + 'px';
-    }
+     var taxableval=document.getElementById('amountinput-'+idval);
+        if(taxableval.value.length>0){
+            taxableval.style.width = ((taxableval.value.length + 3) * 8) + 'px';
+        }else{
+          taxableval.style.width = ((taxableval.getAttribute('placeholder').length + 3) * 8) + 'px';
+        }
 
-    var cgst= (+(pamount)*9)/100;
-        var sgst=cgst;
-        var total=+pamount+cgst+sgst;
-     document.getElementById('cgst-'+idval).innerHTML =cgst.toFixed(2);
-    document.getElementById('sgst-'+idval).innerHTML = sgst.toFixed(2);
-    document.getElementById('pamount-'+idval).innerHTML = total.toFixed(0);
+
+
+        var total=+pamount;
+    document.getElementById('amountinput-'+idval).innerHTML = total.toFixed(0);
+
     calculateGrandTotal();
     }
 
   function addInput(){
        counter++;
-    var rowid='row-'+counter;
+
+
+     var rowid='row-'+counter;
        var newRow = $("<tr id='row-"+counter+"'>");
         var cols = "";
+            cols+='<td><input id="dname-'+counter+'" style="width:250px;" placeholder="Debtor Name.." list="debname-'+counter+'" autocomplete="off"><datalist id="debname-'+counter+'"></datalist> </td>';
          cols+='<td><input id="particulars-' + counter + '" style="width:250px;" placeholder="Particulars.." list="parti-' + counter + '" autocomplete="off" onchange="fillparticulars($(this).val(),' + counter + ');" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" onfocusout="fillpdetails(' + counter + ')"><datalist id="parti-' + counter + '"></datalist></td>';
-          cols+='<td class="text-center"><input style="width:65px;" type="number" placeholder="SAC Code.." id="saccode-' + counter + '" /></td>';
-             cols+='<td class="text-center"><input style="width:65px;" type="number" placeholder="Amount.." id="taxableval-' + counter + '" onchange="calcamount($(this).val(),' + counter + ');" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" /></td>';
-                cols+= '<td class="text-center" id="cgst-' + counter + '"></td>';
-                  cols+='<td class="text-center" id="sgst-' + counter + '"></td>';
-                    cols+= '<td class="text-right count-me" id="pamount-' + counter + '"></td>';
+          cols+='<td class="text-center"><select id="yearsel-'+counter+'"></select></td>';
+            cols+= '<td class="text-center"><input style="width:65px; " type="text" placeholder="Period.." id="periodinput-'+counter+'" /></td>';
+             cols+='<td class="text-center count-me"><input style="width:65px;" type="number" placeholder="Amount.." id="amountinput-' + counter + '" onchange="calcamount($(this).val(),' + counter + ');" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" /></td>';
+                 var ooptions = $("#yearsel--1 > option").clone();
+
 
      document.getElementById("deloperation").style.display = "inline";
         newRow.append(cols);
         $('#billdet > tbody > tr').eq( counter ).after(newRow);
+         $('#yearsel-'+counter).append(ooptions);
+        fillDebtorInfo(counter);
        // $("table.order-list").append(newRow);
 
 
@@ -550,6 +632,7 @@ function calcamount(pamount,idval)
       var combat = $(this).text().replace(/[^0-9.]/g,'');
       if (!isNaN(combat) && combat.length !== 0) {
         grandTotal += parseFloat(combat);
+        //alert("here"+grandTotal);
       }
     });
 
@@ -645,24 +728,25 @@ function convertNumberToWords(amount) {
 
     function editbill()
     {
+
+
     var billlid=$('#invoicenum').text();
      var options = {};
-    options.url = "/Bill/Format1/Edit?id="+billlid+"&&handler=UpdateBill";
+    options.url = "/Bill/Format2/Edit?id="+billlid+"&&handler=UpdateBill2";
     options.type = "PUT";
 
             var obj = {};
             obj.BillNumber = billlid;
-            obj.BilledTo = document.getElementById('toinfo').value;
+            obj.BilledTo = $('#to').text();
             obj.BillAmount = $('#grandtotal').text().substring(1, $('#grandtotal').text().length);
             obj.InvoiceDate = $('#invcdt').val();
-            obj.PlaceOfSupply = $('#placeofsup').find(":selected").val();
             obj.DebtorGroupID =  $('#billtoid').val();
-            obj.SeriesName =  $('#seriesinfo').val();
             obj.BillDate =  $('#billdate').val();
-            obj.BillActNum =  $('#billactnum').val();
+
 
 
             options.data = JSON.stringify(obj);
+
             options.contentType = "application/json";
             options.dataType = "html";
 
@@ -682,24 +766,35 @@ function convertNumberToWords(amount) {
                          {
 
                                 var options = {};
-                                options.url = "/Bill/Format1/Create?handler=InsertBillDetails";
+                                options.url = "/Bill/Format2/Create?handler=InsertBillDetails";
                                 options.type = "POST";
-                                
+
 
                                 var obj = {};
-                                obj.ParticularsName =  $(tr).find('td:eq(0)').find("input").val();
-                                obj.Amount =  $(tr).find('td:eq(5)').text();
-                                obj.CGSTAmount=$(tr).find('td:eq(3)').text();
-                                obj.SGSTAmount = $(tr).find('td:eq(4)').text();
-                                obj.TaxableValue= $(tr).find('td:eq(2)').find("input").val();
-                               var inputid=$(tr).find('td:eq(0)').find("input").val();
 
-                                obj.ParticularsID= $(tr).find('td:eq(0)').find("datalist").find('option[value="' + inputid + '"]').attr('id');
 
-                                obj.BillNumber=$('#invoicenum').text();
-                                obj.DebtorGroupID=$('#billtoid').val();
+                obj.ParticularsName =  $(tr).find('td:eq(1)').find("input").val();
+                obj.TaxableValue = $(tr).find('td:eq(4)').find("input").val();
+                obj.Period = $(tr).find('td:eq(3)').find("input").val();
+                obj.YearInfo = $(tr).find('td:eq(2)').find(":selected").val();
+                obj.Amount = $(tr).find('td:eq(4)').find("input").val();
+
+
+                 var inputid=$(tr).find('td:eq(1)').find("input").val();
+                 obj.ParticularsID= $(tr).find('td:eq(1)').find("datalist").find('option[value="' + inputid + '"]').attr('id');
+
+
+                obj.DebtorGroupID =$('#billtoid').val();
+                obj.BillNumber=$('#invoicenum').text();
+
+                      var dinputid=$(tr).find('td:eq(0)').find("input").val();
+                     obj.DebtorID= $(tr).find('td:eq(0)').find("datalist").find('option[value="' + dinputid + '"]').attr('id');
+
+
+
 
                                 options.data = JSON.stringify(obj);
+                                    alert("here"+options.data);
                                 options.contentType = "application/json; charset=utf-8";
                                 options.dataType = "json";
 
@@ -726,7 +821,6 @@ function convertNumberToWords(amount) {
                 alert("Error Occured while updating.");
             };
             $.ajax(options);
-
 
 }
 </script>

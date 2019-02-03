@@ -456,8 +456,9 @@
 
     function fillpdetails(idval)
     {
-       var x = document.getElementById("parti"+idval);
+       var x = document.getElementById("parti-"+idval);
     var i;
+
     for (i = 0; i < x.options.length; i++) {
         if(x.options[i].value!= $('#particulars'+idval).val())
         {
@@ -666,9 +667,10 @@ function convertNumberToWords(amount) {
 
 
             options.data = JSON.stringify(obj);
+            alert("here"+options.data);
             options.contentType = "application/json";
             options.dataType = "html";
-
+             alert("here"+options.data);
             options.beforeSend = function (xhr) {
                 xhr.setRequestHeader("MY-XSRF-TOKEN",
                 $('input:hidden[name="__RequestVerificationToken"]').val());

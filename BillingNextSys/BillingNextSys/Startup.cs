@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using BillingNextSys.Models;
 using System.Globalization;
+using BillingNextSys.Services;
 
 namespace BillingNextSys
 {
@@ -27,6 +28,11 @@ namespace BillingNextSys
         .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
         .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
         .AddEnvironmentVariables();
+
+            if (env.IsDevelopment())
+            {
+                builder.AddUserSecrets<Startup>();
+            }
             Configuration = builder.Build();
             //Configuration = configuration;
         }
@@ -55,6 +61,7 @@ namespace BillingNextSys
             services.AddDistributedMemoryCache(); // Adds a default in-memory implementation of IDistributedCache
             services.AddSession();
             services.AddAntiforgery(options =>options.HeaderName = "MY-XSRF-TOKEN");
+            services.Configure<Whatsappoptions>(Configuration);
 
         }
 

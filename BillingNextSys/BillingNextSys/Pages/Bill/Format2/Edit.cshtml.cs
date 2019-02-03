@@ -128,7 +128,7 @@ namespace BillingNextSys.Pages.Bill.Format2
         }
 
 
-        public IActionResult OnPutUpdateBill(int id, [FromBody]Models.Bill obj)
+        public IActionResult OnPutUpdateBill2(int id, [FromBody]Models.Bill obj)
         {
             obj.CompanyID = (int)_session.GetInt32("Cid");
             _context.Attach(obj).State = EntityState.Modified;
