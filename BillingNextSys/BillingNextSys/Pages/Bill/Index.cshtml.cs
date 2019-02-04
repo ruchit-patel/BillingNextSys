@@ -28,4 +28,20 @@ namespace BillingNextSys.Pages.Bill
                 .Include(b => b.DebtorGroup).ToListAsync();
         }
     }
+
+    public class IndexGridModel : PageModel
+    {
+        private readonly BillingNextSys.Models.BillingNextSysContext _context;
+
+        public IndexGridModel(BillingNextSys.Models.BillingNextSysContext context)
+        {
+            _context = context;
+        }
+        public IQueryable<Models.Bill> Bills { get; set; }
+
+        public void OnGet()
+        {
+            Bills = _context.Bill.AsQueryable();
+        }
+    }
 }

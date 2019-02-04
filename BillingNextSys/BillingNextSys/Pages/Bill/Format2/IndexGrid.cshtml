@@ -1,0 +1,24 @@
+﻿@page
+@model IndexGridModel
+@{ Layout = null; }
+
+@(Html
+                                                        .Grid(Model.Bills)
+                                                        .Build(columns =>
+                                                        {
+                                                            columns.Add(model => model.BillNumber).Titled("Bill Number");
+                                                            columns.Add(model => model.BilledTo).Titled("Billed To");
+                                                            columns.Add(model => model.BillAmount).Titled("Bill Amount");
+                                                            columns.Add(model => model.InvoiceDate).Titled("Invoice Date");
+                                                            columns.Add(model => model.BillNumber).Titled("Options");
+                                                        })
+                                                        .Empty("No data found")
+                                                        .Id("my-ajax-grid")
+                                                        .Pageable(pager =>
+                                                        {
+                                                            pager.PagesToDisplay = 4;
+                                                            pager.RowsPerPage = 10;
+                                                        })
+                                                        .Filterable()
+                                                        .Sortable()
+)

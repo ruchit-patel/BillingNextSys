@@ -102,7 +102,7 @@ namespace BillingNextSys.Pages.Bill.Format1
         public IActionResult OnPutUpdateBillDetails(int id, [FromBody]Models.BillDetails obj)
         {
             obj.CompanyID= (int)_session.GetInt32("Cid");
-
+            obj.BillAmountOutstanding = obj.Amount;
             _context.Attach(obj).State = EntityState.Modified;
 
             try

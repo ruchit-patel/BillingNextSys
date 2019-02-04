@@ -10,69 +10,72 @@
 <p>
     <a asp-page="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Bill[0].BilledTo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Bill[0].BillAmount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Bill[0].Note)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Bill[0].InvoiceDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Bill[0].PlaceOfSupply)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Bill[0].DebtorGroup)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Bill[0].Company)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Bill[0].BillSeries)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.Bill) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.BilledTo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BillAmount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Note)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.InvoiceDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PlaceOfSupply)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DebtorGroup.DebtorGroupAddress)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Company.AccountNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BillSeries.SeriesName)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.BillNumber">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.BillNumber">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.BillNumber">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+
+@Html.AjaxGrid(Url.Page("IndexGrid"))
+
+@*<table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Bill[0].BilledTo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Bill[0].BillAmount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Bill[0].Note)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Bill[0].InvoiceDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Bill[0].PlaceOfSupply)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Bill[0].DebtorGroup)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Bill[0].Company)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Bill[0].BillSeries)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model.Bill) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BilledTo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BillAmount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Note)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.InvoiceDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PlaceOfSupply)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DebtorGroup.DebtorGroupAddress)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Company.AccountNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BillSeries.SeriesName)
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.BillNumber">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.BillNumber">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.BillNumber">Delete</a>
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>*@

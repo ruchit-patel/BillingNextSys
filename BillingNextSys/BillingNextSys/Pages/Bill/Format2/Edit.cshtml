@@ -124,8 +124,8 @@
                                     <td class="text-center">
                                       <p id="period-@counter" style="display: inline-block;">@Html.DisplayFor(modelItem=>item.Period)</p>    <input style="width:65px; display:none;" type="text" value="@Html.DisplayFor(modelItem => item.Period)" placeholder="Period.." id="periodinput-@counter" />  
                                     </td>
-                                    <td class="text-center count-me">
-                                        <p id="amount-@counter" style="display: inline-block;">@Html.DisplayFor(modelItem => item.Amount)</p>    <input style="width:65px; display:none;" type="text" value="@Html.DisplayFor(modelItem => item.Amount)" placeholder="Amount.." id="amountinput-@counter" onchange="calcamount($(this).val(),@counter);" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" />
+                                    <td class="text-center">
+                                        <p id="amount-@counter" class="count-me" style="display: inline-block;">@Html.DisplayFor(modelItem => item.Amount)</p>    <input style="width:65px; display:none;" type="text" value="@Html.DisplayFor(modelItem => item.Amount)" placeholder="Amount.." id="amountinput-@counter" onchange="calcamount($(this).val(),@counter);" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" />
                                     </td>
 
                                     <td class="text-right" id="opr-@counter">
@@ -284,11 +284,7 @@
      document.getElementById("amount-"+count).style.display = "none";
     document.getElementById("amountinput-"+count).style.display = "inline-block";
     fillDebtorInfo(count);
-
-    @*$('#taxableval-'+count).val($('#taxableval-'+count).val().replace(/[^0-9.]/g,''));
-    $('#cgst-'+count).val($('#cgst-'+count).val().replace(/[^0-9.]/g,''));
-    $('#sgst-'+count).val($('#sgst-'+count).val().replace(/[^0-9.]/g,''));
-    $('#pamount-'+count).val($('#pamount-'+count).val().replace(/[^0-9.]/g,''));*@
+    
     }
 
 
@@ -362,7 +358,6 @@
 
 
             options.data = JSON.stringify(obj);
-            alert(options.data);
             options.contentType = "application/json";
             options.dataType = "html";
 
@@ -372,8 +367,7 @@
                 };
             options.success = function (msg) {
                  var countid=btnid.substring(5);
-                    @*$('pp-'+countid).text(''+obj.ParticularsName);
-                     $('ptamount-'+countid).text(''+obj.TaxableValue);*@
+
                      document.getElementById("pp-"+countid).innerHTML=obj.ParticularsName;
                      document.getElementById("dt-"+countid).innerHTML=$('#dname-'+btnid.substring(5)).val();
                      document.getElementById("amountinput-"+countid).innerHTML=obj.TaxableValue;
@@ -453,9 +447,9 @@
     };
     options.error = function () {
      var option = document.createElement('option');
-                @*// Set the value using the item in the JSON array.*@
+
           option.value = "Couldn't Fetch Particulars Information";
-                @*// Add the <option> element to the <datalist>.*@
+
        dataList.appendChild(option);
     };
     $.ajax(options);
@@ -474,13 +468,12 @@
 
      $("#tosearch").empty();
     data.forEach(function (element) {
-    @*newInput +="<tr><td>"+element.debtorName+"</td><td>"+element.debtorOutstanding+"</td><td><button style='padding: 0;border: none;background: none;' onclick='delindidet("+element.debtorID+")'><img src='/images/delete.png' alt='delete' height='20px' width='20px' /></button>&nbsp;&nbsp;&nbsp;&nbsp;<a href='#modal_edit' data-toggle='modal' data-did='"+element.debtorID+"' data-dname='"+element.debtorName+"' data-doutstan='"+element.debtorOutstanding+"' data-dgid='"+element.debtorGroupID+"' ><img src='/images/edit.svg' alt='Edit Record' height='20px' width='20px' /></a></td></tr>";*@
 
      var option = document.createElement('option');
-                @*// Set the value using the item in the JSON array.*@
+
           option.value = element.debtorGroupName;
              option.id = element.debtorGroupID;
-                @*// Add the <option> element to the <datalist>.*@
+
        dataList.appendChild(option);
 
            });
@@ -488,48 +481,16 @@
     };
     options.error = function () {
      var option = document.createElement('option');
-                @*// Set the value using the item in the JSON array.*@
+
           option.value = "Couldn't Fetch Debtor Information";
-                @*// Add the <option> element to the <datalist>.*@
+
        dataList.appendChild(option);
     };
     $.ajax(options);
     }
 
 
-    @*function filladress()
-    {
 
-    var x = document.getElementById("tosearch");
-    var i;
-    for (i = 0; i < x.options.length; i++) {
-        if(x.options[i].value!= $('#toinfo').val())
-        {
-            $('#toinfo').val('');
-        }
-    }
-
-    var dinfoa = $("#tosearch option[value='" + $('#toinfo').val() + "']").attr('id');
-
-    if(dinfoa==null || dinfoa==="undefined")
-    {
-    dinfoa=$('#billtoid').val();
-    }
-     $('#billtoid').val(dinfoa);
-    var options = {};
-    options.url = "/Bill/Format1/Create?id="+dinfoa+"&&handler=BillToDetails";
-    options.type = "GET";
-    options.dataType = "json";
-    options.success = function (data) {
-        document.getElementById('toaddress').innerHTML = data.debtorGroupAddress;
-    };
-    options.error = function () {
-     $("#toaddress").val("Couldn't load data");
-     $("#togstin").val("Couldn't load data");
-    };
-    $.ajax(options);
-
-    }*@
 
     function fillpdetails(idval)
     {
@@ -571,12 +532,9 @@ function calcamount(pamount,idval)
         }else{
           taxableval.style.width = ((taxableval.getAttribute('placeholder').length + 3) * 8) + 'px';
         }
-
-
-
         var total=+pamount;
-    document.getElementById('amountinput-'+idval).innerHTML = total.toFixed(0);
-
+    document.getElementById('amount-'+idval).innerHTML = total.toFixed(0);
+   
     calculateGrandTotal();
     }
 
@@ -591,7 +549,7 @@ function calcamount(pamount,idval)
          cols+='<td><input id="particulars-' + counter + '" style="width:250px;" placeholder="Particulars.." list="parti-' + counter + '" autocomplete="off" onchange="fillparticulars($(this).val(),' + counter + ');" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" onfocusout="fillpdetails(' + counter + ')"><datalist id="parti-' + counter + '"></datalist></td>';
           cols+='<td class="text-center"><select id="yearsel-'+counter+'"></select></td>';
             cols+= '<td class="text-center"><input style="width:65px; " type="text" placeholder="Period.." id="periodinput-'+counter+'" /></td>';
-             cols+='<td class="text-center count-me"><input style="width:65px;" type="number" placeholder="Amount.." id="amountinput-' + counter + '" onchange="calcamount($(this).val(),' + counter + ');" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" /></td>';
+             cols+='<td class="text-center count-me">  <p id="amount-'+counter+'" style="display: none;"></p>  <input style="width:65px;" type="number" placeholder="Amount.." id="amountinput-' + counter + '" onchange="calcamount($(this).val(),' + counter + ');" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" /></td>';
                  var ooptions = $("#yearsel--1 > option").clone();
 
 
@@ -631,8 +589,8 @@ function calcamount(pamount,idval)
     $(this).find('.count-me').each(function () {
       var combat = $(this).text().replace(/[^0-9.]/g,'');
       if (!isNaN(combat) && combat.length !== 0) {
+
         grandTotal += parseFloat(combat);
-        //alert("here"+grandTotal);
       }
     });
 
@@ -794,7 +752,7 @@ function convertNumberToWords(amount) {
 
 
                                 options.data = JSON.stringify(obj);
-                                    alert("here"+options.data);
+
                                 options.contentType = "application/json; charset=utf-8";
                                 options.dataType = "json";
 
