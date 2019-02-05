@@ -33,10 +33,11 @@
         @Html.AntiForgeryToken()
         <div class="row">
             <div class="jumbotron" style="padding: 5px;">
-                <input type="hidden" id="billtoid" asp-for="Bill.DebtorGroupID"/>
+                <input type="hidden" id="billtoid" asp-for="Bill.DebtorGroupID" />
                 <input type="hidden" id="seriesinfo" asp-for="Bill.SeriesName" />
-                <input type="hidden" id="billdate" asp-for="Bill.BillDate" />
+                <input type="datetime" id="billdate" asp-for="Bill.BillDate" hidden />
                 <input type="hidden" id="billactnum" asp-for="Bill.BillActNum" />
+
                 <div class="row">
                     <div class="col-md-3">
                         <img class="img-responsive full-width" src="data:image/png;base64,@Convert.ToBase64String(Model.Companies.FirstOrDefault().CompanyLogoImg)" /> @*<img src="https://images-na.ssl-images-amazon.com/images/I/713t5BMNwdL._SX425_.jpg" height="250px" width="300px" style="padding:10px;" />*@
@@ -63,7 +64,7 @@
                     <div class="col-xs-6">
                         <address>
                             <strong>Billed To:</strong><br>
-                            <div id="to"> <input id="toinfo" class="form-control" style="width:300px;" list="tosearch" autocomplete="off" onchange="fillvalues($(this).val());" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" onfocusout="filladress()" value="@Html.DisplayFor(model=>model.Bill.BilledTo)"> <datalist id="tosearch"></datalist></div>
+                            <div id="to"> <input id="toinfo" class="form-control" style="width:300px;" list="tosearch" autocomplete="off" onchange="fillvalues($(this).val());" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" onfocusout="filladress()" value="@Html.DisplayFor(model=>model.Bill.BilledTo)" readonly> <datalist id="tosearch"></datalist></div>
                             <div><p id="toaddress"></p></div><br>
                             <strong>GSTIN: </strong><div><p id="togstin"></p></div>
                         </address>
@@ -208,6 +209,7 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
 <script>
+    var diffcount=0;
     var counter=0;
     window.onload = function() {
      filladress();
@@ -241,6 +243,7 @@
 
     function editcont(btnid,count)
     {
+     diffcount=$('#pamount-'+count).text().replace(/[^0-9.]/g,'');
       document.getElementById(btnid).style.display = "none";
      document.getElementById("save-"+count).style.display = "inline-block";
       document.getElementById("pp-"+count).style.display = "none";
@@ -286,8 +289,10 @@
 
     function savecont(btnid,billid)
     {
+            var ttamt=parseFloat($("#pamount-"+btnid.substring(5)).text())-diffcount;
+
                 var options = {};
-            options.url = "/Bill/Format1/Edit?id="+billid+"&&handler=UpdateBillDetails";
+            options.url = "/Bill/Format1/Edit?id="+billid+"&&damt="+ttamt+"&&handler=UpdateBillDetails";
             options.type = "PUT";
 
 
@@ -314,7 +319,7 @@
 
 
             options.data = JSON.stringify(obj);
-            alert(options.data);
+
             options.contentType = "application/json";
             options.dataType = "html";
 
@@ -339,7 +344,7 @@
                  document.getElementById("saccode-"+btnid.substring(5)).style.display = "none";
                  document.getElementById("ptamount-"+btnid.substring(5)).style.display = "inline-block";
                  document.getElementById("taxableval-"+btnid.substring(5)).style.display = "none";
-                 
+
 
             };
             options.error = function () {
@@ -649,6 +654,8 @@ function convertNumberToWords(amount) {
 
     function editbill()
     {
+    var countdebout=0;
+
     var billlid=$('#invoicenum').text();
      var options = {};
     options.url = "/Bill/Format1/Edit?id="+billlid+"&&handler=UpdateBill";
@@ -667,10 +674,10 @@ function convertNumberToWords(amount) {
 
 
             options.data = JSON.stringify(obj);
-            alert("here"+options.data);
+
             options.contentType = "application/json";
             options.dataType = "html";
-             alert("here"+options.data);
+
             options.beforeSend = function (xhr) {
                 xhr.setRequestHeader("MY-XSRF-TOKEN",
                 $('input:hidden[name="__RequestVerificationToken"]').val());
@@ -685,12 +692,11 @@ function convertNumberToWords(amount) {
                          var rowid=$(tr).attr('id').substring(4);
                          if(rowid>=comval)
                          {
-
                                 var options = {};
                                 options.url = "/Bill/Format1/Create?handler=InsertBillDetails";
                                 options.type = "POST";
-                                
 
+                                countdebout+=parseFloat($(tr).find('td:eq(5)').text());
                                 var obj = {};
                                 obj.ParticularsName =  $(tr).find('td:eq(0)').find("input").val();
                                 obj.Amount =  $(tr).find('td:eq(5)').text();
@@ -712,8 +718,8 @@ function convertNumberToWords(amount) {
                                     xhr.setRequestHeader("MY-XSRF-TOKEN",
                                     $('input:hidden[name="__RequestVerificationToken"]').val());
                                 };
-                                options.success = function (msg) {
 
+                                options.success = function (msg) {
 
                                 };
                                 options.error = function () {
@@ -725,13 +731,30 @@ function convertNumberToWords(amount) {
                       }
 
                     });
-                window.location.pathname="/Bill/Index";
+                savedebout(countdebout);
+                window.location.pathname="/Bill/Format1/Index";
             };
             options.error = function () {
                 alert("Error Occured while updating.");
             };
             $.ajax(options);
 
-
 }
+
+    function savedebout(debamt)
+    {
+         var options = {};
+            options.url = "/Bill/Format1/Edit?debout="+debamt+"&&dgid="+$('#billtoid').val()+"&&handler=UpdateDebOut";
+            options.type = "GET";
+            options.dataType = "json";
+
+            options.success = function (data) {
+
+            
+            };
+            options.error = function () {
+            alert("Error Updating Debtor Oustanding Amount");
+            };
+            $.ajax(options);
+    }
 </script>

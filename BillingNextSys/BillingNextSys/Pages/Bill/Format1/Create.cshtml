@@ -511,7 +511,8 @@ function convertNumberToWords(amount) {
 
     function savebill()
     {
-
+    var countdebout=0;
+        var debgid;
      var options = {};
     options.url = "/Bill/Format1/Create?handler=InsertBill";
     options.type = "POST";
@@ -526,6 +527,7 @@ function convertNumberToWords(amount) {
     obj.SeriesName=$("#Series option[value='" + $('#invoiceseries').val() + "']").val();
     obj.DebtorGroupID=$("#tosearch option[value='" + $('#toinfo').val() + "']").attr('id');
     obj.BillActNum=$('#bnum').val();
+    debgid=obj.DebtorGroupID;
 
     options.data = JSON.stringify(obj);
 
@@ -548,7 +550,7 @@ $('input:hidden[name="__RequestVerificationToken"]').val());
     options.type = "POST";
 
     @*var myData = $('#insertform').serializeArray();*@
-
+    countdebout+=parseFloat($(tr).find('td:eq(5)').text());
     var obj = {};
     obj.ParticularsName =  $(tr).find('td:eq(0)').find("input").val();
     obj.Amount =  $(tr).find('td:eq(5)').text();
@@ -590,8 +592,11 @@ $('input:hidden[name="__RequestVerificationToken"]').val());
     $('#bnum').val(curr);
     savebill();
     }
+
+
+      savedebout(countdebout,debgid);
     //redirect
-    window.location.pathname="/Bill/Index";
+    window.location.pathname="/Bill/Format1/Index";
     };
     options.error = function () {
 
@@ -599,4 +604,21 @@ $('input:hidden[name="__RequestVerificationToken"]').val());
     };
     $.ajax(options);
 }
+
+    function savedebout(debamt,debgid)
+    {
+         var options = {};
+            options.url = "/Bill/Format1/Edit?debout="+debamt+"&&dgid="+debgid+"&&handler=UpdateDebOut";
+            options.type = "GET";
+            options.dataType = "json";
+
+            options.success = function (data) {
+
+
+            };
+            options.error = function () {
+            alert("Error Updating Debtor Oustanding Amount");
+            };
+            $.ajax(options);
+    }
 </script>

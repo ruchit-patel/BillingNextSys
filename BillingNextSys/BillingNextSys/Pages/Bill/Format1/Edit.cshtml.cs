@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -99,27 +100,37 @@ namespace BillingNextSys.Pages.Bill.Format1
         }
 
 
-        public IActionResult OnPutUpdateBillDetails(int id, [FromBody]Models.BillDetails obj)
+        public IActionResult OnPutUpdateBillDetails(int id,double damt, [FromBody]Models.BillDetails obj)
         {
-            obj.CompanyID= (int)_session.GetInt32("Cid");
-            obj.BillAmountOutstanding = obj.Amount;
-            _context.Attach(obj).State = EntityState.Modified;
+           
+                obj.CompanyID = (int)_session.GetInt32("Cid");
+                obj.BillAmountOutstanding = obj.Amount;
+                _context.Attach(obj).State = EntityState.Modified;
 
-            try
-            {
-                _context.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!BillDetailsExists(obj.BillDetailsID))
+                try
                 {
-                    return new JsonResult("Update Error!");
+                    _context.SaveChanges();
+                    _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+
+                    var DebtorGroupOut = _context.DebtorGroup.Where(a => a.DebtorGroupID.Equals(obj.DebtorGroupID)).Select(a => a.DebtorOutstanding).FirstOrDefault();
+
+                    var billout = DebtorGroupOut + damt;
+                    var dgout = new Models.DebtorGroup { DebtorGroupID = obj.DebtorGroupID, DebtorOutstanding = billout };
+                    _context.DebtorGroup.Attach(dgout).Property(x => x.DebtorOutstanding).IsModified = true;
+                    _context.SaveChanges();
                 }
-                else
+                catch (DbUpdateConcurrencyException)
                 {
-                    return new JsonResult("Update Error!");
+                    if (!BillDetailsExists(obj.BillDetailsID))
+                    {
+                        return new JsonResult("Update Error!");
+                    }
+                    else
+                    {
+                        return new JsonResult("Update Error!");
+                    }
                 }
-            }
+
             return new JsonResult("Information Updated!");
         }
         private bool BillDetailsExists(int id)
@@ -136,6 +147,7 @@ namespace BillingNextSys.Pages.Bill.Format1
             try
             {
                 _context.SaveChanges();
+
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -155,5 +167,16 @@ namespace BillingNextSys.Pages.Bill.Format1
             return _context.Bill.Any(e => e.BillNumber == id);
         }
 
+        public IActionResult OnGetUpdateDebOut(double debout,int dgid)
+        {
+            var DebtorGroupOut = _context.DebtorGroup.Where(a => a.DebtorGroupID.Equals(dgid)).Select(a => a.DebtorOutstanding).FirstOrDefault();
+
+            var billout = DebtorGroupOut + debout;
+            var dgout = new Models.DebtorGroup { DebtorGroupID = dgid, DebtorOutstanding = billout };
+            _context.DebtorGroup.Attach(dgout).Property(x => x.DebtorOutstanding).IsModified = true;
+            _context.SaveChanges();
+
+            return new JsonResult("Information Updated!");
+        }
     }
 }

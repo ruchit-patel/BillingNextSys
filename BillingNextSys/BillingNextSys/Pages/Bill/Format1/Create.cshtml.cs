@@ -14,6 +14,7 @@ using Microsoft.Extensions.Options;
 using Twilio;
 using Twilio.Rest.Api.V2010.Account;
 using Twilio.Types;
+using System.Threading;
 
 namespace BillingNextSys.Pages.Bill.Format1
 {
@@ -97,10 +98,22 @@ namespace BillingNextSys.Pages.Bill.Format1
 
         public IActionResult OnPostInsertBillDetails([FromBody] Models.BillDetails obj)
         {
-            obj.CompanyID= (int)_session.GetInt32("Cid");
-            obj.BillAmountOutstanding = obj.Amount;
-            _context.BillDetails.Add(obj);
-            _context.SaveChanges();
+            
+                try
+                {
+                    obj.CompanyID = (int)_session.GetInt32("Cid");
+                    obj.BillAmountOutstanding = obj.Amount;
+                    _context.BillDetails.Add(obj);
+                    _context.SaveChanges();
+
+                    
+                }
+                catch(Exception)
+                {
+                    return new JsonResult("Insert Error!");
+                }
+               
+           
             return new JsonResult("Added Successfully!");
         }
 
@@ -112,15 +125,19 @@ namespace BillingNextSys.Pages.Bill.Format1
                 obj.BillDate = DateTime.Now;
                 _context.Bill.Add(obj);
                 _context.SaveChanges();
-                var DebtorGroupPhone = _context.DebtorGroup.Where(a => a.DebtorGroupID.Equals(obj.DebtorGroupID)).Select(a=>a.DebtorGroupPhoneNumber).FirstOrDefault();
-                SendSmsAsync("whatsapp:" + DebtorGroupPhone, obj.BilledTo, obj.BillAmount);
-                return new JsonResult("Added Successfully!");
+
+               
             }
             catch(DbUpdateException )
             {
                 string exce= "Update 1";
                 return new JsonResult(exce);
             }
+           
+            var DebtorGroupInfo = _context.DebtorGroup.Where(a => a.DebtorGroupID.Equals(obj.DebtorGroupID)).Select(a=>a.DebtorGroupPhoneNumber).FirstOrDefault();
+
+            SendSmsAsync("whatsapp:" + DebtorGroupInfo, obj.BilledTo, obj.BillAmount);
+            return new JsonResult("Added Successfully!");
         }
 
         public Task SendSmsAsync(string number,string debtorname, double message)

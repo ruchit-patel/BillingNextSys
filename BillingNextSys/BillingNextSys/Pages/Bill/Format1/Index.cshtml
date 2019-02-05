@@ -73,16 +73,17 @@
 
     function displaymoredetails(inid)
     {
-    alert(inid);
      var newInput="";
     var options = {};
     options.url = "/Bill/Format1/Index?id="+inid +"&&handler=SelectAll";
     options.type = "GET";
     options.dataType = "json";
+    console.log(options);
     options.success = function (data) {
     data.forEach(function (element) {
     if(element.billAmountOutstanding==0)
     {
+
         newInput +="<tr><td>"+element.particularsName+"</td><td>"+element.amount+"</td><td id='amtout-"+element.billDetailsID+"'>"+element.billAmountOutstanding+"</td></tr>";
     }
     else
@@ -114,9 +115,14 @@
 
     function savepaymt(stid)
     {
-        if($("#amt-"+stid).val()>$("#amtout-"+stid).text())
+        if(document.getElementById('chkpay-'+stid).checked && document.getElementById("chknum-"+stid).value=="")
+         {
+            alert("Please provide cheque number.");
+            return true;
+         }
+        if(parseFloat($("#amt-"+stid).val())>parseFloat($("#amtout-"+stid).text()))
         {
-            alert("The amout is more than outstanding amount :" +$("#amt-"+stid).val()+" , "+$("#amtout-"+stid).text());
+            alert("The amout is more than outstanding amount.");
             $("#amt-"+stid).val('');
         }
         else
@@ -153,8 +159,7 @@
                 };
                 options.success = function (msg) {
                     var bnum=$('#billno').text();
-                    alert("here "+bnum.substr(bnum.indexOf(':')+1));
-                   displaymoredetails(bnum.substr(bnum.indexOf(':')+1));
+                   displaymoredetails(bnum.substr(bnum.indexOf(':')+2));
                 };
                 options.error = function () {
                     alert("Error Occured While Executing Transaction.");
