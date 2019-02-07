@@ -72,7 +72,6 @@ namespace BillingNextSys.Models
         public string PAN { get; set; }
 
         [Display(Name = "Company's Owner")]
-        [Required(ErrorMessage = "Please Specify Company Owner."),StringLength(100)]
         public string CompanyOwner { get; set; }
 
         public ICollection<Branch> Branches { get; set; }

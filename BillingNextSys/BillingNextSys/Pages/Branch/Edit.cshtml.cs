@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BillingNextSys.Models;
+using System.IO;
 
 namespace BillingNextSys.Pages.Branch
 {
@@ -22,6 +23,8 @@ namespace BillingNextSys.Pages.Branch
         [BindProperty]
         public Models.Branch Branch { get; set; }
 
+        public static byte[] Img;
+
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
@@ -36,7 +39,8 @@ namespace BillingNextSys.Pages.Branch
             {
                 return NotFound();
             }
-           ViewData["CompanyID"] = new SelectList(_context.Company, "CompanyID", "CompanyName");
+            Img = Branch.BranchManagerSign;
+            ViewData["CompanyID"] = new SelectList(_context.Company, "CompanyID", "CompanyName");
             return Page();
         }
 
@@ -45,6 +49,26 @@ namespace BillingNextSys.Pages.Branch
             if (!ModelState.IsValid)
             {
                 return Page();
+            }
+
+            if (Branch.BranchManaSign != null)
+            {
+                if (Branch.BranchManaSign.Length > 0)
+                //Convert Image to byte and save to database
+                {
+                    byte[] p1 = null;
+                    using (var fs1 = Branch.BranchManaSign.OpenReadStream())
+                    using (var ms1 = new MemoryStream())
+                    {
+                        fs1.CopyTo(ms1);
+                        p1 = ms1.ToArray();
+                    }
+                    Branch.BranchManagerSign = p1;
+                }
+            }
+            else
+            {
+                Branch.BranchManagerSign = Img;
             }
 
             _context.Attach(Branch).State = EntityState.Modified;

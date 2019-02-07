@@ -4,7 +4,7 @@
     ViewData["Title"] = "Print";
 }
 
-<h2>Edit</h2>
+<h2>Print</h2>
 
 <h4>Bill</h4>
 <hr />
@@ -25,6 +25,9 @@
         border-top: 2px solid;
     }
 </style>
+<div class="form-group">
+    <input type="button" value="Print Bill" id="btnprint" class="btn btn-default" onclick="printDiv('printableArea')" />
+</div>
 <div class="container" id="printableArea">
     <form onsubmit="return false;">
         @Html.AntiForgeryToken()
@@ -64,7 +67,7 @@
                     <div class="col-xs-6 text-right">
                         <address>
                             <strong>Invoice Number:</strong> <div id="invoicenum">@Html.DisplayFor(model => model.Bill.BillNumber)</div><br>
-                            <strong>Invoice Date:</strong> <div id="invoicedate"><input asp-for="Bill.InvoiceDate" id="invcdt" style="width:initial; border-radius:4px; height:35px;" /></div><br>
+                            <strong>Invoice Date:</strong> <div id="invoicedate">@Html.DisplayFor(model => model.Bill.InvoiceDate) </div><br>
                         </address>
                     </div>
                 </div>
@@ -152,8 +155,10 @@
                                         <address>
                                             <strong>Amount In Words: </strong> <div style="display:inline;" id="inwords"></div><br>
                                             <strong>For <div style="display:inline;" id="cname">@Html.DisplayFor(model => model.Bill.Company.CompanyName)</div></strong><br>
-                                            <br /><br /><br />
-                                            <strong>@Html.DisplayFor(model => model.Bill.Company.CompanyOwner) <br> (Authorised Signatory)</strong><br>
+
+                                            <img width="100px" height="100px" class="img-responsive  pull-right" src="data:image/png;base64,@Convert.ToBase64String(Model.Bill.Branch.BranchManagerSign)" />
+                                            <br><br><br>
+                                            <strong class="pull-right">@Html.DisplayFor(model => model.Bill.Branch.BranchManagerName) <br> (Authorised Signatory)</strong><br>
 
                                         </address>
                                     </div>
@@ -166,9 +171,7 @@
         </div>
     </form>
 </div>
-<div class="form-group">
-    <input type="button" value="Print Bill" id="btnprint" class="btn btn-default" onclick="printDiv('printableArea')" />
-</div>
+
 <div>
     <a asp-page="/Bill/Format2/Index">Back to List</a>
 </div>

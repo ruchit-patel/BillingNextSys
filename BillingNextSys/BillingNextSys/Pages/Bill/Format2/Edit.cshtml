@@ -42,23 +42,23 @@
                 <input type="hidden" id="messsent" asp-for="Bill.MessageSent" />
                 <div class="row">
                     <div class="col-md-3">
-                        <img class="img-responsive full-width" src="data:image/png;base64,@Convert.ToBase64String(Model.Companies.FirstOrDefault().CompanyLogoImg)" /> @*<img src="https://images-na.ssl-images-amazon.com/images/I/713t5BMNwdL._SX425_.jpg" height="250px" width="300px" style="padding:10px;" />*@
+                        <img class="img-responsive full-width" src="data:image/png;base64,@Convert.ToBase64String(Model.Bill.Company.CompanyLogoImg)" /> @*<img src="https://images-na.ssl-images-amazon.com/images/I/713t5BMNwdL._SX425_.jpg" height="250px" width="300px" style="padding:10px;" />*@
                     </div>
                     <div class="col-md-9">
-                        <h1>@Html.DisplayFor(model => model.Companies.FirstOrDefault().CompanyName)</h1>
+                        <h1>@Html.DisplayFor(model => model.Bill.Company.CompanyName)</h1>
                         <h2>CHARTERED ACCOUNTANTS</h2>
-                        <h4>@Html.DisplayFor(model => model.Branches.FirstOrDefault().BranchAddress)</h4>
+                        <h4>@Html.DisplayFor(model => model.Bill.Branch.BranchAddress)</h4>
                         <div class="row">
-                            <div class="col-md-6"><h4> <img src="/images/mail.svg" alt="Mail:" width="20px" height="20px" />&nbsp; @Html.DisplayFor(model => model.Branches.FirstOrDefault().BranchEmail)</h4></div>
-                            <div class="col-md-6"><h4> <img src="/images/mobile.png" alt="Mobile Number:" width="20px" height="20px" />&nbsp; @Html.DisplayFor(model => model.Branches.FirstOrDefault().BranchPhone)</h4></div>
+                            <div class="col-md-6"><h4> <img src="/images/mail.svg" alt="Mail:" width="20px" height="20px" />&nbsp; @Html.DisplayFor(model => model.Bill.Branch.BranchEmail)</h4></div>
+                            <div class="col-md-6"><h4> <img src="/images/mobile.png" alt="Mobile Number:" width="20px" height="20px" />&nbsp; @Html.DisplayFor(model => model.Bill.Branch.BranchPhone)</h4></div>
                         </div>
                         <div class="row">
-                            <div class="col-md-2"></div> <div class="col-md-10"><h3>GSTIN:@Html.DisplayFor(model => model.Companies.FirstOrDefault().GSTIN)</h3></div>
+                            <div class="col-md-2"></div> <div class="col-md-10"><h3>GSTIN:@Html.DisplayFor(model => model.Bill.Company.GSTIN)</h3></div>
                         </div>
                     </div>
                 </div>
                 <hr />
-                <center><h3>Tax Invoice</h3></center>
+                <center><h3>Bill Of Supply</h3></center>
             </div>
 
             <div class="col-xs-12">
@@ -138,16 +138,6 @@
                                     counter++;
                                     }
 
-                                    @*<tr id="row-1" class="">
-            <td><input id="particulars-1" style="width:250px;" placeholder="Particulars.." list="parti-1" autocomplete="off" onchange="fillparticulars($(this).val(),-1);" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" onfocusout="fillpdetails(-1)"><datalist id="parti-1"></datalist></td>
-            <td class="text-center"><input style="width:65px;" placeholder="SAC Code.." type="number" id="saccode-1" /></td>
-            <td class="text-center"><input style="width:65px;" type="number" placeholder="Amount.." id="taxableval-1" onchange="calcamount($(this).val(),-1);" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" /></td>
-            <td class="text-center" id="cgst-1"></td>
-            <td class="text-center" id="sgst-1"></td>
-            <td class="text-right count-me" id="pamount-1"></td>
-
-        </tr>*@
-
                                     <tr>
                                         <td class="thick-line"></td>
                                         <td class="thick-line"></td>
@@ -155,14 +145,7 @@
                                         <td class="thick-line text-center"><strong>Total</strong></td>
                                         <td class="thick-line text-center" id="grandtotal"></td>
                                     </tr>
-                                    @*<tr>
-            <td class="no-line text-left"><strong>Amount In Words:</strong></td>
-            <td class="no-line text-center">Seven Thousand Six Hundred Seventy.</td>
-            <td class="no-line"></td>
-            <td class="no-line"></td>
-            <td class="no-line"></td>
-            <td class="no-line"></td>
-        </tr>*@
+
                                 </tbody>
                             </table>
                             <input type="hidden" value="@counter" id="lastcount" />
@@ -172,19 +155,20 @@
                                 <div class="row">
                                     <div class="col-xs-6">
                                         <address>
-                                            <strong>Company's PAN:</strong> &nbsp;<div style="display:inline;" id="pan"> @Html.DisplayFor(model => model.Companies.FirstOrDefault().PAN)</div><br>
-                                            <strong>Bank Name:</strong> &nbsp;<div style="display:inline;" id="bname">@Html.DisplayFor(model => model.Companies.FirstOrDefault().BankName)</div><br>
-                                            <strong>Account Type:</strong> &nbsp;<div style="display:inline;" id="atype">@Html.DisplayFor(model => model.Companies.FirstOrDefault().AccountType)</div><br>
-                                            <strong>Account Number:</strong> &nbsp;<div style="display:inline;" id="anum">@Html.DisplayFor(model => model.Companies.FirstOrDefault().AccountNumber)</div><br>
-                                            <strong>IFSC Code:</strong> &nbsp;<div style="display:inline;" id="ifsc">@Html.DisplayFor(model => model.Companies.FirstOrDefault().IFSCcode)</div><br>
+                                            <strong>Company's PAN:</strong> &nbsp;<div style="display:inline;" id="pan"> @Html.DisplayFor(model => model.Bill.Company.PAN)</div><br>
+                                            <strong>Bank Name:</strong> &nbsp;<div style="display:inline;" id="bname">@Html.DisplayFor(model => model.Bill.Company.BankName)</div><br>
+                                            <strong>Account Type:</strong> &nbsp;<div style="display:inline;" id="atype">@Html.DisplayFor(model => model.Bill.Company.AccountType)</div><br>
+                                            <strong>Account Number:</strong> &nbsp;<div style="display:inline;" id="anum">@Html.DisplayFor(model => model.Bill.Company.AccountNumber)</div><br>
+                                            <strong>IFSC Code:</strong> &nbsp;<div style="display:inline;" id="ifsc">@Html.DisplayFor(model => model.Bill.Company.IFSCcode)</div><br>
                                         </address>
                                     </div>
                                     <div class="col-xs-6 text-right">
                                         <address>
                                             <strong>Amount In Words: </strong> <div style="display:inline;" id="inwords"></div><br>
-                                            <strong>For <div style="display:inline;" id="cname">@Html.DisplayFor(model => model.Companies.FirstOrDefault().CompanyName)</div></strong><br>
-                                            <br /><br /><br />
-                                            <strong>@Html.DisplayFor(model => model.Companies.FirstOrDefault().CompanyOwner) <br> (Authorised Signatory)</strong><br>
+                                            <strong>For <div style="display:inline;" id="cname">@Html.DisplayFor(model => model.Bill.Company.CompanyName)</div></strong><br>
+                                            <img width="100px" height="100px" class="img-responsive  pull-right" src="data:image/png;base64,@Convert.ToBase64String(Model.Bill.Branch.BranchManagerSign)" />
+                                            <br><br><br>
+                                            <strong class="pull-right">@Html.DisplayFor(model => model.Bill.Branch.BranchManagerName) <br> (Authorised Signatory)</strong><br>
 
                                         </address>
                                     </div>
@@ -292,7 +276,83 @@
     }
 
 
+
+
     function delcont(btnid,count)
+    {
+           var options = {};
+            alert("here at del with "+btnid+" : " + count);
+            var billamt=$('#amount-'+btnid.substring(4)).text().replace(/[^0-9.]/g,'').trim();
+
+        alert("here"+billamt+" and "+$('#billtoid').val());
+           options.url = "/Bill/Format1/Edit?id="+count+"&&billamt="+billamt+"&&debid="+$('#billtoid').val()+"&&handler=DeleteBillDetails";
+           options.type = "DELETE";
+           options.dataType = "html";
+           options.beforeSend = function (xhr) {
+           xhr.setRequestHeader("MY-XSRF-TOKEN",
+           $('input:hidden[name="__RequestVerificationToken"]').val());
+           };
+           options.success = function (msg) {
+
+            if(msg=='"Deleted Successfully! Remove Row."')
+             {
+
+                document.getElementById("row-"+btnid.substring(4)).style.display = "none";
+                 document.getElementById("row-"+btnid.substring(4)).innerHTML="<p>dummy row</p>";
+                calculateGrandTotal();
+
+
+                     var billlid=$('#invoicenum').text();
+                 var options1 = {};
+                options1.url = "/Bill/Format1/Edit?id="+billlid+"&&handler=UpdateBill";
+                options1.type = "PUT";
+
+                var obj1 = {};
+                obj1.BillNumber = billlid;
+                obj1.BilledTo = $('#to').text();
+                obj1.BillAmount = $('#grandtotal').text().substring(1, $('#grandtotal').text().length);
+                obj1.InvoiceDate = $('#invcdt').val();
+                obj1.DebtorGroupID =  $('#billtoid').val();
+                obj1.BillDate =  $('#billdate').val();
+                obj1.BillDelivered=$('#billdel').val();
+                obj1.SecretUnlockCode=$('#secode').val();
+                obj1.MessageSent=$('#messsent').val();
+
+
+            options1.data = JSON.stringify(obj1);
+
+            options1.contentType = "application/json";
+            options1.dataType = "html";
+
+            options1.beforeSend = function (xhr) {
+                xhr.setRequestHeader("MY-XSRF-TOKEN",
+                $('input:hidden[name="__RequestVerificationToken"]').val());
+                };
+            options1.success = function (msg) {
+           };
+            options1.error = function () {
+                alert("Error Occured while updating.");
+            };
+            $.ajax(options1);
+
+
+             }
+            else
+             {
+                alert("Exception occured while handling the return data.");
+             }
+            };
+           options.error = function () {
+                alert("Error Occured while deleting.");
+            };
+       $.ajax(options);
+    }
+
+
+
+
+
+    @*function delcont(btnid,count)
     {
            var options = {};
            options.url = "/Bill/Format1/Edit?id="+count+"&&handler=DeleteBillDetails";
@@ -317,7 +377,7 @@
                 alert("Error Occured while deleting.");
             };
        $.ajax(options);
-    }
+    }*@
 
 
     function savecont(btnid,billid)

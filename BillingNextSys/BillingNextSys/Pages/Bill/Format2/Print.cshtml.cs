@@ -46,8 +46,7 @@ namespace BillingNextSys.Pages.Bill.Format2
                 return NotFound();
             }
 
-            int cid = (int)_session.GetInt32("Cid");
-            int bid = (int)_session.GetInt32("Bid");
+           
             BillDetailss = _context.BillDetails.Where(a => a.BillNumber.Equals(id)).Include(b => b.Particulars).Include(c => c.Debtor).ToList();
 
             return Page();

@@ -11,7 +11,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form method="post">
+        <form enctype="multipart/form-data" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Branch.BranchName" class="control-label"></label>
@@ -29,7 +29,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Branch.BranchPhone" class="control-label"></label>
-                <input  asp-for="Branch.BranchPhone" class="form-control" />
+                <input asp-for="Branch.BranchPhone" class="form-control" />
                 <span asp-validation-for="Branch.BranchPhone" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -37,6 +37,17 @@
                 <input type="email" asp-for="Branch.BranchEmail" class="form-control" />
                 <span asp-validation-for="Branch.BranchEmail" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="Branch.BranchManagerName" class="control-label"></label>
+                <input  asp-for="Branch.BranchManagerName" class="form-control" />
+                <span asp-validation-for="Branch.BranchManagerName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Branch.BranchManaSign" class="control-label"></label>
+                <input asp-for="Branch.BranchManaSign" type="file" accept="image/x-png,image/jpeg" class="form-control" required />
+                <span asp-validation-for="Branch.BranchManaSign" class="text-danger"></span>
+            </div>
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-default" />
             </div>

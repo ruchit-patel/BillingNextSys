@@ -26,8 +26,7 @@ namespace BillingNextSys.Pages.Bill.Format1
         [BindProperty]
         public Models.Bill Bill { get; set; }
 
-        public IList<Models.Company> Companies { get; set; }
-        public IList<Models.Branch> Branches { get; set; }
+    
         public IList<Models.BillDetails> BillDetailss { get; set; }
 
 
@@ -41,6 +40,7 @@ namespace BillingNextSys.Pages.Bill.Format1
             Bill = await _context.Bill
                 .Include(b => b.BillSeries)
                 .Include(b => b.Company)
+                .Include(b=>b.Branch)
                 .Include(b => b.DebtorGroup).FirstOrDefaultAsync(m => m.BillNumber == id);
 
             if (Bill == null)
@@ -50,8 +50,7 @@ namespace BillingNextSys.Pages.Bill.Format1
 
             int cid = (int)_session.GetInt32("Cid");
             int bid = (int)_session.GetInt32("Bid");
-            Companies = _context.Company.Where(ab => ab.CompanyID.Equals(cid)).ToList();
-            Branches = _context.Branch.Where(a => a.BranchID.Equals(bid)).ToList();
+        
             BillDetailss = _context.BillDetails.Where(a => a.BillNumber.Equals(id)).Include(b => b.Particulars).ToList();
 
             return Page();
@@ -92,9 +91,18 @@ namespace BillingNextSys.Pages.Bill.Format1
 
 
 
-        public IActionResult OnDeleteDeleteBillDetails(int id)
+        public IActionResult OnDeleteDeleteBillDetails(int id, double billamt, int debid)
         {
             _context.BillDetails.Remove(_context.BillDetails.Find(id));
+            _context.SaveChanges();
+
+            _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+
+            var DebtorGroupOut = _context.DebtorGroup.Where(a => a.DebtorGroupID.Equals(debid)).Select(a => a.DebtorOutstanding).FirstOrDefault();
+
+            var billout = DebtorGroupOut - billamt;
+            var dgout = new Models.DebtorGroup { DebtorGroupID = debid, DebtorOutstanding = billout };
+            _context.DebtorGroup.Attach(dgout).Property(x => x.DebtorOutstanding).IsModified = true;
             _context.SaveChanges();
             return new JsonResult("Deleted Successfully! Remove Row.");
         }

@@ -53,6 +53,13 @@ namespace BillingNextSys.Pages.Bill
             {
                 _context.Bill.Remove(Bill);
                 await _context.SaveChangesAsync();
+
+                var DebtorGroupOut = _context.DebtorGroup.Where(a => a.DebtorGroupID.Equals(Bill.DebtorGroupID)).Select(a => a.DebtorOutstanding).FirstOrDefault();
+
+                var billout = DebtorGroupOut - Bill.BillAmount;
+                var dgout = new Models.DebtorGroup { DebtorGroupID = Bill.DebtorGroupID, DebtorOutstanding = billout };
+                _context.DebtorGroup.Attach(dgout).Property(x => x.DebtorOutstanding).IsModified = true;
+                _context.SaveChanges();
             }
 
             return RedirectToPage("./Index");

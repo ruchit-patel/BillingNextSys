@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Http;
 
 namespace BillingNextSys.Models
 {
@@ -12,7 +14,6 @@ namespace BillingNextSys.Models
         [Required(ErrorMessage = "Please Specify Branch Name"), StringLength(100)]
         [Display(Name = "Branch Name")]
         public string BranchName { get; set; }
-
 
         [Required(ErrorMessage = "Please Specify Branch Address"), StringLength(200)]
         [DataType(DataType.MultilineText)]
@@ -31,6 +32,17 @@ namespace BillingNextSys.Models
         [ScaffoldColumn(false)]
         [DataType(DataType.DateTime)]
         public DateTime CreationDate { get; set; }
+
+        public byte[] BranchManagerSign { get; set; }
+
+        [NotMapped]
+        [DataType(DataType.Upload)]
+        [Display(Name = "Branch Manager Signature")]
+        public IFormFile BranchManaSign { get; set; }
+
+        [Display(Name = "Branch Manager Name")]
+        [Required(ErrorMessage = "Please Specify Branch Manager Name."), StringLength(100)]
+        public string BranchManagerName { get; set; }
 
         public int CompanyID { get; set; }
 

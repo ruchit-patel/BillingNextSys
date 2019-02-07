@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using BillingNextSys.Models;
+using System.IO;
 
 namespace BillingNextSys.Pages.Branch
 {
@@ -33,6 +34,25 @@ namespace BillingNextSys.Pages.Branch
             if (!ModelState.IsValid)
             {
                 return Page();
+            }
+
+            if (Branch.BranchManaSign != null)
+            {
+                if (Branch.BranchManaSign.Length > 0)
+
+                //Convert Image to byte and save to database
+
+                {
+                    byte[] p1 = null;
+                    using (var fs1 = Branch.BranchManaSign.OpenReadStream())
+                    using (var ms1 = new MemoryStream())
+                    {
+                        fs1.CopyTo(ms1);
+                        p1 = ms1.ToArray();
+                    }
+                    Branch.BranchManagerSign = p1;
+
+                }
             }
 
             _context.Branch.Add(Branch);
