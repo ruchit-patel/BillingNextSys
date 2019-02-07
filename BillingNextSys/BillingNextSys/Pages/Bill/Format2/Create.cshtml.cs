@@ -72,6 +72,7 @@ namespace BillingNextSys.Pages.Bill.Format2
         public IActionResult OnPostInsertBillDetails([FromBody] Models.BillDetails obj)
         {
             obj.CompanyID= (int)_session.GetInt32("Cid");
+            obj.BillAmountOutstanding = obj.Amount;
             _context.BillDetails.Add(obj);
             _context.SaveChanges();
             return new JsonResult("Added Successfully!");
@@ -82,6 +83,11 @@ namespace BillingNextSys.Pages.Bill.Format2
             try
             {
                 obj.CompanyID = (int)_session.GetInt32("Cid");
+                obj.BranchID = (int)_session.GetInt32("Bid");
+                Random generator = new Random();
+                obj.SecretUnlockCode = Int32.Parse(generator.Next(0, 999999).ToString("D6"));
+                obj.BillDelivered = false;
+                obj.MessageSent = false;
                 obj.BillDate = DateTime.Now;
                 _context.Bill.Add(obj);
                 _context.SaveChanges();

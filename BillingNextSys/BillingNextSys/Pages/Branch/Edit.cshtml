@@ -31,12 +31,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="Branch.BranchPhone" class="control-label"></label>
-                <textarea asp-for="Branch.BranchPhone" class="form-control"></textarea>
+                <input asp-for="Branch.BranchPhone" class="form-control" />
                 <span asp-validation-for="Branch.BranchPhone" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Branch.BranchEmail" class="control-label"></label>
-                <textarea asp-for="Branch.BranchEmail" class="form-control"></textarea>
+                <input type="email" asp-for="Branch.BranchEmail" class="form-control">
                 <span asp-validation-for="Branch.BranchEmail" class="text-danger"></span>
             </div>
             <div class="form-group">

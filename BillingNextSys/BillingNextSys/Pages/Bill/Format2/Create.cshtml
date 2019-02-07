@@ -147,7 +147,7 @@
     <input type="button" value="Create Bill" id="btncreate" class="btn btn-default" onclick="savebill()"/>
 </div>
 <div>
-    <a asp-page="/Bill/Index">Back to List</a>
+    <a asp-page="/Bill/Format2/Index">Back to List</a>
 </div>
 
 @section Scripts {
@@ -496,7 +496,8 @@ function convertNumberToWords(amount) {
 
     function savebill()
     {
-
+    var countdebout=0;
+    var debgid;
      var options = {};
     options.url = "/Bill/Format1/Create?handler=InsertBill";
     options.type = "POST";
@@ -508,7 +509,7 @@ function convertNumberToWords(amount) {
     obj.BillAmount=  $('#grandtotal').text().substring(1, $('#grandtotal').text().length);
     obj.InvoiceDate = $('#invcdt').val();
     obj.DebtorGroupID=$("#tosearch option[value='" + $('#toinfo').val() + "']").attr('id');
-
+    debgid=obj.DebtorGroupID;
 
     options.data = JSON.stringify(obj);
 
@@ -530,7 +531,7 @@ $('input:hidden[name="__RequestVerificationToken"]').val());
     options.type = "POST";
 
     @*var myData = $('#insertform').serializeArray();*@
-
+     countdebout+=parseFloat($(tr).find('td:eq(4)').find("input").val());
     var obj = {};
     obj.ParticularsName =  $(tr).find('td:eq(1)').find("input").val();
     obj.YearInfo = $(tr).find('td:eq(2)').find("select").val();
@@ -549,7 +550,7 @@ $('input:hidden[name="__RequestVerificationToken"]').val());
     obj.DebtorID= $(tr).find('td:eq(0)').find("datalist").find('option[value="' + debid + '"]').attr('id');
 
     options.data = JSON.stringify(obj);
-    alert(options.data);
+   
     options.contentType = "application/json; charset=utf-8";
     options.dataType = "json";
 
@@ -577,8 +578,10 @@ $('input:hidden[name="__RequestVerificationToken"]').val());
     $('#bnum').val(curr);
     savebill();
     }
+
+    savedebout(countdebout,debgid);
     //redirect
-    window.location.pathname="/Bill/Index";
+    window.location.pathname="/Bill/Format2/Index";
     };
     options.error = function () {
 
@@ -586,4 +589,21 @@ $('input:hidden[name="__RequestVerificationToken"]').val());
     };
     $.ajax(options);
 }
+
+function savedebout(debamt,debgid)
+    {
+         var options = {};
+            options.url = "/Bill/Format1/Edit?debout="+debamt+"&&dgid="+debgid+"&&handler=UpdateDebOut";
+            options.type = "GET";
+            options.dataType = "json";
+
+            options.success = function (data) {
+
+
+            };
+            options.error = function () {
+            alert("Error Updating Debtor Oustanding Amount");
+            };
+            $.ajax(options);
+    }
 </script>

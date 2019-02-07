@@ -31,15 +31,25 @@ namespace BillingNextSys.Pages.Bill.Format1
             return new JsonResult(data);
         }
 
-        public IActionResult OnPostInsertReceived(int amt,[FromBody] Models.Received obj)
+        public IActionResult OnPostInsertReceived(int dgid,[FromBody] Models.Received obj)
         { 
             obj.CompanyID= (int)_session.GetInt32("Cid");
             _context.Received.Add(obj);
             _context.SaveChanges();
 
-            var billout = amt - obj.ReceivedAmount;
+            _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+            var amtout = _context.BillDetails.Where(a => a.BillDetailsID.Equals(obj.BillDetailsID)).FirstOrDefault().BillAmountOutstanding;
+            // var amtout = _context.DebtorGroup.Where(a => a.DebtorGroupID.Equals(dgid)).FirstOrDefault().DebtorOutstanding;
+            var billout = amtout - obj.ReceivedAmount;
             var billdet = new Models.BillDetails { BillDetailsID = obj.BillDetailsID, BillAmountOutstanding= billout };
             _context.BillDetails.Attach(billdet).Property(x => x.BillAmountOutstanding).IsModified = true;
+            _context.SaveChanges();
+
+            var dgout = _context.DebtorGroup.Where(a => a.DebtorGroupID.Equals(dgid)).FirstOrDefault().DebtorOutstanding;
+
+            var debout = dgout - obj.ReceivedAmount;
+            var dgdet = new Models.DebtorGroup { DebtorGroupID = dgid, DebtorOutstanding = debout };
+            _context.DebtorGroup.Attach(dgdet).Property(x => x.DebtorOutstanding).IsModified = true;
             _context.SaveChanges();
 
             return new JsonResult("Successful!");

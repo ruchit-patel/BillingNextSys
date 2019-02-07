@@ -37,6 +37,9 @@
                 <input type="hidden" id="seriesinfo" asp-for="Bill.SeriesName" />
                 <input type="datetime" id="billdate" asp-for="Bill.BillDate" hidden />
                 <input type="hidden" id="billactnum" asp-for="Bill.BillActNum" />
+                <input type="hidden" id="secode" asp-for="Bill.SecretUnlockCode" />
+                <input type="hidden" id="billdel" asp-for="Bill.BillDelivered" />
+                <input type="hidden" id="messsent" asp-for="Bill.MessageSent" />
 
                 <div class="row">
                     <div class="col-md-3">
@@ -328,6 +331,49 @@
                 $('input:hidden[name="__RequestVerificationToken"]').val());
                 };
             options.success = function (msg) {
+
+
+
+
+    var billlid=$('#invoicenum').text();
+     var options1 = {};
+    options1.url = "/Bill/Format1/Edit?id="+billlid+"&&handler=UpdateBill";
+    options1.type = "PUT";
+
+            var obj1 = {};
+            obj1.BillNumber = billlid;
+            obj1.BilledTo = document.getElementById('toinfo').value;
+            obj1.BillAmount = $('#grandtotal').text().substring(1, $('#grandtotal').text().length);
+            obj1.InvoiceDate = $('#invcdt').val();
+            obj1.PlaceOfSupply = $('#placeofsup').find(":selected").val();
+            obj1.DebtorGroupID =  $('#billtoid').val();
+            obj1.SeriesName =  $('#seriesinfo').val();
+            obj1.BillDate =  $('#billdate').val();
+            obj1.BillActNum =  $('#billactnum').val();
+            obj1.BillDelivered=$('#billdel').val();
+            obj1.SecretUnlockCode=$('#secode').val();
+            obj1.MessageSent=$('#messsent').val();
+
+
+            options1.data = JSON.stringify(obj1);
+
+            options1.contentType = "application/json";
+            options1.dataType = "html";
+
+            options1.beforeSend = function (xhr) {
+                xhr.setRequestHeader("MY-XSRF-TOKEN",
+                $('input:hidden[name="__RequestVerificationToken"]').val());
+                };
+            options1.success = function (msg) {
+           };
+            options1.error = function () {
+                alert("Error Occured while updating.");
+            };
+            $.ajax(options1);
+
+
+
+
                  var countid=btnid.substring(5);
                     @*$('pp-'+countid).text(''+obj.ParticularsName);
                      $('ptamount-'+countid).text(''+obj.TaxableValue);*@
@@ -671,6 +717,9 @@ function convertNumberToWords(amount) {
             obj.SeriesName =  $('#seriesinfo').val();
             obj.BillDate =  $('#billdate').val();
             obj.BillActNum =  $('#billactnum').val();
+            obj.BillDelivered=$('#billdel').val();
+            obj.SecretUnlockCode=$('#secode').val();
+            obj.MessageSent=$('#messsent').val();
 
 
             options.data = JSON.stringify(obj);
@@ -750,7 +799,7 @@ function convertNumberToWords(amount) {
 
             options.success = function (data) {
 
-            
+
             };
             options.error = function () {
             alert("Error Updating Debtor Oustanding Amount");

@@ -113,10 +113,18 @@ namespace BillingNextSys.Models
 
         public Company Company { get; set; }
 
+        public int BranchID { get; set; }
+
+        public Branch Branch { get; set; }
+
         public string SeriesName { get; set; }
         public BillSeries BillSeries { get; set; }
 
-        //add a field of issued at branch
+        public int SecretUnlockCode { get; set; }
+
+        public bool BillDelivered { get; set; }
+
+        public bool? MessageSent { get; set; }
 
         public ICollection<BillDetails> BillDetails { get; set; }
     }

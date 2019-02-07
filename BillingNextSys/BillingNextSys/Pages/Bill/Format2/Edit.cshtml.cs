@@ -99,7 +99,7 @@ namespace BillingNextSys.Pages.Bill.Format2
         }
 
 
-        public IActionResult OnPutUpdateBillDetails(int id, [FromBody]Models.BillDetails obj)
+        public IActionResult OnPutUpdateBillDetails(int id, double damt, [FromBody]Models.BillDetails obj)
         {
             obj.CompanyID= (int)_session.GetInt32("Cid");
 
@@ -107,6 +107,12 @@ namespace BillingNextSys.Pages.Bill.Format2
 
             try
             {
+                _context.SaveChanges();
+                var DebtorGroupOut = _context.DebtorGroup.Where(a => a.DebtorGroupID.Equals(obj.DebtorGroupID)).Select(a => a.DebtorOutstanding).FirstOrDefault();
+
+                var billout = DebtorGroupOut + damt;
+                var dgout = new Models.DebtorGroup { DebtorGroupID = obj.DebtorGroupID, DebtorOutstanding = billout };
+                _context.DebtorGroup.Attach(dgout).Property(x => x.DebtorOutstanding).IsModified = true;
                 _context.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
@@ -131,6 +137,8 @@ namespace BillingNextSys.Pages.Bill.Format2
         public IActionResult OnPutUpdateBill2(int id, [FromBody]Models.Bill obj)
         {
             obj.CompanyID = (int)_session.GetInt32("Cid");
+            obj.BranchID = (int)_session.GetInt32("Bid");
+
             _context.Attach(obj).State = EntityState.Modified;
 
             try

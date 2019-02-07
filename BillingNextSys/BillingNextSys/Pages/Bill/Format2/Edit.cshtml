@@ -35,8 +35,11 @@
             <div class="jumbotron" style="padding: 5px;">
                 <input type="hidden" id="billtoid" asp-for="Bill.DebtorGroupID"/>
                 <input type="hidden" id="seriesinfo" asp-for="Bill.SeriesName" />
-                <input type="hidden" id="billdate" asp-for="Bill.BillDate" />
+                <input type="datetime" id="billdate" asp-for="Bill.BillDate" hidden/>
                 <input type="hidden" id="toinfo" asp-for="Bill.DebtorGroupID" />
+                <input type="hidden" id="secode" asp-for="Bill.SecretUnlockCode" />
+                <input type="hidden" id="billdel" asp-for="Bill.BillDelivered" />
+                <input type="hidden" id="messsent" asp-for="Bill.MessageSent" />
                 <div class="row">
                     <div class="col-md-3">
                         <img class="img-responsive full-width" src="data:image/png;base64,@Convert.ToBase64String(Model.Companies.FirstOrDefault().CompanyLogoImg)" /> @*<img src="https://images-na.ssl-images-amazon.com/images/I/713t5BMNwdL._SX425_.jpg" height="250px" width="300px" style="padding:10px;" />*@
@@ -198,7 +201,7 @@
     <input type="button" value="Edit Bill" id="btnedit" class="btn btn-default" onclick="editbill()" />
 </div>
 <div>
-    <a asp-page="/Bill/Index">Back to List</a>
+    <a asp-page="/Bill/Format2/Index">Back to List</a>
 </div>
 
 @section Scripts {
@@ -206,7 +209,7 @@
 }
 <script>
     var counter=0;
-    var arrele={};
+     var diffcount=0;
     window.onload = function() {
      //filladress();
            document.getElementById("deloperation").style.display = "none";
@@ -270,6 +273,7 @@
 
     function editcont(btnid,count)
     {
+    diffcount=$('#amount-'+count).text().replace(/[^0-9.]/g,'');
      setSelectedIndex(document.getElementById("yearsel-"+count),$('#year-'+count).text());
       document.getElementById(btnid).style.display = "none";
      document.getElementById("save-"+count).style.display = "inline-block";
@@ -284,7 +288,7 @@
      document.getElementById("amount-"+count).style.display = "none";
     document.getElementById("amountinput-"+count).style.display = "inline-block";
     fillDebtorInfo(count);
-    
+
     }
 
 
@@ -318,8 +322,9 @@
 
     function savecont(btnid,billid)
     {
-                var options = {};
-            options.url = "/Bill/Format1/Edit?id="+billid+"&&handler=UpdateBillDetails";
+            var ttamt=parseFloat($("#amountinput-"+btnid.substring(5)).val())-diffcount;
+            var options = {};
+            options.url = "/Bill/Format1/Edit?id="+billid+"&&damt="+ttamt+"&&handler=UpdateBillDetails";
             options.type = "PUT";
 
 
@@ -366,6 +371,46 @@
                 $('input:hidden[name="__RequestVerificationToken"]').val());
                 };
             options.success = function (msg) {
+
+
+
+                var billlid=$('#invoicenum').text();
+         var options1 = {};
+        options1.url = "/Bill/Format2/Edit?id="+billlid+"&&handler=UpdateBill2";
+        options1.type = "PUT";
+
+                var obj1 = {};
+                obj1.BillNumber = billlid;
+                obj1.BilledTo = $('#to').text();
+                obj1.BillAmount = $('#grandtotal').text().substring(1, $('#grandtotal').text().length);
+                obj1.InvoiceDate = $('#invcdt').val();
+                obj1.DebtorGroupID =  $('#billtoid').val();
+                obj1.BillDate =  $('#billdate').val();
+                obj1.BillDelivered=$('#billdel').val();
+                obj1.SecretUnlockCode=$('#secode').val();
+                obj1.MessageSent=$('#messsent').val();
+
+
+                options1.data = JSON.stringify(obj1);
+
+                options1.contentType = "application/json";
+                options1.dataType = "html";
+
+                options1.beforeSend = function (xhr) {
+                    xhr.setRequestHeader("MY-XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+                    };
+                options1.success = function (msg) {
+                      };
+                    options1.error = function () {
+                        alert("Error Occured while updating bill amount.");
+                    };
+                    $.ajax(options1);
+
+
+
+
+
                  var countid=btnid.substring(5);
 
                      document.getElementById("pp-"+countid).innerHTML=obj.ParticularsName;
@@ -534,7 +579,7 @@ function calcamount(pamount,idval)
         }
         var total=+pamount;
     document.getElementById('amount-'+idval).innerHTML = total.toFixed(0);
-   
+
     calculateGrandTotal();
     }
 
@@ -687,7 +732,7 @@ function convertNumberToWords(amount) {
     function editbill()
     {
 
-
+     var countdebout=0;
     var billlid=$('#invoicenum').text();
      var options = {};
     options.url = "/Bill/Format2/Edit?id="+billlid+"&&handler=UpdateBill2";
@@ -700,7 +745,9 @@ function convertNumberToWords(amount) {
             obj.InvoiceDate = $('#invcdt').val();
             obj.DebtorGroupID =  $('#billtoid').val();
             obj.BillDate =  $('#billdate').val();
-
+            obj.BillDelivered=$('#billdel').val();
+            obj.SecretUnlockCode=$('#secode').val();
+            obj.MessageSent=$('#messsent').val();
 
 
             options.data = JSON.stringify(obj);
@@ -730,7 +777,7 @@ function convertNumberToWords(amount) {
 
                                 var obj = {};
 
-
+                countdebout+=parseFloat($(tr).find('td:eq(4)').find("input").val());
                 obj.ParticularsName =  $(tr).find('td:eq(1)').find("input").val();
                 obj.TaxableValue = $(tr).find('td:eq(4)').find("input").val();
                 obj.Period = $(tr).find('td:eq(3)').find("input").val();
@@ -773,7 +820,8 @@ function convertNumberToWords(amount) {
                       }
 
                     });
-                window.location.pathname="/Bill/Index";
+                savedebout(countdebout);
+                window.location.pathname="/Bill/Format2/Index";
             };
             options.error = function () {
                 alert("Error Occured while updating.");
@@ -781,4 +829,21 @@ function convertNumberToWords(amount) {
             $.ajax(options);
 
 }
+
+    function savedebout(debamt)
+    {
+         var options = {};
+            options.url = "/Bill/Format1/Edit?debout="+debamt+"&&dgid="+$('#billtoid').val()+"&&handler=UpdateDebOut";
+            options.type = "GET";
+            options.dataType = "json";
+
+            options.success = function (data) {
+
+
+            };
+            options.error = function () {
+            alert("Error Updating Debtor Oustanding Amount");
+            };
+            $.ajax(options);
+    }
 </script>

@@ -6,6 +6,9 @@
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/lib/keymaster/keymaster.js"></script>
 <h2>Bill Index</h2>
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
 @Html.AjaxGrid(Url.Page("IndexGrid"))
 
 <div class="modal" id="my_modal" tabindex='-1'>
@@ -64,14 +67,15 @@
 
     $('#my_modal').on('show.bs.modal', function(e) {
            var bId = $(e.relatedTarget).data('bid');
+            var dgid = $(e.relatedTarget).data('dgid');
             $('#billno').text("Bill No: "+$(e.relatedTarget).data('bid')).css("fontWeight","bold");
               $('#billto').text("Billed To: "+$(e.relatedTarget).data('bto')).css("fontWeight","bold");
              $('#billamount').text("Bill Amount: "+$(e.relatedTarget).data('bamount')).css("fontWeight","bold");
-          displaymoredetails(bId);
+          displaymoredetails(bId,dgid);
         });
    });
 
-    function displaymoredetails(inid)
+    function displaymoredetails(inid,dgid)
     {
      var newInput="";
     var options = {};
@@ -88,7 +92,7 @@
     }
     else
     {
-         newInput +="<tr><td>"+element.particularsName+"</td><td>"+element.amount+"</td><td id='amtout-"+element.billDetailsID+"'>"+element.billAmountOutstanding+"</td><td><input type='number'  id='amt-"+element.billDetailsID+"' /></td><td>Cheque Payment? &nbsp;<input type='checkbox' checked id='chkpay-"+element.billDetailsID+"' onclick='chkenable(this.id)' ></td><td><input type='number' id='chknum-"+element.billDetailsID+"' style='width:100px;'/></td><td><input type='date' id='dt-"+element.billDetailsID+"' value='"+dtt+"' style='width:150px;' /></td><td><button onclick='savepaymt("+element.billDetailsID+");' class='btn btn-default' ><img src='/images/save.png' alt='save' height='20px' width='20px' /></button></td></tr>";
+         newInput +="<tr><td>"+element.particularsName+"</td><td>"+element.amount+"</td><td id='amtout-"+element.billDetailsID+"'>"+element.billAmountOutstanding+"</td><td><input type='number'  id='amt-"+element.billDetailsID+"' /></td><td>Cheque Payment? &nbsp;<input type='checkbox' checked id='chkpay-"+element.billDetailsID+"' onclick='chkenable(this.id)' ></td><td><input type='number' id='chknum-"+element.billDetailsID+"' style='width:100px;'/></td><td><input type='date' id='dt-"+element.billDetailsID+"' value='"+dtt+"' style='width:150px;' /></td><td><button onclick='savepaymt("+element.billDetailsID+");' class='btn btn-default' ><img src='/images/save.png' alt='save' height='20px' width='20px' /></button><input type='hidden' id='dgid-"+element.billDetailsID+"' value='"+dgid+"' ></td></tr>";
     }
            });
     document.getElementById('rowbody1').innerHTML = newInput;
@@ -129,7 +133,7 @@
         {
 
                 var options = {};
-                options.url = "/Bill/Format1/Index?amt="+$("#amtout-"+stid).text()+"&&handler=InsertReceived";
+                options.url = "/Bill/Format1/Index?dgid="+$("#dgid-"+stid).val()+"&&handler=InsertReceived";
                 options.type = "POST";
 
                 var obj = {};
@@ -159,7 +163,7 @@
                 };
                 options.success = function (msg) {
                     var bnum=$('#billno').text();
-                   displaymoredetails(bnum.substr(bnum.indexOf(':')+2));
+                   displaymoredetails(bnum.substr(bnum.indexOf(':')+2),$("#dgid-"+stid).val());
                 };
                 options.error = function () {
                     alert("Error Occured While Executing Transaction.");

@@ -44,5 +44,9 @@ namespace BillingNextSys.Models
         public DbSet<BillingNextSys.Models.BillSeries> BillSeries { get; set; }
 
         public DbQuery<BillingNextSys.Models.AdHocReturn> AdHocReturns { get; set; }
+
+        public DbQuery<BillingNextSys.Models.Report1> Report1s { get; set; }
+
+        public DbQuery<BillingNextSys.Models.Report2> Report2s { get; set; }
     }
 }

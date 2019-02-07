@@ -13,6 +13,7 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.Design" Version="1.1.1" />
     <PackageReference Include="NonFactors.Grid.Mvc6" Version="4.0.2" />
     <PackageReference Include="Twilio" Version="5.25.1" />
+    <PackageReference Include="EPPlus.Core" Version="1.5.4" />
   </ItemGroup>
 <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
@@ -34,5 +35,9 @@
   <Folder Include="wwwroot\Content\" />
   <Folder Include="Pages\Bill\Format1\" />
   <Folder Include="Pages\Bill\Format2\" />
+  <Folder Include="Pages\Export\" />
+  <Folder Include="Pages\Export\Format1\" />
+  <Folder Include="Pages\Export\Format2\" />
+  <Folder Include="Pages\Export\Format3\" />
 </ItemGroup>
 </Project>

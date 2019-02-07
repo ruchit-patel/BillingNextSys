@@ -2,5 +2,174 @@
 @model IndexModel
 @{
 }
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/keymaster/keymaster.js"></script>
 <h2>Bill Index</h2>
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
 @Html.AjaxGrid(Url.Page("IndexGrid"))
+
+<div class="modal" id="my_modal" tabindex='-1'>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Bill Details</h4>
+            </div>
+
+            <div id="showdetails" style="padding:5px;">
+                @Html.AntiForgeryToken()
+                <table class="table"><tr class="success"><td id="billno"></td><td id="billto"></td><td id="billamount"></td><td id="billpaid"></td></></tr></table>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Debtor Name</th>
+                                <th>Particulars</th>
+                                <th>Amount</th>
+                                <th>Outstanding Amount</th>
+                                <th>Amount Deposited</th>
+                                <th>Cash/Cheque</th>
+                                <th>Cheque Number</th>
+                                <th>Received Date</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="rowbody1"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="msg1"></div>
+            @*<div class="modal-body">
+                    <p>some content</p>
+                    <input type="text" name="bookId" value="" />
+                </div>*@
+            <div class="modal-footer">
+                <button type="button" id="closedet" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var dtt;
+    $(document).ready(function() {
+
+     var now = new Date();
+    var month = (now.getMonth() + 1);
+    var day = now.getDate();
+    if (month < 10)
+        month = "0" + month;
+    if (day < 10)
+        day = "0" + day;
+    dtt = now.getFullYear() + '-' + month + '-' + day;
+
+    $('#my_modal').on('show.bs.modal', function(e) {
+           var bId = $(e.relatedTarget).data('bid');
+            var dgid = $(e.relatedTarget).data('dgid');
+            $('#billno').text("Bill No: "+$(e.relatedTarget).data('bid')).css("fontWeight","bold");
+              $('#billto').text("Billed To: "+$(e.relatedTarget).data('bto')).css("fontWeight","bold");
+             $('#billamount').text("Bill Amount: "+$(e.relatedTarget).data('bamount')).css("fontWeight","bold");
+          displaymoredetails(bId,dgid);
+        });
+   });
+
+    function displaymoredetails(inid,dgid)
+    {
+     var newInput="";
+    var options = {};
+    options.url = "/Bill/Format2/Index?id="+inid +"&&handler=SelectAll";
+    options.type = "GET";
+    options.dataType = "json";
+
+    options.success = function (data) {
+    data.forEach(function (element) {
+
+    if(element.billdetails.billAmountOutstanding==0)
+    {
+
+        newInput +="<tr><td>"+element.debtorName+"</td><td>"+element.billdetails.particularsName+"</td><td>"+element.billdetails.amount+"</td><td id='amtout-"+element.billdetails.billDetailsID+"'>"+element.billdetails.billAmountOutstanding+"</td></tr>";
+    }
+    else
+    {
+         newInput +="<tr><td>"+element.debtorName+"</td><td>"+element.billdetails.particularsName+"</td><td>"+element.billdetails.amount+"</td><td id='amtout-"+element.billdetails.billDetailsID+"'>"+element.billdetails.billAmountOutstanding+"</td><td><input type='number' style='width:100px;' id='amt-"+element.billdetails.billDetailsID+"' /></td><td>Cheque Payment? &nbsp;<input type='checkbox' checked id='chkpay-"+element.billdetails.billDetailsID+"' onclick='chkenable(this.id)' ></td><td><input type='number' id='chknum-"+element.billdetails.billDetailsID+"' style='width:90px;'/></td><td><input type='date' id='dt-"+element.billdetails.billDetailsID+"' value='"+dtt+"' style='width:150px;' /></td><td><button onclick='savepaymt("+element.billdetails.billDetailsID+");' class='btn btn-default' ><img src='/images/save.png' alt='save' height='20px' width='20px' /></button><input type='hidden' id='dgid-"+element.billdetails.billDetailsID+"' value='"+dgid+"' ></td></tr>";
+    }
+           });
+    document.getElementById('rowbody1').innerHTML = newInput;
+
+    };
+    options.error = function () {
+        $("#msg1").html("Error while making Ajax call!");
+    };
+    $.ajax(options);
+    }
+
+    function chkenable(strid)
+    {
+        if(document.getElementById(strid).checked)
+        {
+            document.getElementById("chknum-"+strid.substr(strid.indexOf('-')+1)).disabled = false;;
+        }
+        else
+        {
+
+            document.getElementById("chknum-"+strid.substr(strid.indexOf('-')+1)).disabled = true;
+        }
+    }
+
+    function savepaymt(stid)
+    {
+        if(document.getElementById('chkpay-'+stid).checked && document.getElementById("chknum-"+stid).value=="")
+         {
+            alert("Please provide cheque number.");
+            return true;
+         }
+        if(parseFloat($("#amt-"+stid).val())>parseFloat($("#amtout-"+stid).text()))
+        {
+            alert("The amout is more than outstanding amount.");
+            $("#amt-"+stid).val('');
+        }
+        else
+        {
+
+                var options = {};
+                options.url = "/Bill/Format1/Index?dgid="+$("#dgid-"+stid).val()+"&&handler=InsertReceived";
+                options.type = "POST";
+
+                var obj = {};
+                obj.ReceivedAmount = $("#amt-"+stid).val();
+                obj.ReceivedDate= $("#dt-"+stid).val();
+
+                if(document.getElementById('chkpay-'+stid).checked)
+                 {
+                    obj.ChequePaymet=true;
+                    obj.ChequeNumber=$("#chknum-"+stid).val();
+                 }
+                else
+                {
+                    obj.ChequePaymet=false;
+                }
+                obj.BillDetailsID = stid;
+
+
+
+                options.data = JSON.stringify(obj);
+                options.contentType = "application/json; charset=utf-8";
+                options.dataType = "json";
+
+                options.beforeSend = function (xhr) {
+                    xhr.setRequestHeader("MY-XSRF-TOKEN",
+            $('input:hidden[name="__RequestVerificationToken"]').val());
+                };
+                options.success = function (msg) {
+                    var bnum=$('#billno').text();
+                   displaymoredetails(bnum.substr(bnum.indexOf(':')+2),$("#dgid-"+stid).val());
+                };
+                options.error = function () {
+                    alert("Error Occured While Executing Transaction.");
+                };
+                $.ajax(options);
+        }
+    }
+</script>

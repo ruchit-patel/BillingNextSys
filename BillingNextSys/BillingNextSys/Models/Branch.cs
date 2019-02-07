@@ -20,7 +20,6 @@ namespace BillingNextSys.Models
         public string BranchAddress { get; set; }
 
         [Required(ErrorMessage = "Please Specify Branch Email"), StringLength(200)]
-        [DataType(DataType.EmailAddress)]
         [Display(Name = "Branch Email Address")]
         public string BranchEmail { get; set; }
 
@@ -38,5 +37,7 @@ namespace BillingNextSys.Models
         public Company Company { get; set; }
 
         public ICollection<DebtorGroup> DebtorGroups { get; set; }
+
+        public ICollection<Bill> Bills { get; set; }
     }
 }

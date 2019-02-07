@@ -1,0 +1,10 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Export";
+}
+<h2>Export Report</h2>
+<br>
+<form method="post"><input type="image" src="/images/export.png" alt="Export" width="40px" height="40px" /></form>
+
+@(new HtmlGrid<Models.Report1>(Html, Model.gridd))
