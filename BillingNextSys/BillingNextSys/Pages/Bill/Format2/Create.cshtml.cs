@@ -71,7 +71,6 @@ namespace BillingNextSys.Pages.Bill.Format2
 
         public IActionResult OnPostInsertBillDetails([FromBody] Models.BillDetails obj)
         {
-            obj.CompanyID= (int)_session.GetInt32("Cid");
             obj.BillAmountOutstanding = obj.Amount;
             _context.BillDetails.Add(obj);
             _context.SaveChanges();

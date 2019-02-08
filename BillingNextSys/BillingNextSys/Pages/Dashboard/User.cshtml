@@ -1,0 +1,58 @@
+﻿@page
+@model UserModel
+@{
+}
+<link rel="stylesheet" href="/css/userdash.css" />
+
+<br><br>
+<div class="row">
+    <div class="col-md-4">
+        <div class="card" onclick="document.getElementById('billindex').click();">
+            <center> <i class="fa fa-file-text fa-5x" title="Sales Invoice"></i></center>
+            <div class="text-center">
+                <h4><b>Bill</b></h4>
+                <a id="billindex" href="/Bill" class="btncus successcus">Show Bills</a>
+                <a href="/Bill/Create" class="btncus successcus">Create Bill</a>
+            </div>
+        </div><br>
+    </div>
+    <div class="col-md-4">
+        <div class="card" onclick="document.getElementById('ledgerindex').click();">
+            <center> <i class="fa fa-book fa-5x" title="Ledger"></i></center>
+            <div class="text-center">
+                <h4><b>Ledger</b></h4>
+                <a id="ledgerindex" href="/DebtorGroup" class="btncus successcus">Show Ledger</a>
+            </div>
+        </div><br>
+    </div>
+    <div class="col-md-4">
+        <div class="card" onclick="document.getElementById('messageindex').click();">
+            <center> <i class="fa fa-whatsapp fa-5x" title="Message Customer"></i></center>
+            <div class="text-center">
+                <h4><b>Message Customer</b></h4>
+                <a href="/Message" id="messageindex" class="btncus successcus">Message Customer</a>
+
+            </div>
+        </div><br>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <div class="card" onclick="document.getElementById('exportindex').click();">
+            <center> <i class="fa fa-file-excel-o fa-5x" title="Reports"></i></center>
+            <div class="text-center">
+                <h4><b>Report</b></h4>
+                <a href="/Export" id="exportindex" class="btncus successcus">Export Reports</a>
+            </div>
+        </div><br>
+    </div>
+    <div class="col-md-4">
+        <div class="card" onclick="document.getElementById('accountindex').click();">
+            <center> <i class="fa fa-user fa-5x" title="Manage Profile"></i></center>
+            <div class="text-center">
+                <h4><b>Manage Profile</b></h4>
+                <a href="/Identity/Account/Manage" id="accountindex" class="btncus successcus">Create Bill</a>
+            </div>
+        </div><br>
+    </div>
+</div>

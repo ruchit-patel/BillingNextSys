@@ -32,6 +32,23 @@
                 <input asp-for="Input.ConfirmPassword" class="form-control" />
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label> Role:</label>
+                <select class="form-control" name="Roles" required>
+                    <option>
+                        Admin
+                    </option>
+                    <option>
+                        Accountant
+                    </option>
+                    <option>
+                        Developer
+                    </option>
+                </select>
+            
+            </div>
+
+
             <button type="submit" class="btn btn-default">Register</button>
         </form>
     </div>

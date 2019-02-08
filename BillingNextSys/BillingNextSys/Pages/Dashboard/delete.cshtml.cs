@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace BillingNextSys.Pages
+namespace BillingNextSys.Pages.Dashboard
 {
-    public class DashboardModel : PageModel
+    public class deleteModel : PageModel
     {
         public void OnGet()
         {

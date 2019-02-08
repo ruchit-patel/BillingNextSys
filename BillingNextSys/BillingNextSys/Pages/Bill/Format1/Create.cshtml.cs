@@ -101,7 +101,7 @@ namespace BillingNextSys.Pages.Bill.Format1
             
                 try
                 {
-                    obj.CompanyID = (int)_session.GetInt32("Cid");
+                   
                      obj.BillAmountOutstanding = obj.Amount;
                     _context.BillDetails.Add(obj);
                     _context.SaveChanges();

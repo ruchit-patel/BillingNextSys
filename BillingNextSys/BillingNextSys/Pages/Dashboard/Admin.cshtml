@@ -1,0 +1,169 @@
+﻿@page
+@model AdminModel
+@{
+}
+<link rel="stylesheet" href="/css/dashboard.css" />
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
+                <li><a href="#">Reports</a></li>
+                <li><a href="#">Analytics</a></li>
+                <li><a href="#">Export</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="">Nav item</a></li>
+                <li><a href="">Nav item again</a></li>
+                <li><a href="">One more nav</a></li>
+                <li><a href="">Another nav item</a></li>
+                <li><a href="">More navigation</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="">Nav item again</a></li>
+                <li><a href="">One more nav</a></li>
+                <li><a href="">Another nav item</a></li>
+            </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <h1 class="page-header">Dashboard</h1>
+            <h2 class="sub-header">Company Configuration</h2>
+            <a asp-page="/Company/Create">Create New</a>
+            <div class="row placeholders">
+                @foreach (var item in Model.Company)
+              {
+            <div class="col-xs-6 col-sm-4 placeholder">
+                <img src="data:image/png;base64,@Convert.ToBase64String(item.CompanyLogoImg)" width="200" height="200" class="img-responsive" alt="Company Logo">
+                <h4> @Html.DisplayFor(modelItem => item.CompanyName)</h4>
+                <span class="text-muted">GSTIN: @Html.DisplayFor(modelItem => item.GSTIN)</span>
+            </div>
+            }
+            </div>
+
+
+            <h2 class="sub-header">Manage Users</h2>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <h3>Users with Admin Role</h3>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Change Role</th>
+                            <th>More Options</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.usersofRoleAdmin)
+            {
+                <tr>
+
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        <form method="POST">
+                            <select name="Roles" asp-items="@new SelectList(Model.Roles)"></select>
+                            <input type="hidden" name="UserID" value="@Html.DisplayFor(modelItem=>item.Id)" />
+                            <input type="hidden" name="curRole" value="Admin" />
+                            <input type="submit" value="Save" class="btn btn-primary-v3" />
+
+                        </form>
+                    </td>
+
+                    <td>
+                        <a href="./delete?id=@item.Id">Delete</a>
+                    </td>
+                </tr>
+}
+
+                    </tbody>
+                </table>
+
+                <table class="table table-striped">
+                    <h3>Users with Accountant Role</h3>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Change Role</th>
+                            <th>More Options</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.usersofRoleAccountant)
+            {
+                <tr>
+
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        <form method="POST">
+                            <select name="Roles" asp-items="@new SelectList(Model.Roles)"></select>
+                            <input type="hidden" name="UserID" value="@Html.DisplayFor(modelItem=>item.Id)" />
+                            <input type="hidden" name="curRole" value="Accountant" />
+                            <input type="submit" value="Save" class="btn btn-primary-v3" />
+                        </form>
+                    </td>
+
+                    <td>
+                        <a href="./delete?id=@item.Id">Delete</a>
+                    </td>
+                </tr>
+}
+
+                    </tbody>
+                </table>
+
+                <table class="table table-striped">
+                    <h3>Users with Developer Role</h3>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Change Role</th>
+                            <th>More Options</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.usersofRoleDeveloper)
+            {
+                <tr>
+
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        <form method="POST">
+                            <select name="Roles" asp-items="@new SelectList(Model.Roles)"></select>
+                            <input type="hidden" name="UserID" value="@Html.DisplayFor(modelItem=>item.Id)" />
+                            <input type="hidden" name="curRole" value="Developer" />
+                            <input type="submit" value="Save" class="btn btn-primary-v3" />
+                        </form>
+                    </td>
+
+                    <td>
+                        <a href="./delete?id=@item.Id" >Delete</a>
+                    </td>
+                </tr>
+}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -48,8 +48,8 @@ namespace BillingNextSys.Pages.Bill.Format2
                 return NotFound();
             }
 
-            int cid = (int)_session.GetInt32("Cid");
-            int bid = (int)_session.GetInt32("Bid");
+            //int cid = (int)_session.GetInt32("Cid");
+            //int bid = (int)_session.GetInt32("Bid");
             //Companies = _context.Company.Where(ab => ab.CompanyID.Equals(cid)).ToList();
             //Branches = _context.Branch.Where(a => a.BranchID.Equals(bid)).ToList();
             BillDetailss = _context.BillDetails.Where(a => a.BillNumber.Equals(id)).Include(b => b.Particulars).Include(c=>c.Debtor).ToList();
@@ -104,7 +104,6 @@ namespace BillingNextSys.Pages.Bill.Format2
 
         public IActionResult OnPutUpdateBillDetails(int id, double damt, [FromBody]Models.BillDetails obj)
         {
-            obj.CompanyID= (int)_session.GetInt32("Cid");
 
             _context.Attach(obj).State = EntityState.Modified;
 
@@ -139,8 +138,7 @@ namespace BillingNextSys.Pages.Bill.Format2
 
         public IActionResult OnPutUpdateBill2(int id, [FromBody]Models.Bill obj)
         {
-            obj.CompanyID = (int)_session.GetInt32("Cid");
-            obj.BranchID = (int)_session.GetInt32("Bid");
+          
 
             _context.Attach(obj).State = EntityState.Modified;
 

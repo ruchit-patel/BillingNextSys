@@ -29,6 +29,7 @@
     }
 </style>
 <input type="hidden" id="billnum" value="@Model.lastbillnumber"/>
+<input type="hidden" id="companyid" value="@Model.Companies.FirstOrDefault().CompanyID" />
 <div class="container">
     <form onsubmit="return false;">
         @Html.AntiForgeryToken()
@@ -558,6 +559,7 @@ $('input:hidden[name="__RequestVerificationToken"]').val());
     obj.CGSTAmount=$(tr).find('td:eq(3)').text();
     obj.SGSTAmount = $(tr).find('td:eq(4)').text();
     obj.TaxableValue= $(tr).find('td:eq(2)').find("input").val();
+    obj.CompanyID=$('#companyid').val();
    var inputid=$(tr).find('td:eq(0)').find("input").val();
 
     obj.ParticularsID= $(tr).find('td:eq(0)').find("datalist").find('option[value="' + inputid + '"]').attr('id');

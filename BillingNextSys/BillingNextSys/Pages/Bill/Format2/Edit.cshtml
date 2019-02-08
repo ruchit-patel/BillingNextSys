@@ -33,13 +33,15 @@
         @Html.AntiForgeryToken()
         <div class="row">
             <div class="jumbotron" style="padding: 5px;">
-                <input type="hidden" id="billtoid" asp-for="Bill.DebtorGroupID"/>
+                <input type="hidden" id="billtoid" asp-for="Bill.DebtorGroupID" />
                 <input type="hidden" id="seriesinfo" asp-for="Bill.SeriesName" />
-                <input type="datetime" id="billdate" asp-for="Bill.BillDate" hidden/>
+                <input type="datetime" id="billdate" asp-for="Bill.BillDate" hidden />
                 <input type="hidden" id="toinfo" asp-for="Bill.DebtorGroupID" />
                 <input type="hidden" id="secode" asp-for="Bill.SecretUnlockCode" />
                 <input type="hidden" id="billdel" asp-for="Bill.BillDelivered" />
                 <input type="hidden" id="messsent" asp-for="Bill.MessageSent" />
+                <input type="hidden" id="branchid" asp-for="Bill.BranchID" />
+                <input type="hidden" id="companyId" asp-for="Bill.CompanyID" />
                 <div class="row">
                     <div class="col-md-3">
                         <img class="img-responsive full-width" src="data:image/png;base64,@Convert.ToBase64String(Model.Bill.Company.CompanyLogoImg)" /> @*<img src="https://images-na.ssl-images-amazon.com/images/I/713t5BMNwdL._SX425_.jpg" height="250px" width="300px" style="padding:10px;" />*@
@@ -317,6 +319,8 @@
                 obj1.BillDelivered=$('#billdel').val();
                 obj1.SecretUnlockCode=$('#secode').val();
                 obj1.MessageSent=$('#messsent').val();
+                obj1.BranchID=$('#branchid').val();
+                obj1.CompanyID=$('#companyId').val();
 
 
             options1.data = JSON.stringify(obj1);
@@ -352,33 +356,6 @@
 
 
 
-    @*function delcont(btnid,count)
-    {
-           var options = {};
-           options.url = "/Bill/Format1/Edit?id="+count+"&&handler=DeleteBillDetails";
-           options.type = "DELETE";
-           options.dataType = "html";
-           options.beforeSend = function (xhr) {
-           xhr.setRequestHeader("MY-XSRF-TOKEN",
-           $('input:hidden[name="__RequestVerificationToken"]').val());
-           };
-           options.success = function (msg) {
-
-            if(msg=='"Deleted Successfully! Remove Row."')
-             {
-                  document.getElementById("row-"+btnid.substring(4)).style.display = "none";
-             }
-            else
-             {
-                alert("Exception occured while handling the return data.");
-             }
-            };
-           options.error = function () {
-                alert("Error Occured while deleting.");
-            };
-       $.ajax(options);
-    }*@
-
 
     function savecont(btnid,billid)
     {
@@ -396,7 +373,7 @@
             obj.Period = $("#periodinput-"+btnid.substring(5)).val();
             obj.YearInfo =  $("#yearsel-"+btnid.substring(5)).val();
             obj.Amount =  $("#amountinput-"+btnid.substring(5)).val();
-
+            obj.CompanyID=$('#companyId').val();
 
              var pinfoa=$("#parti-"+btnid.substring(5)).find('option[value="' + obj.ParticularsName + '"]').attr('id');
                  if(pinfoa==null || pinfoa==="undefined")
@@ -449,7 +426,8 @@
                 obj1.BillDelivered=$('#billdel').val();
                 obj1.SecretUnlockCode=$('#secode').val();
                 obj1.MessageSent=$('#messsent').val();
-
+                obj1.BranchID=$('#branchid').val();
+                obj1.CompanyID=$('#companyId').val();
 
                 options1.data = JSON.stringify(obj1);
 
@@ -808,7 +786,8 @@ function convertNumberToWords(amount) {
             obj.BillDelivered=$('#billdel').val();
             obj.SecretUnlockCode=$('#secode').val();
             obj.MessageSent=$('#messsent').val();
-
+            obj.BranchID=$('#branchid').val();
+            obj.CompanyID=$('#companyId').val();
 
             options.data = JSON.stringify(obj);
 
@@ -843,7 +822,7 @@ function convertNumberToWords(amount) {
                 obj.Period = $(tr).find('td:eq(3)').find("input").val();
                 obj.YearInfo = $(tr).find('td:eq(2)').find(":selected").val();
                 obj.Amount = $(tr).find('td:eq(4)').find("input").val();
-
+                obj.CompanyID=$('#companyId').val();
 
                  var inputid=$(tr).find('td:eq(1)').find("input").val();
                  obj.ParticularsID= $(tr).find('td:eq(1)').find("datalist").find('option[value="' + inputid + '"]').attr('id');

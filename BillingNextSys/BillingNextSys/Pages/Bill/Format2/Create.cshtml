@@ -29,6 +29,7 @@
     }
 </style>
 <input type="hidden" id="billnum" value="@Model.lastbillnumber"/>
+<input type="hidden" id="companyid" value="@Model.Companies.FirstOrDefault().CompanyID" />
 <div class="container">
     <form onsubmit="return false;">
         @Html.AntiForgeryToken()
@@ -49,7 +50,7 @@
                     </div>
                 </div>
                 <hr />
-                <center><h3>Invoice</h3></center>
+                <center><h3>Bill Of Supply</h3></center>
             </div>
 
             <div class="col-xs-12">
@@ -129,8 +130,9 @@
                                         <address>
                                             <strong>Amount In Words: </strong> <div style="display:inline;" id="inwords"></div><br>
                                             <strong>For <div style="display:inline;" id="cname">@Html.DisplayFor(model => model.Companies.FirstOrDefault().CompanyName)</div></strong><br>
-                                            <br /><br /><br />
-                                            <strong>@Html.DisplayFor(model => model.Companies.FirstOrDefault().CompanyOwner) <br> (Authorised Signatory)</strong><br>
+                                            <img width="100px" height="100px" class="img-responsive  pull-right" src="data:image/png;base64,@Convert.ToBase64String(Model.Branches.FirstOrDefault().BranchManagerSign)" />
+                                            <br><br><br>
+                                            <strong class="pull-right">@Html.DisplayFor(model => model.Branches.FirstOrDefault().BranchManagerName) <br> (Authorised Signatory)</strong><br>
 
                                         </address>
                                     </div>
@@ -538,6 +540,7 @@ $('input:hidden[name="__RequestVerificationToken"]').val());
     obj.Period=$(tr).find('td:eq(3)').find("input").val();
     obj.Amount =  $(tr).find('td:eq(4)').find("input").val();
     obj.TaxableValue=$(tr).find('td:eq(4)').find("input").val();
+    obj.CompanyID=$('#companyid').val();
 
    var inputid=$(tr).find('td:eq(1)').find("input").val();
 
@@ -550,7 +553,7 @@ $('input:hidden[name="__RequestVerificationToken"]').val());
     obj.DebtorID= $(tr).find('td:eq(0)').find("datalist").find('option[value="' + debid + '"]').attr('id');
 
     options.data = JSON.stringify(obj);
-   
+
     options.contentType = "application/json; charset=utf-8";
     options.dataType = "json";
 

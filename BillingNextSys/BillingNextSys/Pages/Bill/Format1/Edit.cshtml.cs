@@ -111,7 +111,6 @@ namespace BillingNextSys.Pages.Bill.Format1
         public IActionResult OnPutUpdateBillDetails(int id,double damt, [FromBody]Models.BillDetails obj)
         {
            
-                obj.CompanyID = (int)_session.GetInt32("Cid");
                 obj.BillAmountOutstanding = obj.Amount;
                 _context.Attach(obj).State = EntityState.Modified;
 
@@ -149,10 +148,7 @@ namespace BillingNextSys.Pages.Bill.Format1
 
         public IActionResult OnPutUpdateBill(int id, [FromBody]Models.Bill obj)
         {
-            obj.CompanyID = (int)_session.GetInt32("Cid");
-            obj.BranchID = (int)_session.GetInt32("Bid");
-         
-
+          
             _context.Attach(obj).State = EntityState.Modified;
 
             try
