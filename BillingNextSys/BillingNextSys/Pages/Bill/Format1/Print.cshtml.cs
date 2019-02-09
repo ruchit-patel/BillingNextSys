@@ -27,9 +27,9 @@ namespace BillingNextSys.Pages.Bill.Format1
         public IList<Models.BillDetails> BillDetailss { get; set; }
 
 
-        public async Task<IActionResult> OnGetAsync(string id)
+        public async Task<IActionResult> OnGetAsync(string id, int seccode)
         {
-            if (id == null)
+            if (id == null || seccode == null)
             {
                 return NotFound();
             }
@@ -46,7 +46,11 @@ namespace BillingNextSys.Pages.Bill.Format1
                 return NotFound();
             }
 
-           BillDetailss = _context.BillDetails.Where(a => a.BillNumber.Equals(id)).Include(b => b.Particulars).ToList();
+            if (Bill.SecretUnlockCode != seccode)
+            {
+                return NotFound();
+            }
+            BillDetailss = _context.BillDetails.Where(a => a.BillNumber.Equals(id)).Include(b => b.Particulars).ToList();
 
             return Page();
         }

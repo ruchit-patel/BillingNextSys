@@ -1,0 +1,28 @@
+﻿@page
+@model IndexGridModel
+
+@{ Layout = null; }
+
+@* Should only include grid declaration *@
+@(Html
+                                                        .Grid(Model.Bills)
+                                                        .Build(columns =>
+                                                        {
+                                                            columns.Add(model => model.BillNumber).Titled("Bill Number");
+                                                            columns.Add(model => model.BilledTo).Titled("Billed To");
+                                                            columns.Add(model => model.BillAmount).Titled("Bill Amount");
+                                                            columns.Add(model => model.InvoiceDate).Titled("Invoice Date");
+                                                            columns.Add(model => $" <button onclick='sendmessage(\"{model.BillNumber}\",\"{model.DebtorGroupID}\",\"{model.InvoiceDate}\",\"{model.BillAmount}\",\"{model.SeriesName}\",\"{model.SecretUnlockCode}\")' class='btn btn - default' >Send Message</button>").Encoded(false);
+
+
+                                                        })
+                                                        .Empty("No data found")
+                                                        .Id("my-ajax-grid")
+                                                        .Pageable(pager =>
+                                                        {
+                                                            pager.PagesToDisplay = 4;
+                                                            pager.RowsPerPage = 15;
+                                                        })
+                                                        .Filterable()
+                                                        .Sortable()
+)

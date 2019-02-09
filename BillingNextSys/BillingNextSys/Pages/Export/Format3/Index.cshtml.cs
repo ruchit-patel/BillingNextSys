@@ -77,7 +77,7 @@ namespace BillingNextSys.Pages.Export.Format3
             grid.Columns.Add(model => model.BillNumber).Titled("Invoice Reference Number");
             grid.Columns.Add(model => model.InvoiceDate).Titled("Invoice date").Formatted("{0:d}");
             grid.Columns.Add(model => model.BillAmount).Titled("Invoice Amount");
-            //grid.Columns.Add(model => model.).Titled("Invoice Amount");
+            grid.Columns.Add(model => model.BillDelivered).Titled("Bill Delivered?");
 
 
             foreach (IGridColumn column in grid.Columns)

@@ -1,0 +1,55 @@
+﻿@page
+@model CustomMessageModel
+@{
+    ViewData["Title"] = "Custom Message";
+}
+<br>
+<br>
+    <input type="text" id="msg" class="form-control" placeholder="Message Content..." required />
+    <h5>Choose Recipient:</h5>
+
+@Html.AntiForgeryToken()
+@Html.AjaxGrid(Url.Page("DebtorPartial"))
+
+    <script>
+     function sendmessage(debtornum,idval)
+        {
+
+        if($('#msg').val()==null || $('#msg').val()=="" || $('#msg').val()==" ")
+        {
+            alert("Message Content Cannot be empty");
+            return false;
+        }
+
+
+                var options = {};
+                options.url = "/Message/CustomMessage?handler=SendMessage";
+                options.type = "POST";
+
+
+
+        var obj = {};
+        obj.DebtorGroupPhoneNumber = debtornum;
+        obj.DebtorGroupCity =  $('#msg').val();
+
+        options.data = JSON.stringify(obj);
+        options.contentType = "application/json; charset=utf-8";
+        options.dataType = "json";
+
+        options.beforeSend = function (xhr) {
+            xhr.setRequestHeader("MY-XSRF-TOKEN",
+    $('input:hidden[name="__RequestVerificationToken"]').val());
+        };
+        options.success = function (msg) {
+        document.getElementById(idval).disabled = true;
+
+        };
+        options.error = function () {
+
+        alert("error");
+        };
+        $.ajax(options);
+
+        }
+
+    </script>

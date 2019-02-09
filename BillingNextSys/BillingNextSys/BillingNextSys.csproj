@@ -40,5 +40,6 @@
   <Folder Include="Pages\Export\Format2\" />
   <Folder Include="Pages\Export\Format3\" />
   <Folder Include="Pages\Dashboard\" />
+  <Folder Include="Pages\Message\" />
 </ItemGroup>
 </Project>

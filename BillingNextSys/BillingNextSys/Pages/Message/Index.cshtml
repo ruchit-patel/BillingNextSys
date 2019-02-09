@@ -1,0 +1,59 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Message";
+}
+<br><br>
+<a asp-page="/Message/CustomMessage">Send Custom Message</a>
+<br><br />
+@Html.AntiForgeryToken()
+@Html.AjaxGrid(Url.Page("IndexGrid"))
+
+
+<script>
+        function sendmessage(billno,debtorid,invoicedate,billamt,series,secretcode)
+        {
+
+                var options = {};
+                options.url = "/Message/Index?handler=SendMessage";
+                options.type = "POST";
+
+
+
+        var obj = {};
+        obj.BillNumber = billno;
+        obj.DebtorGroupID =  debtorid;
+        obj.InvoiceDate=invoicedate;
+        obj.BillAmount=billamt;
+        obj.SeriesName=series;
+        obj.SecretUnlockCode=secretcode;
+        if(window.location.port=="" || window.location.port==null)
+         {
+            obj.Note=""+window.location.protocol+"//"+window.location.hostname;
+         }
+        else
+        {
+        obj.Note=""+window.location.protocol+"//"+window.location.hostname+":"+window.location.port;
+        }
+        options.data = JSON.stringify(obj);
+        options.contentType = "application/json; charset=utf-8";
+        options.dataType = "json";
+
+        options.beforeSend = function (xhr) {
+            xhr.setRequestHeader("MY-XSRF-TOKEN",
+    $('input:hidden[name="__RequestVerificationToken"]').val());
+        };
+        options.success = function (msg) {
+            new MvcGrid(document.querySelector('.mvc-grid')).reload();
+        };
+        options.error = function () {
+
+        alert("error");
+        };
+        $.ajax(options);
+
+        }
+
+
+</script>
+
