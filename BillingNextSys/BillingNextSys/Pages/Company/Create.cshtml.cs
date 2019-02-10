@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using BillingNextSys.Models;
 using System.IO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BillingNextSys.Pages.Company
 {
+    [Authorize(Roles = "Admin")]
     public class CreateModel : PageModel
     {
         private readonly BillingNextSys.Models.BillingNextSysContext _context;

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BillingNextSys.Pages
 {
+
     public class ErrorModel : PageModel
     {
         public string RequestId { get; set; }

@@ -18,13 +18,16 @@ namespace BillingNextSys.Pages.Received
             _context = context;
         }
 
-        public IList<Models.Received> Received { get;set; }
+        public IQueryable<Models.Received> Received { get;set; }
 
-        public async Task OnGetAsync()
+        public void OnGet(int companyid)
         {
-            Received = await _context.Received
+            Received = _context.Received.Where(a=>a.CompanyID.Equals(companyid))
                 .Include(r => r.BillDetails)
-                .Include(r => r.Company).ToListAsync();
+                .Include(r => r.Company).AsQueryable();
         }
+
     }
 }
+
+

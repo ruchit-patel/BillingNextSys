@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BillingNextSys.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BillingNextSys.Pages.Bill
 {
+    [Authorize]
     public class IndexModel : PageModel
     {
         private readonly BillingNextSys.Models.BillingNextSysContext _context;
@@ -29,6 +31,7 @@ namespace BillingNextSys.Pages.Bill
         }
     }
 
+    [Authorize]
     public class IndexGridModel : PageModel
     {
         private readonly BillingNextSys.Models.BillingNextSysContext _context;

@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BillingNextSys.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BillingNextSys.Pages.Bill
 {
+    [Authorize]
     public class EditModel : PageModel
     {
         private readonly BillingNextSys.Models.BillingNextSysContext _context;

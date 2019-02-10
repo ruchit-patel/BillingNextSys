@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -10,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BillingNextSys.Pages.Branch
 {
+    [Authorize]
     public class SelectBranchModel : PageModel
     {
         private readonly BillingNextSys.Models.BillingNextSysContext _context;
@@ -38,7 +40,7 @@ namespace BillingNextSys.Pages.Branch
         {
             int Bid = Convert.ToInt32(Request.Form["Bid"].ToString());
             HttpContext.Session.SetInt32("Bid", Bid);
-            return RedirectToPage("/Debtor/Index");
+            return RedirectToPage("/Dashboard/Index");
         }
     }
 }

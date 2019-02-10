@@ -10,9 +10,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Data.SqlClient;
 using Npgsql;
 using System.Data.Common;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BillingNextSys.Pages.DebtorGroup
 {
+    [Authorize]
     public class IndexModel : PageModel
     {
         private readonly BillingNextSys.Models.BillingNextSysContext _context;

@@ -53,7 +53,7 @@
                             <span asp-validation-for="DebtorGroup.DebtorGroupMail" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="DebtorGroup.DebtorGroupPhoneNumber" class="control-label"></label>
+                            <label class="control-label">Whatsapp Number <u>(Without Country Code)</u></label>
                             <input asp-for="DebtorGroup.DebtorGroupPhoneNumber" id="dphone" class="form-control" />
                             <span asp-validation-for="DebtorGroup.DebtorGroupPhoneNumber" class="text-danger"></span>
                         </div>
@@ -104,7 +104,7 @@
                         @Html.AntiForgeryToken()
                         <div id="manupulation">
                             <div class="row">
-                                
+
                                 <div class="col-md-7 form-group">
                                     <input type="hidden" id="didorg" />
                                     <input id="dnames" asp-for="Debtor.DebtorName" placeholder="Debtor Name" class="form-control" />
@@ -182,10 +182,7 @@
 
             </div>
             <div id="msg1"></div>
-            @*<div class="modal-body">
-                    <p>some content</p>
-                    <input type="text" name="bookId" value="" />
-                </div>*@
+
             <div class="modal-footer">
                 <button type="button" id="closedet" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
@@ -235,27 +232,27 @@
 <br /><br />
 
 @(Html
-                                                                    .Grid(Model.DebtorGroups)
-                                                                    .Build(columns =>
-                                                                    {
-                                                                        columns.Add(model => model.DebtorGroupName).Titled("Debtor Group Name");
-                                                                        columns.Add(model => model.DebtorOutstanding).Titled("Outstanding Amount");
-                                                                        columns.Add(model => model.DebtorGroupAddress).Titled("Debtor Group Address");
-                                                                        columns.Add(model => model.DebtorGroupPhoneNumber).Titled("Debtor Group Phone Number");
-                                                                        columns.Add(model => model.DebtorGSTIN).Titled("Debtor GSTIN");
-                                                                        columns.Add(model => model.DebtorGroupMail).Titled("Mail Id");
-                                                                        columns.Add(model => model.DebtorGroupCity).Titled("City");
-                                                                        columns.Add(model => model.DebtorGroupID).Titled("Options").Encoded(false).RenderedAs(model => "<a href='/DebtorGroup/Edit?id=" + model.DebtorGroupID + "'>Edit</a> | <a href='#my_modal' data-toggle='modal' data-did='" + model.DebtorGroupID + "' data-dname='" + model.DebtorGroupName + "' >More Details</a> | <a href='/DebtorGroup/Delete?id=" + model.DebtorGroupID + "'>Delete</a>");
-                                                                    })
+                                                                                        .Grid(Model.DebtorGroups)
+                                                                                        .Build(columns =>
+                                                                                        {
+                                                                                            columns.Add(model => model.DebtorGroupName).Titled("Debtor Group Name");
+                                                                                            columns.Add(model => model.DebtorOutstanding).Titled("Outstanding Amount");
+                                                                                            columns.Add(model => model.DebtorGroupAddress).Titled("Debtor Group Address");
+                                                                                            columns.Add(model => model.DebtorGroupPhoneNumber).Titled("Debtor Group Phone Number");
+                                                                                            columns.Add(model => model.DebtorGSTIN).Titled("Debtor GSTIN");
+                                                                                            columns.Add(model => model.DebtorGroupMail).Titled("Mail Id");
+                                                                                            columns.Add(model => model.DebtorGroupCity).Titled("City");
+                                                                                            columns.Add(model => model.DebtorGroupID).Titled("Options").Encoded(false).RenderedAs(model => "<a href='/DebtorGroup/OutstandingBreakDown?debid=" + model.DebtorGroupID + "'>Outstanding Amount Breakdown</a> | <a href='/DebtorGroup/Edit?id=" + model.DebtorGroupID + "'>Edit</a> | <a href='#my_modal' data-toggle='modal' data-did='" + model.DebtorGroupID + "' data-dname='" + model.DebtorGroupName + "' >More Details</a> | <a href='/DebtorGroup/Delete?id=" + model.DebtorGroupID + "'>Delete</a>");
+                                                                                        })
 
-                                                                    .Empty("No data found")
-                                                                    .Filterable()
-                                                                    .Sortable()
-                                                                    .Pageable()
-                                                                    .Css("table-hover") // Overwrites all classes with the new ones
+                                                                                        .Empty("No data found")
+                                                                                        .Filterable()
+                                                                                        .Sortable()
+                                                                                        .Pageable()
+                                                                                        .Css("table-hover") // Overwrites all classes with the new ones
 
 )
-      <script>
+<script>
     var didoo;
           $(document).ready(function() {
     $('#my_modal').on('show.bs.modal', function(e) {
@@ -275,7 +272,7 @@
           $("#doutstandssedit").val(doutstan);
 });
           });
-      </script>
+</script>
 
 
 @section Scripts {
@@ -283,7 +280,7 @@
 }
 
 
-      <script>
+<script>
 
     var tabname="";
     var insid=0;
@@ -300,14 +297,14 @@
     obj.DebtorGroupName = $("#dname").val();
     obj.DebtorGroupAddress = $("#daddress").val();
     obj.DebtorGroupMail = $("#dmail").val();
-    obj.DebtorGroupPhoneNumber = $("#dphone").val();
+    obj.DebtorGroupPhoneNumber ="+91"+ $("#dphone").val();
     obj.DebtorGroupCity = $("#dcity").val();
     obj.DebtorGSTIN = $("#dgstin").val();
     obj.DebtorOutstanding = $("#doutstand").val();
     obj.BranchID = $("#dbranch").val();
 
 
-         
+
     options.data = JSON.stringify(obj);
     options.contentType = "application/json; charset=utf-8";
     options.dataType = "json";
@@ -384,7 +381,7 @@ function showdgmodal()
     options.url = "/DebtorGroup/Index?handler=InsertD";
     options.type = "POST";
 
-        
+
 
     var obj = {};
     obj.DebtorName = $("#dnames").val();
@@ -443,7 +440,7 @@ $('input:hidden[name="__RequestVerificationToken"]').val());
 
     function displaydetails(inid)
     {
-         
+
      document.getElementById("showdet").style.display = "block";
      var newInput="";
     var options = {};
@@ -517,7 +514,7 @@ $('input:hidden[name="__RequestVerificationToken"]').val());
     };
     $.ajax(options);
     }
-      
+
  $("#savedall").click(function (e) {
      e.preventDefault();
     var options = {};
@@ -646,4 +643,4 @@ $('input:hidden[name="__RequestVerificationToken"]').val());
     };
     $.ajax(options);
 });
-      </script>
+</script>

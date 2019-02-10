@@ -9,9 +9,11 @@ using Microsoft.EntityFrameworkCore;
 using BillingNextSys.Models;
 using System.IO;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BillingNextSys.Pages.Company
 {
+    [Authorize(Roles = "Admin")]
     public class EditModel : PageModel
     {
         private readonly BillingNextSys.Models.BillingNextSysContext _context;

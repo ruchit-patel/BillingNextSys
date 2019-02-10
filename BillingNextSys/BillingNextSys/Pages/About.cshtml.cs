@@ -12,7 +12,7 @@ namespace BillingNextSys.Pages
 
         public void OnGet()
         {
-            Message = "Your application description page.";
+            Message = "BillingNext is a billing application.";
         }
     }
 }

@@ -8,9 +8,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BillingNextSys.Models;
 using System.IO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BillingNextSys.Pages.Branch
 {
+    [Authorize(Roles = "Admin")]
     public class EditModel : PageModel
     {
         private readonly BillingNextSys.Models.BillingNextSysContext _context;

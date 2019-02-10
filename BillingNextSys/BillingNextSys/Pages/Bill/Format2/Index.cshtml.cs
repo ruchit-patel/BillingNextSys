@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BillingNextSys.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -14,6 +15,7 @@ using Twilio.Types;
 
 namespace BillingNextSys.Pages.Bill.Format2
 {
+    [Authorize]
     public class IndexModel : PageModel
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -87,6 +89,7 @@ namespace BillingNextSys.Pages.Bill.Format2
 
         }
     }
+    [Authorize]
     public class IndexGridModel : PageModel
     {
         private readonly BillingNextSys.Models.BillingNextSysContext _context;

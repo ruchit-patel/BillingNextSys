@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BillingNextSys.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BillingNextSys.Pages.Debtor
 {
+    [Authorize(Roles = "Developer")]
     public class IndexModel : PageModel
     {
         private readonly BillingNextSys.Models.BillingNextSysContext _context;

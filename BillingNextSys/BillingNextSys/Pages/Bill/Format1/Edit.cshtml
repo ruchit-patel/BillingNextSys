@@ -122,7 +122,7 @@
                                         <input type="hidden" id="pid-@counter" value="@Html.DisplayFor(modelItem=>item.ParticularsID)"/>
                                      </td>
                                     <td class="text-center">
-                                       <p id="psac-@counter" style="display: inline-block;">@Html.DisplayFor(modelItem=>item.Particulars.SACCode)</p>   <input style="display:none; width:65px;" placeholder="SAC Code.." value="@Html.DisplayFor(modelItem => item.Particulars.SACCode)" type="number" id="saccode-@counter" />  
+                                       <p id="psac-@counter" style="display: inline-block;">@Html.DisplayFor(modelItem=>item.Particulars.SACCode)</p>   <input style="display:none; width:65px;" placeholder="SAC Code.." value="@Html.DisplayFor(modelItem => item.Particulars.SACCode)" type="number" id="saccode-@counter" readonly/>  
                                     </td>
                                     <td class="text-center">
                                       <p id="ptamount-@counter" style="display: inline-block;">@Html.DisplayFor(modelItem=>item.TaxableValue)</p>    <input style="width:65px; display:none;" type="text" value="@Html.DisplayFor(modelItem => item.TaxableValue)" placeholder="Amount.." id="taxableval-@counter" onchange="calcamount($(this).val(),@counter);" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" />  
@@ -202,6 +202,7 @@
     var diffcount=0;
     var counter=0;
     window.onload = function() {
+    document.getElementById("del--1").style.display="none";
      filladress();
            document.getElementById("deloperation").style.display = "none";
         key('ctrl+1', function(){ document.getElementById("addoperations").click(); return false });
@@ -603,8 +604,8 @@ function calcamount(pamount,idval)
        var newRow = $("<tr id='row-"+counter+"'>");
         var cols = "";
          cols+='<td><input id="particulars-' + counter + '" style="width:250px;" placeholder="Particulars.." list="parti-' + counter + '" autocomplete="off" onchange="fillparticulars($(this).val(),' + counter + ');" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" onfocusout="fillpdetails(' + counter + ')"><datalist id="parti-' + counter + '"></datalist></td>';
-          cols+='<td class="text-center"><input style="width:65px;" type="number" placeholder="SAC Code.." id="saccode-' + counter + '" /></td>';
-             cols+='<td class="text-center"><input style="width:65px;" type="number" placeholder="Amount.." id="taxableval-' + counter + '" onchange="calcamount($(this).val(),' + counter + ');" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" /></td>';
+          cols+='<td class="text-center"><input style="width:65px;" type="number" placeholder="SAC Code.." id="saccode-' + counter + '" readonly /></td>';
+             cols+='<td class="text-center"><input style="width:65px;" type="number" placeholder="Amount.." min="0" id="taxableval-' + counter + '" onchange="calcamount($(this).val(),' + counter + ');" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" /></td>';
                 cols+= '<td class="text-center" id="cgst-' + counter + '"></td>';
                   cols+='<td class="text-center" id="sgst-' + counter + '"></td>';
                     cols+= '<td class="text-right count-me" id="pamount-' + counter + '"></td>';

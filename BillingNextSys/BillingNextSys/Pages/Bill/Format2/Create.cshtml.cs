@@ -9,9 +9,11 @@ using BillingNextSys.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BillingNextSys.Pages.Bill.Format2
 {
+    [Authorize]
     public class CreateModel : PageModel
     {
         private readonly IHttpContextAccessor _httpContextAccessor;

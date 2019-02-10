@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BillingNextSys.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BillingNextSys.Pages.Branch
 {
+    [Authorize(Roles = "Admin")]
     public class DeleteModel : PageModel
     {
         private readonly BillingNextSys.Models.BillingNextSysContext _context;

@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BillingNextSys.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BillingNextSys.Pages.Branch
 {
+    [Authorize]
     public class IndexModel : PageModel
     {
         private readonly BillingNextSys.Models.BillingNextSysContext _context;

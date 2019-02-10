@@ -15,9 +15,11 @@ using Twilio;
 using Twilio.Rest.Api.V2010.Account;
 using Twilio.Types;
 using System.Threading;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BillingNextSys.Pages.Bill.Format1
 {
+    [Authorize(Roles = "Admin,Accountant,Developer")]
     public class CreateModel : PageModel
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -35,13 +37,19 @@ namespace BillingNextSys.Pages.Bill.Format1
 
         public IActionResult OnGet()
         {
-        
-            int cid = (int)_session.GetInt32("Cid");
-            int bid = (int)_session.GetInt32("Bid");
-            Companies = _context.Company.Where(ab => ab.CompanyID.Equals(cid)).ToList();
-            Branches = _context.Branch.Where(a => a.BranchID.Equals(bid)).ToList();
+            try
+            {
+                int cid = (int)_session.GetInt32("Cid");
+                int bid = (int)_session.GetInt32("Bid");
+                Companies = _context.Company.Where(ab => ab.CompanyID.Equals(cid)).ToList();
+                Branches = _context.Branch.Where(a => a.BranchID.Equals(bid)).ToList();
 
-            lastbillnumber = _context.Bill.Where(ab=>ab.BillActNum.HasValue).OrderByDescending(a => a.BillDate).Select(c => c.BillNumber).FirstOrDefault().ToString();
+                lastbillnumber = _context.Bill.Where(ab => ab.BillActNum.HasValue).OrderByDescending(a => a.BillDate).Select(c => c.BillNumber).FirstOrDefault().ToString();
+            }
+           catch(InvalidOperationException)
+            {
+                return RedirectToPage("/Index");
+            }
 
             return Page();
         }
@@ -140,24 +148,9 @@ namespace BillingNextSys.Pages.Bill.Format1
            
             var DebtorGroupInfo = _context.DebtorGroup.Where(a => a.DebtorGroupID.Equals(obj.DebtorGroupID)).Select(a=>a.DebtorGroupPhoneNumber).FirstOrDefault();
 
-            SendSmsAsync("whatsapp:" + DebtorGroupInfo, obj.BilledTo, obj.BillAmount);
+
             return new JsonResult("Added Successfully!");
         }
 
-        public Task SendSmsAsync(string number,string debtorname, double message)
-        {
-            // Plug in your SMS service here to send a text message.
-            // Your Account SID from twilio.com/console
-            var accountSid = Options.WhatsappAccountIdentification;
-            // Your Auth Token from twilio.com/console
-            var authToken = Options.WhatsappAccountPassword;
-
-            TwilioClient.Init(accountSid, authToken);
-
-            return MessageResource.CreateAsync(
-            to: new PhoneNumber(number),
-            from: new PhoneNumber(Options.WhatsappAccountFrom),
-             body: $"Hey! {debtorname}. Your bill has been generated for ₹{message}");
-        }
     }
 }

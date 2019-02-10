@@ -198,6 +198,7 @@
      var diffcount=0;
     window.onload = function() {
      //filladress();
+     document.getElementById("del--1").style.display="none";
            document.getElementById("deloperation").style.display = "none";
         key('ctrl+1', function(){ document.getElementById("addoperations").click(); return false });
         key('ctrl+2', function(){ document.getElementById("deloperation").click(); return false });
@@ -260,6 +261,8 @@
     function editcont(btnid,count)
     {
     diffcount=$('#amount-'+count).text().replace(/[^0-9.]/g,'');
+    $('#amountinput-'+count).val($('#amountinput-'+count).val().replace(/[^0-9.]/g,''));
+
      setSelectedIndex(document.getElementById("yearsel-"+count),$('#year-'+count).text());
       document.getElementById(btnid).style.display = "none";
      document.getElementById("save-"+count).style.display = "inline-block";
