@@ -286,10 +286,10 @@
     function delcont(btnid,count)
     {
            var options = {};
-            alert("here at del with "+btnid+" : " + count);
+
             var billamt=$('#amount-'+btnid.substring(4)).text().replace(/[^0-9.]/g,'').trim();
 
-        alert("here"+billamt+" and "+$('#billtoid').val());
+
            options.url = "/Bill/Format1/Edit?id="+count+"&&billamt="+billamt+"&&debid="+$('#billtoid').val()+"&&handler=DeleteBillDetails";
            options.type = "DELETE";
            options.dataType = "html";
