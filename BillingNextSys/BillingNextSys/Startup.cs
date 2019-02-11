@@ -29,10 +29,10 @@ namespace BillingNextSys
         .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
         .AddEnvironmentVariables();
 
-            if (env.IsDevelopment())
-            {
-                builder.AddUserSecrets<Startup>();
-            }
+            //if (env.IsDevelopment())
+            //{
+            //    builder.AddUserSecrets<Startup>();
+            //}
             Configuration = builder.Build();
             //Configuration = configuration;
         }
@@ -60,8 +60,9 @@ namespace BillingNextSys
 
             services.AddDistributedMemoryCache(); // Adds a default in-memory implementation of IDistributedCache
             services.AddSession();
+            services.AddOptions();
             services.AddAntiforgery(options =>options.HeaderName = "MY-XSRF-TOKEN");
-            services.Configure<Whatsappoptions>(Configuration);
+            services.Configure<Whatsappoptions>(Configuration.GetSection("WhatsappSettings"));
 
         }
 

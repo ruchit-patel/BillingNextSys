@@ -400,6 +400,16 @@
 
 
             obj.DebtorID=dinfoa;
+            if(obj.DebtorID==null || obj.DebtorID=="")
+            {
+                alert("Sub-Debtor is Not Set Correctly");
+                return false;
+            }
+             if(obj.ParticularsID==null || obj.ParticularsID=="")
+            {
+                alert("Particulars id Not Set Correctly");
+                return false;
+            }
 
 
             options.data = JSON.stringify(obj);

@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace BillingNextSys.Pages.Particulars
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,Accountant")]
     public class EditModel : PageModel
     {
         private readonly BillingNextSys.Models.BillingNextSysContext _context;

@@ -28,17 +28,24 @@ namespace BillingNextSys.Pages.Bill.Format2
 
         public IActionResult OnGet()
         {
-        ViewData["SeriesName"] = new SelectList(_context.BillSeries, "SeriesName", "SeriesName");
-        ViewData["CompanyID"] = new SelectList(_context.Company, "CompanyID", "CompanyName");
-        ViewData["DebtorGroupID"] = new SelectList(_context.DebtorGroup, "DebtorGroupID", "DebtorGroupName");
-            int cid = (int)_session.GetInt32("Cid");
-            int bid = (int)_session.GetInt32("Bid");
-            Companies = _context.Company.Where(ab => ab.CompanyID.Equals(cid)).ToList();
-            Branches = _context.Branch.Where(a => a.BranchID.Equals(bid)).ToList();
+            //ViewData["SeriesName"] = new SelectList(_context.BillSeries, "SeriesName", "SeriesName");
+            //ViewData["CompanyID"] = new SelectList(_context.Company, "CompanyID", "CompanyName");
+            //ViewData["DebtorGroupID"] = new SelectList(_context.DebtorGroup, "DebtorGroupID", "DebtorGroupName");
+            try
+            {
+                int cid = (int)_session.GetInt32("Cid");
+                int bid = (int)_session.GetInt32("Bid");
+                Companies = _context.Company.Where(ab => ab.CompanyID.Equals(cid)).ToList();
+                Branches = _context.Branch.Where(a => a.BranchID.Equals(bid)).ToList();
 
-            lastbillnumber = _context.Bill.Where(ab=> !(ab.BillActNum.HasValue)).OrderByDescending(a => a.BillDate).Select(c => c.BillNumber).FirstOrDefault().ToString();
+                lastbillnumber = _context.Bill.Where(ab => !(ab.BillActNum.HasValue)).OrderByDescending(a => a.BillDate).Select(c => c.BillNumber).FirstOrDefault().ToString();
 
-            return Page();
+                return Page();
+            }
+            catch(InvalidOperationException)
+            {
+                return RedirectToPage("/Index");
+            }
         }
 
         [BindProperty]

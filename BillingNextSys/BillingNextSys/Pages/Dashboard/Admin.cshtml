@@ -8,11 +8,11 @@
         <div class="col-sm-3 col-md-2 sidebar">
             <ul class="nav nav-sidebar">
                 <li class="active"><a href="#"><i class="fa fa-hashtag fa-3x" aria-hidden="true"></i>&nbsp; &nbsp;<span style="font-size:x-large;">Overview</span> <span class="sr-only">(current)</span></a></li>
-                <li><a href="/Bill/@Html.DisplayFor(model=>model.compformat)/Index"><i class="fa fa-file-text-o fa-3x" aria-hidden="true"></i>&nbsp; &nbsp;<span style="font-size:x-large;"> Bills</span></a></li>
+                <li><a href="/Bill/@Model.Companydet.FirstOrDefault().BillFormat.ToString()/Index"><i class="fa fa-file-text-o fa-3x" aria-hidden="true"></i>&nbsp; &nbsp;<span style="font-size:x-large;"> Bills</span></a></li>
                 <li><a href="/DebtorGroup"><i class="fa fa-book fa-3x" aria-hidden="true"></i>&nbsp; &nbsp;<span style="font-size:x-large;"> Ledger</span></a></li>
                 <li><a href="/Message"><i class="fa fa-whatsapp fa-3x" aria-hidden="true"></i>&nbsp; &nbsp;<span style="font-size:x-large;"> Message</span></a></li>
                 <li><a href="/Company"><i class="fa fa-building-o fa-3x" aria-hidden="true"></i>&nbsp; &nbsp;<span style="font-size:x-large;"> Company</span></a></li>
-                  </ul>
+            </ul>
             <ul class="nav nav-sidebar">
                 <li><a href="/Received?companyid=@Model.CompanyId"><i class="fa fa-money fa-2x" aria-hidden="true"></i>&nbsp; &nbsp;<span style="font-size:large;"> Received</span></a></li>
                 <li><a href="/BillSeries"><i class="fa fa-list-ol fa-2x" aria-hidden="true"></i>&nbsp; &nbsp;<span style="font-size:large;"> Bill Series</span></a></li>
@@ -22,6 +22,9 @@
                 <li><a href="/Export/Format1"><i class="fa fa-file-excel-o fa-2x" aria-hidden="true"></i>&nbsp; &nbsp;<span style="font-size:medium;"> Sales Report</span></a></li>
                 <li><a href="/Export/Format2"><i class="fa fa-file-excel-o fa-2x" aria-hidden="true"></i>&nbsp; &nbsp;<span style="font-size:medium;"> Outstanding Report</span></a></li>
                 <li><a href="/Export/Format3"><i class="fa fa-file-excel-o fa-2x" aria-hidden="true"></i>&nbsp; &nbsp;<span style="font-size:medium;"> Bill Delivery Report</span></a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="/Bill/Index"><i class="fa fa-database" aria-hidden="true"></i>&nbsp; &nbsp;<span style="font-size:small;"> Show All Bills</span></a></li>
             </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
@@ -168,3 +171,4 @@
         </div>
     </div>
 </div>
+<div class="pull-right">@Model.Companydet.FirstOrDefault().CompanyName : @Model.branchname</div>

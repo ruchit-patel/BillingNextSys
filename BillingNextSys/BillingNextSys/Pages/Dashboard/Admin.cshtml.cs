@@ -44,8 +44,9 @@ namespace BillingNextSys.Pages.Dashboard
 
         public IQueryable<IdentityRole> Roles;
 
-        public string compformat;
+        public IList<Models.Company> Companydet { get; set; }
         public IList<Models.Company> Company { get; set; }
+        public string branchname;
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -59,7 +60,9 @@ namespace BillingNextSys.Pages.Dashboard
                 usersofRoleDeveloper = await userManager.GetUsersInRoleAsync("Developer");
                 Roles = roleManager.Roles;
                 Company = await _context.Company.ToListAsync();
-                compformat = _context.Company.Where(a => a.CompanyID.Equals(cid)).Select(a => a.BillFormat).FirstOrDefault().ToString();
+                Companydet = _context.Company.Where(a => a.CompanyID.Equals(cid)).ToList();
+                branchname = _context.Branch.Where(a => a.BranchID.Equals(bid)).Select(a => a.BranchName).FirstOrDefault().ToString();
+
                 return Page();
             }
             catch (InvalidOperationException)

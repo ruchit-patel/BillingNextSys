@@ -515,9 +515,12 @@ function convertNumberToWords(amount) {
     {
     var countdebout=0;
         var debgid;
+
+
      var options = {};
     options.url = "/Bill/Format1/Create?handler=InsertBill";
     options.type = "POST";
+
 
 
     var obj = {};
@@ -530,6 +533,30 @@ function convertNumberToWords(amount) {
     obj.DebtorGroupID=$("#tosearch option[value='" + $('#toinfo').val() + "']").attr('id');
     obj.BillActNum=$('#bnum').val();
     debgid=obj.DebtorGroupID;
+
+    if(obj.SeriesName==null || obj.SeriesName=="")
+    {
+        alert("Series Name is null");
+        return false;
+    }
+    if(obj.DebtorGroupID==null || obj.DebtorGroupID=="")
+    {
+        alert("Debtor not selected correctly");
+        return false;
+    }
+
+     var inputid1=$('#particulars-1').val();
+    if($('#parti-1').find('option[value="' + inputid1 + '"]').attr('id') == null)
+    {
+        alert("Particulars is not set properly");
+        return false;
+    }
+    if($('#taxableval-1').val()==null || $('#taxableval-1').val()=="" )
+    {
+        alert("Taxable Amount is empty");
+        return false;
+    }
+
 
     options.data = JSON.stringify(obj);
 

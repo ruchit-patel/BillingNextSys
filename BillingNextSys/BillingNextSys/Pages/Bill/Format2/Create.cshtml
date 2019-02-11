@@ -513,6 +513,26 @@ function convertNumberToWords(amount) {
     obj.DebtorGroupID=$("#tosearch option[value='" + $('#toinfo').val() + "']").attr('id');
     debgid=obj.DebtorGroupID;
 
+    if(obj.DebtorGroupID==null || obj.DebtorGroupID=="")
+    {
+        alert("Debtor not selected correctly");
+        return false;
+    }
+    -1
+
+     var inputid1=$('#dname-1').val();
+    if($('#debname-1').find('option[value="' + inputid1 + '"]').attr('id') == null)
+    {
+        alert("Sub-Debtor is not set properly");
+        return false;
+    }
+    var inputid2=$('#particulars-1').val();
+    if($('#parti-1').find('option[value="' + inputid2 + '"]').attr('id') == null)
+    {
+        alert("Particulars is not set properly");
+        return false;
+    }
+
     options.data = JSON.stringify(obj);
 
     options.contentType = "application/json; charset=utf-8";
