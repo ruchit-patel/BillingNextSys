@@ -1,9 +1,10 @@
 ﻿@page
-@model PrintModel
+@model PrintGuestModel
 @{
+    Layout = "_LayoutPrint";
     ViewData["Title"] = "Print";
 }
-<link href="/css/print.css" rel="stylesheet"/>
+<link href="/css/print.css" rel="stylesheet" />
 <h2>Print</h2>
 
 <h4>Bill</h4>
@@ -19,7 +20,7 @@
 
                 <div class="row">
                     <div class="col-xs-3">
-                        <img class="img-responsive full-width" src="data:image/png;base64,@Convert.ToBase64String(Model.Bill.Company.CompanyLogoImg)" /> 
+                        <img class="img-responsive full-width" src="data:image/png;base64,@Convert.ToBase64String(Model.Bill.Company.CompanyLogoImg)" />
                     </div>
                     <div class="col-xs-9">
                         <h1>@Html.DisplayFor(model => model.Bill.Company.CompanyName)</h1>
@@ -30,7 +31,7 @@
                             <div class="col-md-6"><h4>  <img src="/images/mobile.png" alt="Mobile Number:" width="20px" height="20px" />&nbsp; @Html.DisplayFor(model => model.Bill.Branch.BranchPhone)</h4></div>
                         </div>
                         <div class="row">
-                            <div class="col-xs-2"></div> <div  class="col-xs-10 fontdec" style="font-size: 1.48em; font-weight:400;">GSTIN:@Html.DisplayFor(model => model.Bill.Company.GSTIN)</div>
+                            <div class="col-xs-2"></div> <div class="col-xs-10 fontdec"  style="font-size: 1.48em; font-weight:400;">GSTIN:@Html.DisplayFor(model => model.Bill.Company.GSTIN)</div>
                         </div>
                     </div>
                 </div>
@@ -43,7 +44,7 @@
                     <div class="col-xs-6">
                         <address>
                             <strong>Billed To:</strong><br>
-                            <div id="to"> @Html.DisplayFor(model=>model.Bill.BilledTo) </div>
+                            <div id="to"> @Html.DisplayFor(model => model.Bill.BilledTo) </div>
                             <div><p id="toaddress">@Html.DisplayFor(model => model.Bill.DebtorGroup.DebtorGroupAddress)</p></div><br>
                             <strong>GSTIN: </strong><div><p id="togstin">@Html.DisplayFor(model => model.Bill.DebtorGroup.DebtorGSTIN)</p></div>
                         </address>
@@ -51,8 +52,8 @@
                     <div class="col-xs-6 text-right">
                         <address>
                             <strong>Invoice Number:</strong> <div id="invoicenum">@Html.DisplayFor(model => model.Bill.BillNumber)</div><br>
-                            <strong>Invoice Date:</strong> <div id="invoicedate">@Html.DisplayFor(model=>model.Bill.InvoiceDate)</div><br>
-                            <strong>Place Of Supply:</strong> <div id="placeofsupply">@Html.DisplayFor(model=>model.Bill.PlaceOfSupply)</div><br>
+                            <strong>Invoice Date:</strong> <div id="invoicedate">@Html.DisplayFor(model => model.Bill.InvoiceDate)</div><br>
+                            <strong>Place Of Supply:</strong> <div id="placeofsupply">@Html.DisplayFor(model => model.Bill.PlaceOfSupply)</div><br>
                         </address>
                     </div>
                 </div>
@@ -90,14 +91,14 @@
                                     {
                                         <tr id="row-@counter">
                                             <td>
-                                                <p id="pp-@counter" >@Html.DisplayFor(modelItem => item.ParticularsName)</p> 
+                                                <p id="pp-@counter">@Html.DisplayFor(modelItem => item.ParticularsName)</p>
 
                                             </td>
                                             <td class="text-center">
-                                                <p id="psac-@counter" >@Html.DisplayFor(modelItem => item.Particulars.SACCode)</p>  
+                                                <p id="psac-@counter">@Html.DisplayFor(modelItem => item.Particulars.SACCode)</p>
                                             </td>
                                             <td class="text-center">
-                                                <p id="ptamount-@counter" >@Html.DisplayFor(modelItem => item.TaxableValue)</p>    
+                                                <p id="ptamount-@counter">@Html.DisplayFor(modelItem => item.TaxableValue)</p>
                                             </td>
                                             <td class="text-center" id="cgst-@counter">
                                                 @Html.DisplayFor(modelItem => item.CGSTAmount)
@@ -108,12 +109,12 @@
                                             <td class="text-right count-me" id="pamount-@counter">
                                                 @Html.DisplayFor(modelItem => item.Amount)
                                             </td>
-                                           
+
                                         </tr>
                                         counter++;
                                     }
 
-                                   
+
 
                                     <tr>
                                         <td class="thick-line"></td>
@@ -126,7 +127,7 @@
 
                                 </tbody>
                             </table>
-                           
+
                         </div>
                         <div class="row">
                             <div class="col-xs-12">
@@ -160,16 +161,11 @@
     </form>
 </div>
 
-<div>
-    <a asp-page="/Bill/Format1/Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
-<script>
-
-    window.onload = function() {
+<script>window.onload = function() {
     calculateGrandTotal();
      };
 
@@ -286,6 +282,4 @@
 
      document.body.innerHTML = originalContents;
     document.body.style.marginTop = "0px";
-}
-
-</script>
+}</script>

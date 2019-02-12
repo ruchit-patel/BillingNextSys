@@ -6,14 +6,7 @@
 }
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/lib/keymaster/keymaster.js"></script>
-@*<!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.13.1/bootstrap-table.min.css">
-
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.13.1/bootstrap-table.min.js"></script>
-
-    <!-- Latest compiled and minified Locales -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.13.1/locale/bootstrap-table-en-US.min.js"></script>*@
+<link rel="stylesheet" href="/css/print.css" />
 <h2>Index</h2>
 
 <br>
@@ -53,7 +46,7 @@
                             <span asp-validation-for="DebtorGroup.DebtorGroupMail" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label class="control-label">Whatsapp Number <u>(Without Country Code)</u></label>
+                            <label class="control-label">Whatsapp Number: <u>(Without Country Code)</u></label>
                             <input asp-for="DebtorGroup.DebtorGroupPhoneNumber" id="dphone" class="form-control" />
                             <span asp-validation-for="DebtorGroup.DebtorGroupPhoneNumber" class="text-danger"></span>
                         </div>
@@ -232,26 +225,27 @@
 <br /><br />
 
 @(Html
-                                                                                        .Grid(Model.DebtorGroups)
-                                                                                        .Build(columns =>
-                                                                                        {
-                                                                                            columns.Add(model => model.DebtorGroupName).Titled("Debtor Group Name");
-                                                                                            columns.Add(model => model.DebtorOutstanding).Titled("Outstanding Amount");
-                                                                                            columns.Add(model => model.DebtorGroupAddress).Titled("Debtor Group Address");
-                                                                                            columns.Add(model => model.DebtorGroupPhoneNumber).Titled("Debtor Group Phone Number");
-                                                                                            columns.Add(model => model.DebtorGSTIN).Titled("Debtor GSTIN");
-                                                                                            columns.Add(model => model.DebtorGroupMail).Titled("Mail Id");
-                                                                                            columns.Add(model => model.DebtorGroupCity).Titled("City");
-                                                                                            columns.Add(model => model.DebtorGroupID).Titled("Options").Encoded(false).RenderedAs(model => "<a href='/DebtorGroup/OutstandingBreakDown?debid=" + model.DebtorGroupID + "'>Outstanding Amount Breakdown</a> | <a href='/DebtorGroup/Edit?id=" + model.DebtorGroupID + "'>Edit</a> | <a href='#my_modal' data-toggle='modal' data-did='" + model.DebtorGroupID + "' data-dname='" + model.DebtorGroupName + "' >More Details</a> | <a href='/DebtorGroup/Delete?id=" + model.DebtorGroupID + "'>Delete</a>");
-                                                                                        })
+                                                                                                                            .Grid(Model.DebtorGroups)
+                                                                                                                            .Build(columns =>
+                                                                                                                            {
+                                                                                                                                columns.Add(model => model.DebtorGroupName).Titled("Debtor Group Name");
+                                                                                                                                columns.Add(model => model.DebtorOutstanding).Titled("Outstanding Amount");
+                                                                                                                                columns.Add(model => model.DebtorGroupAddress).Titled("Debtor Group Address");
+                                                                                                                                columns.Add(model => model.DebtorGroupPhoneNumber).Titled("Debtor Group Phone Number");
+                                                                                                                                columns.Add(model => model.DebtorGSTIN).Titled("Debtor GSTIN");
+                                                                                                                                columns.Add(model => model.DebtorGroupMail).Titled("Mail Id");
+                                                                                                                                columns.Add(model => model.DebtorGroupCity).Titled("City");
+                                                                                                                                columns.Add(model => model.DebtorGroupID).Titled("Options").Encoded(false).RenderedAs(model => "<a href='/DebtorGroup/OutstandingBreakDown?debid=" + model.DebtorGroupID + "'><i class='fa fa-money fa-2x' aria-hidden='true'></i></a> | <a href='/DebtorGroup/Edit?id=" + model.DebtorGroupID + "'><i class='fa fa-pencil fa-2x' aria-hidden='true'></i></a> | <a href='#my_modal' data-toggle='modal' data-did='" + model.DebtorGroupID + "' data-dname='" + model.DebtorGroupName + "' ><i class='fa fa-info-circle fa-2x' aria-hidden='true'></i></a> | <a href='/DebtorGroup/Delete?id=" + model.DebtorGroupID + "'><i class='fa fa-trash fa-2x' aria-hidden='true'></i></a>");
+                                                                                                                            })
 
-                                                                                        .Empty("No data found")
-                                                                                        .Filterable()
-                                                                                        .Sortable()
-                                                                                        .Pageable()
-                                                                                        .Css("table-hover") // Overwrites all classes with the new ones
+                                                                                                                            .Empty("No data found")
+                                                                                                                            .Filterable()
+                                                                                                                            .Sortable()
+                                                                                                                            .Pageable()
+                                                                                                                            .Css("table-hover hgtincdet") // Overwrites all classes with the new ones
 
 )
+<a asp-page="/Dashboard/Index"><i class="fa fa-arrow-left" aria-hidden="true"></i> Dashboard</a>
 <script>
     var didoo;
           $(document).ready(function() {
@@ -475,7 +469,7 @@ $('input:hidden[name="__RequestVerificationToken"]').val());
     options.success = function (data) {
 
     data.forEach(function (element) {
-    newInput +="<tr><td>"+element.debtorName+"</td><td>"+element.debtorOutstanding+"</td><td><button style='padding: 0;border: none;background: none;' onclick='delindidet("+element.debtorID+")'><img src='/images/delete.png' alt='delete' height='20px' width='20px' /></button>&nbsp;&nbsp;&nbsp;&nbsp;<a href='#modal_edit' data-toggle='modal' data-did='"+element.debtorID+"' data-dname='"+element.debtorName+"' data-doutstan='"+element.debtorOutstanding+"' data-dgid='"+element.debtorGroupID+"' ><img src='/images/edit.svg' alt='Edit Record' height='20px' width='20px' /></a></td></tr>";
+    newInput +="<tr><td>"+element.debtorName+"</td><td>"+element.debtorOutstanding+"</td><td><button style='padding: 0;border: none;background: none;' onclick='window.location.href=\"/DebtorGroup/DebtorBreakdown?debid="+element.debtorID+"\"'><i class='fa fa-info-circle fa-2x' aria-hidden='true'></i></button>&nbsp;&nbsp;&nbsp;&nbsp;<button style='padding: 0;border: none;background: none;' onclick='delindidet("+element.debtorID+")'><i class='fa fa-trash fa-2x' aria-hidden='true'></i></button>&nbsp;&nbsp;&nbsp;&nbsp;<a href='#modal_edit' data-toggle='modal' data-did='"+element.debtorID+"' data-dname='"+element.debtorName+"' data-doutstan='"+element.debtorOutstanding+"' data-dgid='"+element.debtorGroupID+"' style='color:black;' ><i class='fa fa-pencil fa-2x' aria-hidden='true'></i></a></td></tr>";
 
            });
     document.getElementById('rowbody1').innerHTML = newInput;
@@ -500,7 +494,7 @@ $('input:hidden[name="__RequestVerificationToken"]').val());
     options.dataType = "json";
     options.success = function (data) {
     data.forEach(function (element) {
-    newInput +="<tr><td>"+element.debtorName+"</td><td>"+element.debtorOutstanding+"</td><td><button style='padding: 0;border: none;background: none;' onclick='delindidet("+element.debtorID+")'><img src='/images/delete.png' alt='delete' height='20px' width='20px' /></button>&nbsp;&nbsp;&nbsp;&nbsp;<a href='#modal_edit' data-toggle='modal' data-did='"+element.debtorID+"' data-dname='"+element.debtorName+"' data-doutstan='"+element.debtorOutstanding+"' data-dgid='"+element.debtorGroupID+"' ><img src='/images/edit.svg' alt='Edit Record' height='20px' width='20px' /></a></td></tr>";
+    newInput +="<tr><td>"+element.debtorName+"</td><td>"+element.debtorOutstanding+"</td><td><button style='padding: 0;border: none;background: none;' onclick='window.location.href=\"/DebtorGroup/DebtorBreakdown?debid="+element.debtorID+"\"'><i class='fa fa-info-circle fa-2x' aria-hidden='true'></i></button>&nbsp;&nbsp;&nbsp;&nbsp;<button style='padding: 0;border: none;background: none;' onclick='delindidet("+element.debtorID+")'><i class='fa fa-trash fa-2x' aria-hidden='true'></i></button>&nbsp;&nbsp;&nbsp;&nbsp;<a href='#modal_edit' data-toggle='modal' data-did='"+element.debtorID+"' data-dname='"+element.debtorName+"' data-doutstan='"+element.debtorOutstanding+"' data-dgid='"+element.debtorGroupID+"' style='color:black;' ><i class='fa fa-pencil fa-2x' aria-hidden='true'></i></a></td></tr>";
 
            });
     document.getElementById('rowbody1').innerHTML = newInput;

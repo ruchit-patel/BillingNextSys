@@ -1,0 +1,39 @@
+﻿@page
+@model DebtorBreakdownModel
+@{
+}
+<link rel="stylesheet" href="/css/print.css" />
+<br><br>
+@{
+    if(Model.BillsDetailss.Count()==0)
+    {
+        <h2>Debtor has no bills</h2>
+    }
+    else
+    {
+        <h2>Debtor Name: @Model.BillsDetailss.FirstOrDefault().Debtor.DebtorName</h2>
+    }
+}
+
+@(Html
+                                                                                        .Grid(Model.BillsDetailss)
+                                                                                        .Build(columns =>
+                                                                                        {
+                                                                                            columns.Add(model => model.BillNumber).Titled("Bill Number");
+                                                                                            columns.Add(model => model.ParticularsName).Titled("Particulars");
+                                                                                            columns.Add(model => model.BillAmountOutstanding).Titled("Debtor Amount Outstanding");
+                                                                                            columns.Add(model => model.Amount).Titled("Amount");
+                                                                                            columns.Add(model => model.Period).Titled("Period");
+                                                                                            columns.Add(model => model.YearInfo).Titled("Year");
+                                                                                        })
+                                                                                        .Empty("No data found")
+                                                                                        .Filterable()
+                                                                                        .Sortable()
+                                                                                        .Css("table-hover hgtinc")
+
+)
+
+
+<h2>Debtor Outstanding Total: @Model.Detamt</h2>
+<br>
+<a asp-page="/DebtorGroup/Index"><i class="fa fa-arrow-left" aria-hidden="true"></i>DebtorGroup List</a>

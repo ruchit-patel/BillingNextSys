@@ -3,24 +3,25 @@
 @{ Layout = null; }
 
 @(Html
-                                                        .Grid(Model.Bills)
-                                                        .Build(columns =>
-                                                        {
-                                                            columns.Add(model => model.BillNumber).Titled("Bill Number");
-                                                            columns.Add(model => model.BilledTo).Titled("Billed To");
-                                                            columns.Add(model => model.BillAmount).Titled("Bill Amount");
-                                                            columns.Add(model => model.InvoiceDate).Titled("Invoice Date");
-                                                            columns.Add(model => model.PlaceOfSupply).Titled("Place Of Supply");
-                                                            columns.Add(model => model.SeriesName).Titled("Operation").Encoded(false).RenderedAs(model => model.SeriesName == null ? "<a href='/Bill/Format2/Print?id=" + model.BillNumber + "&&seccode=" + model.SecretUnlockCode + "'>Print</a> | <a href='/Bill/Format2/Edit?id=" + model.BillNumber + "'>Edit</a> | <a href='/Bill/Delete?id=" + model.BillNumber + "'>Delete</a>" : "<a href='/Bill/Format1/Print?id=" + model.BillNumber + "&&seccode=" + model.SecretUnlockCode + "'>Print</a> | <a href='/Bill/Format1/Edit?id=" + model.BillNumber + "'>Edit</a> | <a href='/Bill/Delete?id=" + model.BillNumber + "'>Delete</a>");
+                                                                .Grid(Model.Bills)
+                                                                .Build(columns =>
+                                                                {
+                                                                    columns.Add(model => model.BillNumber).Titled("Bill Number");
+                                                                    columns.Add(model => model.BilledTo).Titled("Billed To");
+                                                                    columns.Add(model => model.BillAmount).Titled("Bill Amount");
+                                                                    columns.Add(model => model.InvoiceDate).Titled("Invoice Date");
+                                                                    columns.Add(model => model.PlaceOfSupply).Titled("Place Of Supply");
+                                                                    columns.Add(model => model.SeriesName).Titled("Operation").Encoded(false).RenderedAs(model => model.SeriesName == null ? "<a href='/Bill/Format2/Print?id=" + model.BillNumber + "&&seccode=" + model.SecretUnlockCode + "'>Print</a> | <a href='/Bill/Format2/Edit?id=" + model.BillNumber + "'>Edit</a> | <a href='/Bill/Delete?id=" + model.BillNumber + "'>Delete</a>" : "<a href='/Bill/Format1/Print?id=" + model.BillNumber + "&&seccode=" + model.SecretUnlockCode + "'>Print</a> | <a href='/Bill/Format1/Edit?id=" + model.BillNumber + "'>Edit</a> | <a href='/Bill/Delete?id=" + model.BillNumber + "'>Delete</a>");
 
-                                                        })
-                                                        .Empty("No data found")
-                                                        .Id("my-ajax-grid")
-                                                        .Pageable(pager =>
-                                                        {
-                                                            pager.PagesToDisplay = 4;
-                                                            pager.RowsPerPage = 10;
-                                                        })
-                                                        .Filterable()
-                                                        .Sortable()
+                                                                })
+                                                                .Empty("No data found")
+                                                                .Id("my-ajax-grid")
+                                                                .Pageable(pager =>
+                                                                {
+                                                                    pager.PagesToDisplay = 4;
+                                                                    pager.RowsPerPage = 10;
+                                                                })
+                                                                .Filterable()
+                                                                .Sortable()
+                                                                .Css("table-hover hgtinc")
 )

@@ -5,26 +5,27 @@
 
 @* Should only include grid declaration *@
 @(Html
-                                                                        .Grid(Model.DebtorGroups)
-                                                                        .Build(columns =>
-                                                                        {
-                                                                            columns.Add(model => model.DebtorGroupID).Titled("Debtor Group ID");
-                                                                            columns.Add(model => model.DebtorGroupName).Titled("Debtor Group Name");
-                                                                            columns.Add(model => model.DebtorGroupPhoneNumber).Titled("Debtor Group Whatsapp Number");
-                                                                            columns.Add(model => model.DebtorOutstanding).Titled("Debtor Amount Outstanding");
-                                                                            columns.Add(model => model.DebtorGroupMail).Titled("Email Id");
-                                                                            columns.Add(model => model.DebtorGroupAddress).Titled("Address");
-                                                                            columns.Add(model => $" <button onclick='sendmessage(\"{model.DebtorGroupPhoneNumber}\",\"{model.DebtorGroupID}\")' id='{model.DebtorGroupID}' class='btn btn - default' >Send Message</button>").Encoded(false);
+                                                                                .Grid(Model.DebtorGroups)
+                                                                                .Build(columns =>
+                                                                                {
+                                                                                    columns.Add(model => model.DebtorGroupID).Titled("Debtor Group ID");
+                                                                                    columns.Add(model => model.DebtorGroupName).Titled("Debtor Group Name");
+                                                                                    columns.Add(model => model.DebtorGroupPhoneNumber).Titled("Debtor Group Whatsapp Number");
+                                                                                    columns.Add(model => model.DebtorOutstanding).Titled("Debtor Amount Outstanding");
+                                                                                    columns.Add(model => model.DebtorGroupMail).Titled("Email Id");
+                                                                                    columns.Add(model => model.DebtorGroupAddress).Titled("Address");
+                                                                                    columns.Add(model => $" <button onclick='sendmessage(\"{model.DebtorGroupPhoneNumber}\",\"{model.DebtorGroupID}\")' id='{model.DebtorGroupID}' class='btn btn - default' >Send Message</button>").Encoded(false);
 
 
-                                                                        })
-                                                                        .Empty("No data found")
-                                                                        .Id("my-ajax-grid")
-                                                                        .Pageable(pager =>
-                                                                        {
-                                                                            pager.PagesToDisplay = 4;
-                                                                            pager.RowsPerPage = 15;
-                                                                        })
-                                                                        .Filterable()
-                                                                        .Sortable()
+                                                                                })
+                                                                                .Empty("No data found")
+                                                                                .Id("my-ajax-grid")
+                                                                                .Pageable(pager =>
+                                                                                {
+                                                                                    pager.PagesToDisplay = 4;
+                                                                                    pager.RowsPerPage = 15;
+                                                                                })
+                                                                                .Filterable()
+                                                                                .Sortable()
+                                                                                .Css("table-hover hgtinc")
 )

@@ -10,7 +10,7 @@
 
 @Html.AntiForgeryToken()
 @Html.AjaxGrid(Url.Page("DebtorPartial"))
-
+    <a asp-page="/Message/Index"><i class="fa fa-arrow-left" aria-hidden="true"></i> Messages</a>
     <script>
      function sendmessage(debtornum,idval)
         {

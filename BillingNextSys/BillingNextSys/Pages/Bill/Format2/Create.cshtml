@@ -29,6 +29,7 @@
     }
 </style>
 <input type="hidden" id="billnum" value="@Model.lastbillnumber"/>
+<input type="hidden" id="yearser" />
 <input type="hidden" id="companyid" value="@Model.Companies.FirstOrDefault().CompanyID" />
 <div class="container">
     <form onsubmit="return false;">
@@ -157,7 +158,7 @@
 }
 <script>
     window.onload = function() {
-
+        yearfill();
          var lastbnum=$("#billnum").val();
 
          $("#bnum").val(+lastbnum+1);
@@ -361,7 +362,7 @@ function calcamount(pamount,idval)
         cols+='<td><input id="dname' + counter + '" style="width:250px;" class="form-control" placeholder="Debtor Name.." list="debname' + counter + '" autocomplete="off" ><datalist id="debname' + counter + '"></datalist></td>';
          cols+='<td ><input id="particulars' + counter + '" class="form-control" style="width:250px;" placeholder="Particulars.." list="parti' + counter + '" autocomplete="off" onchange="fillparticulars($(this).val(),' + counter + ');" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" onfocusout="fillpdetails(' + counter + ')"><datalist id="parti' + counter + '"></datalist></td>';
           cols+= '<td class="text-center"><select id="year' + counter + '" class="form-control" > </select></td>';
-           cols+='<td class="text-center"> <input id="period' + counter + '" class="form-control" style="width:120px;" placeholder="E.g. 2018-19 " list="periodlist' + counter + '" ><datalist id="periodlist' + counter + '"></datalist></td>';
+           cols+='<td class="text-center"> <input id="period' + counter + '" class="form-control" style="width:120px;" placeholder="E.g. 2018-19 " list="periodlist' + counter + '" value='+$('#yearser').val()+'><datalist id="periodlist' + counter + '"></datalist></td>';
             cols+= '<td class="text-right count-me" ><input class="form-control pull-right" style="text-align:right; width:120px; " type="number" id="pamount' + counter + '" onchange="calcamount($(this).val(),' + counter + ');" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();"/></td>';
 
      document.getElementById("deloperation").style.display = "inline";
@@ -628,5 +629,25 @@ function savedebout(debamt,debgid)
             alert("Error Updating Debtor Oustanding Amount");
             };
             $.ajax(options);
+    }
+    function yearfill()
+    {
+     var dt = new Date();
+     var yr = (dt.getFullYear())+"";
+    var mnth=dt.getMonth();
+    var yrprv=dt.getFullYear()-1+"";
+    var yrnxt=dt.getFullYear()+1+"";
+    var yearstr="";
+
+        if(mnth==0 || mnth==1 || mnth==2)
+         {
+             yearstr=yrprv+"-"+yr.substring(2);
+         }
+        else
+        {
+            yearstr=yr+"-"+yrnxt.substring(2);
+        }
+    $('#yearser').val(yearstr);
+    $('#period-1').val(yearstr);
     }
 </script>

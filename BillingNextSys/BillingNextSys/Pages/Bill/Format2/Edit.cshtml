@@ -42,6 +42,7 @@
                 <input type="hidden" id="messsent" asp-for="Bill.MessageSent" />
                 <input type="hidden" id="branchid" asp-for="Bill.BranchID" />
                 <input type="hidden" id="companyId" asp-for="Bill.CompanyID" />
+                <input type="hidden" id="yearser" />
                 <div class="row">
                     <div class="col-md-3">
                         <img class="img-responsive full-width" src="data:image/png;base64,@Convert.ToBase64String(Model.Bill.Company.CompanyLogoImg)" /> @*<img src="https://images-na.ssl-images-amazon.com/images/I/713t5BMNwdL._SX425_.jpg" height="250px" width="300px" style="padding:10px;" />*@
@@ -198,6 +199,7 @@
      var diffcount=0;
     window.onload = function() {
      //filladress();
+    yearfill();
      document.getElementById("del--1").style.display="none";
            document.getElementById("deloperation").style.display = "none";
         key('ctrl+1', function(){ document.getElementById("addoperations").click(); return false });
@@ -644,7 +646,7 @@ function calcamount(pamount,idval)
             cols+='<td><input id="dname-'+counter+'" style="width:250px;" placeholder="Debtor Name.." list="debname-'+counter+'" autocomplete="off"><datalist id="debname-'+counter+'"></datalist> </td>';
          cols+='<td><input id="particulars-' + counter + '" style="width:250px;" placeholder="Particulars.." list="parti-' + counter + '" autocomplete="off" onchange="fillparticulars($(this).val(),' + counter + ');" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" onfocusout="fillpdetails(' + counter + ')"><datalist id="parti-' + counter + '"></datalist></td>';
           cols+='<td class="text-center"><select id="yearsel-'+counter+'"></select></td>';
-            cols+= '<td class="text-center"><input style="width:65px; " type="text" placeholder="Period.." id="periodinput-'+counter+'" /></td>';
+            cols+= '<td class="text-center"><input style="width:65px; " type="text" placeholder="Period.." id="periodinput-'+counter+'" value='+$('#yearser').val()+'></td>';
              cols+='<td class="text-center count-me">  <p id="amount-'+counter+'" style="display: none;"></p>  <input style="width:65px;" type="number" placeholder="Amount.." id="amountinput-' + counter + '" onchange="calcamount($(this).val(),' + counter + ');" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" /></td>';
                  var ooptions = $("#yearsel--1 > option").clone();
 
@@ -897,5 +899,24 @@ function convertNumberToWords(amount) {
             alert("Error Updating Debtor Oustanding Amount");
             };
             $.ajax(options);
+    }
+    function yearfill()
+    {
+     var dt = new Date();
+     var yr = (dt.getFullYear())+"";
+    var mnth=dt.getMonth();
+    var yrprv=dt.getFullYear()-1+"";
+    var yrnxt=dt.getFullYear()+1+"";
+    var yearstr="";
+
+        if(mnth==0 || mnth==1 || mnth==2)
+         {
+             yearstr=yrprv+"-"+yr.substring(2);
+         }
+        else
+        {
+            yearstr=yr+"-"+yrnxt.substring(2);
+        }
+    $('#yearser').val(yearstr);
     }
 </script>

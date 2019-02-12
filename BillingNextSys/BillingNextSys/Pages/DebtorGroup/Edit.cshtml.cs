@@ -48,7 +48,6 @@ namespace BillingNextSys.Pages.DebtorGroup
             {
                 return Page();
             }
-
             _context.Attach(DebtorGroup).State = EntityState.Modified;
 
             try

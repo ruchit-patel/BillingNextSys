@@ -63,8 +63,14 @@ namespace BillingNextSys.Pages.Bill
                 _context.DebtorGroup.Attach(dgout).Property(x => x.DebtorOutstanding).IsModified = true;
                 _context.SaveChanges();
             }
-
-            return RedirectToPage("./Index");
+            if (Bill.SeriesName != null)
+            {
+                return RedirectToPage("/Bill/Format1/Index");
+            }
+            else
+            {
+                return RedirectToPage("/Bill/Format2/Index");
+            }
         }
     }
 }

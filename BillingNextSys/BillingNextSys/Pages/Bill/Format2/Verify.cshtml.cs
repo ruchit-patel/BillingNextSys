@@ -40,7 +40,7 @@ namespace BillingNextSys.Pages.Bill.Format2
                 _context.Bill.Attach(billdelivered).Property(x => x.BillDelivered).IsModified = true;
                 _context.SaveChanges();
 
-                return RedirectToPage("/Bill/Format2/Print",new { id=billnum, seccode =num});
+                return RedirectToPage("/Bill/Format2/PrintGuest",new { id=billnum, seccode =num});
             }
 
         }

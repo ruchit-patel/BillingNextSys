@@ -175,10 +175,11 @@
 <script>
     window.onload = function() {
         fillseries();
-         var lastbnum=$("#billnum").val();
+       var lastbnum=$("#billnum").val();
 
          $("#bnum").val(+(lastbnum.split('/')[2])+1);
          $("#yearser").val(lastbnum.split('/')[1]);
+    yearfill();
            document.getElementById("deloperation").style.display = "none";
         key('ctrl+1', function(){ document.getElementById("addoperations").click(); return false });
         key('ctrl+2', function(){ document.getElementById("deloperation").click(); return false });
@@ -650,5 +651,24 @@ $('input:hidden[name="__RequestVerificationToken"]').val());
             alert("Error Updating Debtor Oustanding Amount");
             };
             $.ajax(options);
+    }
+
+    function yearfill()
+    {
+     var dt = new Date();
+     var yr = (dt.getFullYear())+"";
+    var mnth=dt.getMonth();
+    var yrprv=dt.getFullYear()-1+"";
+    var yrnxt=dt.getFullYear()+1+"";
+    var yearstr="";
+        if(mnth==0 || mnth==1 || mnth==2)
+         {
+             yearstr=yrprv.substring(2)+"-"+yr.substring(2);
+         }
+        else
+        {
+            yearstr=yr.substring(2)+"-"+yrnxt.substring(2);
+        }
+    $('#yearser').val(yearstr);
     }
 </script>

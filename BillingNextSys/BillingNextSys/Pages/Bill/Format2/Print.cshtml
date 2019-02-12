@@ -3,28 +3,12 @@
 @{
     ViewData["Title"] = "Print";
 }
-
+<link href="/css/print.css" rel="stylesheet" />
 <h2>Print</h2>
 
 <h4>Bill</h4>
 <hr />
-<style>
-    .invoice-title h2, .invoice-title h3 {
-        display: inline-block;
-    }
 
-    .table > tbody > tr > .no-line {
-        border-top: none;
-    }
-
-    .table > thead > tr > .no-line {
-        border-bottom: none;
-    }
-
-    .table > tbody > tr > .thick-line {
-        border-top: 2px solid;
-    }
-</style>
 <div class="form-group">
     <input type="button" value="Print Bill" id="btnprint" class="btn btn-default" onclick="printDiv('printableArea')" />
 </div>
@@ -40,14 +24,14 @@
                     </div>
                     <div class="col-xs-9">
                         <h1>@Html.DisplayFor(model => model.Bill.Company.CompanyName)</h1>
-                        <h2>CHARTERED ACCOUNTANTS</h2>
+                        <div class="chartdec" style="font-size: 2.17em; font-weight:400;">CHARTERED ACCOUNTANTS</div>
                         <h4>@Html.DisplayFor(model => model.Bill.Branch.BranchAddress)</h4>
                         <div class="row">
-                            <div class="col-xs-6"><h4> <img src="/images/mail.svg" alt="Mail:" width="20px" height="20px" />&nbsp; @Html.DisplayFor(model => model.Bill.Branch.BranchEmail)</h4></div>
-                            <div class="col-xs-6"><h4> <img src="/images/mobile.png" alt="Mobile Number:" width="20px" height="20px" />&nbsp; @Html.DisplayFor(model => model.Bill.Branch.BranchPhone)</h4></div>
+                            <div class="col-md-6"><h4> <img src="/images/mail.svg" alt="Mail:" width="20px" height="20px" />&nbsp; @Html.DisplayFor(model => model.Bill.Branch.BranchEmail)</h4></div>
+                            <div class="col-md-6"><h4> <img src="/images/mobile.png" alt="Mobile Number:" width="20px" height="20px" />&nbsp; @Html.DisplayFor(model => model.Bill.Branch.BranchPhone)</h4></div>
                         </div>
                         <div class="row">
-                            <div class="col-xs-2"></div> <div class="col-xs-10"><h3>GSTIN:@Html.DisplayFor(model => model.Bill.Company.GSTIN)</h3></div>
+                            <div class="col-xs-2"></div> <div class="col-xs-10 fontdec" style="font-size: 1.48em; font-weight:400;">GSTIN:@Html.DisplayFor(model => model.Bill.Company.GSTIN)</div>
                         </div>
                     </div>
                 </div>
@@ -81,7 +65,7 @@
                         <h3 class="panel-title"><strong>Bill summary</strong></h3>
                     </div>
                     <div class="panel-body">
-                        <div class="">
+                        <div class="table-responsive">
                             <table class="table table-condensed order-list" id="billdet">
                                 <thead>
                                     <tr>
