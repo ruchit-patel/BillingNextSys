@@ -37,7 +37,7 @@ namespace BillingNextSys.Pages.Bill
             {
                 return Page();
             }
-
+            
             _context.Bill.Add(Bill);
             await _context.SaveChangesAsync();
 

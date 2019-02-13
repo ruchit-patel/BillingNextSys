@@ -10,7 +10,7 @@
 @Html.AjaxGrid(Url.Page("IndexGrid"))
     <a asp-page="/Dashboard/Index"><i class="fa fa-arrow-left" aria-hidden="true"></i> Dashboard</a>
 
-<script>
+    <script>
         function sendmessage(billno,debtorid,invoicedate,billamt,series,secretcode)
         {
 
@@ -18,12 +18,19 @@
                 options.url = "/Message/Index?handler=SendMessage";
                 options.type = "POST";
 
-
-
         var obj = {};
         obj.BillNumber = billno;
         obj.DebtorGroupID =  debtorid;
-        obj.InvoiceDate=invoicedate;
+         var datearray;
+        if (invoicedate.indexOf('-') > -1)
+        {
+          datearray = invoicedate.split("-");
+        }
+        else
+        {
+         datearray = invoicedate.split("/");
+        }
+        obj.InvoiceDate=datearray[1] + '/' + datearray[0] + '/' + datearray[2];
         obj.BillAmount=billamt;
         obj.SeriesName=series;
         obj.SecretUnlockCode=secretcode;
@@ -36,6 +43,7 @@
         obj.Note=""+window.location.protocol+"//"+window.location.hostname+":"+window.location.port;
         }
         options.data = JSON.stringify(obj);
+        
         options.contentType = "application/json; charset=utf-8";
         options.dataType = "json";
 
@@ -55,5 +63,5 @@
         }
 
 
-</script>
+    </script>
 

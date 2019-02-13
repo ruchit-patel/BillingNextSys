@@ -38,7 +38,7 @@ namespace BillingNextSys.Pages.Message
         public IActionResult OnPostSendMessage([FromBody] Models.Bill obj)
         {
 
-            var mnth = obj.InvoiceDate.Day;
+            var mnth = obj.InvoiceDate.Month;
             var quarter = "";
             if(mnth==4 || mnth==5 || mnth==6)
             {
