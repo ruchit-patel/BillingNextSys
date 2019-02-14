@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace BillingNextSys.Pages.Particulars
 {
-    [Authorize(Roles = "Admin,Accountant")]
+    [Authorize(Roles = "Admin,Accountant,Developer")]
     public class DeleteModel : PageModel
     {
         private readonly BillingNextSys.Models.BillingNextSysContext _context;

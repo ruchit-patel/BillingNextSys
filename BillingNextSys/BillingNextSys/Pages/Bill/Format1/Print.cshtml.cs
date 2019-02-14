@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -9,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BillingNextSys.Pages.Bill.Format1
 {
+    [Authorize]
     public class PrintModel : PageModel
     {
         private readonly BillingNextSys.Models.BillingNextSysContext _context;
