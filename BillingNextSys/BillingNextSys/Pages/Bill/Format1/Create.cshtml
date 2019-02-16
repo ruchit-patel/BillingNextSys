@@ -141,6 +141,7 @@
                                             <strong>Account Type:</strong> &nbsp;<div style="display:inline;" id="atype">@Html.DisplayFor(model => model.Companies.FirstOrDefault().AccountType)</div><br>
                                             <strong>Account Number:</strong> &nbsp;<div style="display:inline;" id="anum">@Html.DisplayFor(model => model.Companies.FirstOrDefault().AccountNumber)</div><br>
                                             <strong>IFSC Code:</strong> &nbsp;<div style="display:inline;" id="ifsc">@Html.DisplayFor(model => model.Companies.FirstOrDefault().IFSCcode)</div><br>
+                                            <strong>You are Requested to Pay within 7 Days of Receipt of Invoice</strong><br>
                                         </address>
                                     </div>
                                     <div class="col-xs-6 text-right">
@@ -155,7 +156,8 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div><hr>
+                        <center><h6>Subject to @Model.Branches.FirstOrDefault().BranchName Jurisdiction</h6></center>
                     </div>
                 </div>
             </div>
@@ -296,7 +298,7 @@
     for (i = 0; i < x.options.length; i++) {
         if(x.options[i].value!= $('#toinfo').val())
         {
-            $('#toinfo').val('');
+            return false;
         }
     }
 
@@ -320,13 +322,14 @@
     function fillpdetails(idval)
     {
      var x = document.getElementById("parti"+idval);
-    var i;
+    @*var i;
     for (i = 0; i < x.options.length; i++) {
         if(x.options[i].value!= $('#particulars'+idval).val())
         {
-            $('#particulars'+idval).val('');
+            alert("I'm here: "+ x.options[i].value +" : "+$('#particulars'+idval).val())
+            return false;
         }
-    }
+    }*@
 
     var particulars=document.getElementById('particulars'+idval);
     if(particulars.value.length>0){

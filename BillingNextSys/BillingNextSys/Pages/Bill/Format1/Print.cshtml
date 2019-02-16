@@ -83,37 +83,37 @@
                                     <!-- foreach ($order->lineItems as $line) or some such thing here -->
 
                                     @{
-                                        var counter = -1;
+                    var counter = -1;
                                     }
 
                                     @foreach (var item in Model.BillDetailss)
-                                    {
-                                        <tr id="row-@counter">
-                                            <td>
-                                                <p id="pp-@counter" >@Html.DisplayFor(modelItem => item.ParticularsName)</p> 
+                {
+                    <tr id="row-@counter">
+                        <td>
+                            <p id="pp-@counter">@Html.DisplayFor(modelItem => item.ParticularsName)</p>
 
-                                            </td>
-                                            <td class="text-center">
-                                                <p id="psac-@counter" >@Html.DisplayFor(modelItem => item.Particulars.SACCode)</p>  
-                                            </td>
-                                            <td class="text-center">
-                                                <p id="ptamount-@counter" >@Html.DisplayFor(modelItem => item.TaxableValue)</p>    
-                                            </td>
-                                            <td class="text-center" id="cgst-@counter">
-                                                @Html.DisplayFor(modelItem => item.CGSTAmount)
-                                            </td>
-                                            <td class="text-center" id="sgst-@counter">
-                                                @Html.DisplayFor(modelItem => item.SGSTAmount)
-                                            </td>
-                                            <td class="text-right count-me" id="pamount-@counter">
-                                                @Html.DisplayFor(modelItem => item.Amount)
-                                            </td>
-                                           
-                                        </tr>
-                                        counter++;
-                                    }
+                        </td>
+                        <td class="text-center">
+                            <p id="psac-@counter">@Html.DisplayFor(modelItem => item.Particulars.SACCode)</p>
+                        </td>
+                        <td class="text-center">
+                            <p id="ptamount-@counter">@Html.DisplayFor(modelItem => item.TaxableValue)</p>
+                        </td>
+                        <td class="text-center" id="cgst-@counter">
+                            @Html.DisplayFor(modelItem => item.CGSTAmount)
+                        </td>
+                        <td class="text-center" id="sgst-@counter">
+                            @Html.DisplayFor(modelItem => item.SGSTAmount)
+                        </td>
+                        <td class="text-right count-me" id="pamount-@counter">
+                            @Html.DisplayFor(modelItem => item.Amount)
+                        </td>
 
-                                   
+                    </tr>
+counter++;
+}
+
+
 
                                     <tr>
                                         <td class="thick-line"></td>
@@ -126,7 +126,7 @@
 
                                 </tbody>
                             </table>
-                           
+
                         </div>
                         <div class="row">
                             <div class="col-xs-12">
@@ -138,6 +138,7 @@
                                             <strong>Account Type:</strong> &nbsp;<div style="display:inline;" id="atype">@Html.DisplayFor(model => model.Bill.Company.AccountType)</div><br>
                                             <strong>Account Number:</strong> &nbsp;<div style="display:inline;" id="anum">@Html.DisplayFor(model => model.Bill.Company.AccountNumber)</div><br>
                                             <strong>IFSC Code:</strong> &nbsp;<div style="display:inline;" id="ifsc">@Html.DisplayFor(model => model.Bill.Company.IFSCcode)</div><br>
+                                            <strong>You are Requested to Pay within 7 Days of Receipt of Invoice</strong><br>
                                         </address>
                                     </div>
                                     <div class="col-xs-6 text-right">
@@ -152,7 +153,8 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div><hr>
+                        <center><h6>Subject to @Model.Bill.Branch.BranchName Jurisdiction</h6></center>
                     </div>
                 </div>
             </div>

@@ -28,12 +28,12 @@ namespace BillingNextSys.Pages.Branch
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (_session.GetInt32("Cid").HasValue)
-            {
-                Branch = await _context.Branch
-             .Include(b => b.Company).Where(b => b.Company.CompanyID == _session.GetInt32("Cid")).ToListAsync();
-                return Page();
-            }
+            //if (_session.GetInt32("Cid").HasValue)
+            //{
+            //    Branch = await _context.Branch
+            // .Include(b => b.Company).Where(b => b.Company.CompanyID == _session.GetInt32("Cid")).ToListAsync();
+            //    return Page();
+            //}
             if (id==null)
             {
                 Branch = await _context.Branch

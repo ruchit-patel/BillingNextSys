@@ -163,6 +163,7 @@
                                             <strong>Account Type:</strong> &nbsp;<div style="display:inline;" id="atype">@Html.DisplayFor(model => model.Bill.Company.AccountType)</div><br>
                                             <strong>Account Number:</strong> &nbsp;<div style="display:inline;" id="anum">@Html.DisplayFor(model => model.Bill.Company.AccountNumber)</div><br>
                                             <strong>IFSC Code:</strong> &nbsp;<div style="display:inline;" id="ifsc">@Html.DisplayFor(model => model.Bill.Company.IFSCcode)</div><br>
+                                            <strong>You are Requested to Pay within 7 Days of Receipt of Invoice</strong><br>
                                         </address>
                                     </div>
                                     <div class="col-xs-6 text-right">
@@ -383,7 +384,8 @@
              var pinfoa=$("#parti-"+btnid.substring(5)).find('option[value="' + obj.ParticularsName + '"]').attr('id');
                  if(pinfoa==null || pinfoa==="undefined")
                 {
-                pinfoa=$('#pid-'+btnid.substring(5)).val();
+                    alert("Particulars not set properly");
+                   return false;
                 }
                  $('#pid-'+btnid.substring(5)).val(pinfoa);
 
@@ -396,7 +398,8 @@
               var dinfoa=$("#debname-"+btnid.substring(5)).find('option[value="' + dnamm + '"]').attr('id');
                  if(dinfoa==null || dinfoa==="undefined")
                 {
-                dinfoa=$('#did-'+btnid.substring(5)).val();
+                     alert("Sub-Debtor not set properly");
+                   return false;
                 }
                  $('#did-'+btnid.substring(5)).val(dinfoa);
 
@@ -597,7 +600,7 @@
     for (i = 0; i < x.options.length; i++) {
         if(x.options[i].value!= $('#particulars-'+idval).val())
         {
-            $('#particulars-'+idval).val('');
+          $('#particulars'+idval).val('');
         }
     }
     var particulars=document.getElementById('particulars-'+idval);
@@ -848,7 +851,10 @@ function convertNumberToWords(amount) {
 
                       var dinputid=$(tr).find('td:eq(0)').find("input").val();
                      obj.DebtorID= $(tr).find('td:eq(0)').find("datalist").find('option[value="' + dinputid + '"]').attr('id');
-
+                if(obj.DebtorID==null || obj.DebtorID=="undefined")
+                {
+                    return;
+                 }
 
 
 

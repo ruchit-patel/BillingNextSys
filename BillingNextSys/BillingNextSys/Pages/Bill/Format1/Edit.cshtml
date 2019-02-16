@@ -167,6 +167,7 @@
                                             <strong>Account Type:</strong> &nbsp;<div style="display:inline;" id="atype">@Html.DisplayFor(model => model.Bill.Company.AccountType)</div><br>
                                             <strong>Account Number:</strong> &nbsp;<div style="display:inline;" id="anum">@Html.DisplayFor(model => model.Bill.Company.AccountNumber)</div><br>
                                             <strong>IFSC Code:</strong> &nbsp;<div style="display:inline;" id="ifsc">@Html.DisplayFor(model => model.Bill.Company.IFSCcode)</div><br>
+                                            <strong>You are Requested to Pay within 7 Days of Receipt of Invoice</strong><br>
                                         </address>
                                     </div>
                                     <div class="col-xs-6 text-right">
@@ -181,7 +182,8 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div><hr>
+                        <center><h6>Subject to @Model.Bill.Branch.BranchName Jurisdiction</h6></center>
                     </div>
                 </div>
             </div>
@@ -349,7 +351,8 @@
              var pinfoa=$("#parti-"+btnid.substring(5)).find('option[value="' + obj.ParticularsName + '"]').attr('id');
                  if(pinfoa==null || pinfoa==="undefined")
                 {
-                pinfoa=$('#pid-'+btnid.substring(5)).val();
+                    alert("Particulars not set properly");
+                   return false;
                 }
                  $('#pid-'+btnid.substring(5)).val(pinfoa);
 

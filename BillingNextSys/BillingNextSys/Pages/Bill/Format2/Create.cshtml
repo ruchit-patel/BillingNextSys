@@ -125,6 +125,7 @@
                                             <strong>Account Type:</strong> &nbsp;<div style="display:inline;" id="atype">@Html.DisplayFor(model => model.Companies.FirstOrDefault().AccountType)</div><br>
                                             <strong>Account Number:</strong> &nbsp;<div style="display:inline;" id="anum">@Html.DisplayFor(model => model.Companies.FirstOrDefault().AccountNumber)</div><br>
                                             <strong>IFSC Code:</strong> &nbsp;<div style="display:inline;" id="ifsc">@Html.DisplayFor(model => model.Companies.FirstOrDefault().IFSCcode)</div><br>
+                                            <strong>You are Requested to Pay within 7 Days of Receipt of Invoice</strong><br>
                                         </address>
                                     </div>
                                     <div class="col-xs-6 text-right">
@@ -250,7 +251,7 @@
         for (i = 0; i < x.options.length; i++) {
             if(x.options[i].value!= $('#toinfo').val())
             {
-                $('#toinfo').val('');
+                return false;
             }
         }
 
@@ -313,13 +314,13 @@
     function fillpdetails(idval)
     {
        var x = document.getElementById("parti"+idval);
-    var i;
+    @*var i;
     for (i = 0; i < x.options.length; i++) {
         if(x.options[i].value!= $('#particulars'+idval).val())
         {
             $('#particulars'+idval).val('');
         }
-    }
+    }*@
 
     var particulars=document.getElementById('particulars'+idval);
     if(particulars.value.length>0){
@@ -519,7 +520,7 @@ function convertNumberToWords(amount) {
         alert("Debtor not selected correctly");
         return false;
     }
-    -1
+
 
      var inputid1=$('#dname-1').val();
     if($('#debname-1').find('option[value="' + inputid1 + '"]').attr('id') == null)
@@ -572,6 +573,11 @@ $('input:hidden[name="__RequestVerificationToken"]').val());
 
     var debid=$(tr).find('td:eq(0)').find("input").val();
     obj.DebtorID= $(tr).find('td:eq(0)').find("datalist").find('option[value="' + debid + '"]').attr('id');
+
+    if(obj.DebtorID==null || obj.DebtorID=="undefined")
+    {
+     return;
+    }
 
     options.data = JSON.stringify(obj);
 
