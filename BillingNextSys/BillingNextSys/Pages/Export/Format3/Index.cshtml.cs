@@ -80,6 +80,7 @@ namespace BillingNextSys.Pages.Export.Format3
             grid.Columns.Add(model => model.InvoiceDate).Titled("Invoice date").Formatted("{0:d}");
             grid.Columns.Add(model => model.BillAmount).Titled("Invoice Amount");
             grid.Columns.Add(model => model.BillDelivered).Titled("Bill Delivered?");
+            grid.Columns.Add(model => model.CompanyID).Titled("Company Id");
 
 
             foreach (IGridColumn column in grid.Columns)

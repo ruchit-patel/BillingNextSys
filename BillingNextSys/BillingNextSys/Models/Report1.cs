@@ -25,5 +25,7 @@ namespace BillingNextSys.Models
         public double SGSTAmount { get; set; }
 
         public double Amount { get; set; }
+
+        public int CompanyID { get; set; }
     }
 }

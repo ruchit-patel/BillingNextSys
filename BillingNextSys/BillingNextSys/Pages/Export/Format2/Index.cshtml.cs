@@ -30,9 +30,8 @@ namespace BillingNextSys.Pages.Export.Format2
 
         public void OnGet()
         {
-
+            ViewData["CompanyID"] = new SelectList(_context.Company, "CompanyID", "CompanyName");
             gridd = CreateExportableGrid();
-
         }
 
         public IActionResult OnPost()
@@ -84,8 +83,8 @@ namespace BillingNextSys.Pages.Export.Format2
            
             foreach (IGridColumn column in grid.Columns)
             {
-                column.Filter.IsEnabled = true;
-                column.Sort.IsEnabled = true;
+                column.Filter.IsEnabled = false;
+                column.Sort.IsEnabled = false;
             }
 
             return grid;
