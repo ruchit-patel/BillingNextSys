@@ -62,7 +62,7 @@
                     <div class="col-xs-6">
                         <address>
                             <strong>Billed To:</strong><br>
-                            <div id="to"> <input id="toinfo" class="form-control" style="width:300px;" list="tosearch" autocomplete="off" onchange="fillvalues($(this).val());" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" onfocusout="filladress()"> <datalist id="tosearch"></datalist></div>
+                            <div id="to"> <input id="toinfo" class="form-control" style="width:300px;" list="tosearch" autocomplete="off"  onpaste="this.oninput();" oninput="fillvalues($(this).val());"  onfocusout="filladress()"> <datalist id="tosearch"></datalist></div>
                             <div><p id="toaddress"></p></div><br>
                             <strong>GSTIN: </strong><div><p id="togstin"></p></div>
                         </address>
@@ -103,7 +103,7 @@
                                     <!-- foreach ($order->lineItems as $line) or some such thing here -->
 
                                     <tr id="row-1" class="">
-                                        <td><input id="particulars-1" style="width:250px;" placeholder="Particulars.." list="parti-1" autocomplete="off" onchange="fillparticulars($(this).val(),-1);" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" onfocusout="fillpdetails(-1)"><datalist id="parti-1"></datalist></td>
+                                        <td><input id="particulars-1" style="width:250px;" placeholder="Particulars.." list="parti-1" autocomplete="off"  onpaste="this.oninput();" oninput="fillparticulars($(this).val(),-1);"  onfocusout="fillpdetails(-1)"><datalist id="parti-1"></datalist></td>
                                         <td class="text-center"><input readonly style="width:65px;" placeholder="SAC Code.." type="number" id="saccode-1" /></td>
                                         <td class="text-center"><input style="width:65px;" type="number" placeholder="Amount.." id="taxableval-1" onchange="calcamount($(this).val(),-1);" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" /></td>
                                         <td class="text-center" id="cgst-1"></td>
@@ -225,6 +225,7 @@
 
     function fillvalues(dname)
     {
+
     var dataList = document.getElementById('tosearch');
 
     var options = {};
@@ -356,6 +357,7 @@
 
 function calcamount(pamount,idval)
     {
+
     var taxableval=document.getElementById('taxableval'+idval);
     if(taxableval.value.length>0){
         taxableval.style.width = ((taxableval.value.length + 3) * 8) + 'px';
@@ -377,9 +379,9 @@ function calcamount(pamount,idval)
     var rowid='row'+counter;
        var newRow = $("<tr id='row"+counter+"'>");
         var cols = "";
-         cols+='<td><input id="particulars' + counter + '" style="width:250px;" placeholder="Particulars.." list="parti' + counter + '" autocomplete="off" onchange="fillparticulars($(this).val(),' + counter + ');" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" onfocusout="fillpdetails(' + counter + ')"><datalist id="parti' + counter + '"></datalist></td>';
+         cols+='<td><input id="particulars' + counter + '" style="width:250px;" placeholder="Particulars.." list="parti' + counter + '" autocomplete="off"  onpaste="this.oninput();" oninput="fillparticulars($(this).val(),' + counter + ');"  onfocusout="fillpdetails(' + counter + ')"><datalist id="parti' + counter + '"></datalist></td>';
           cols+='<td class="text-center"><input style="width:65px;" type="number" placeholder="SAC Code.." id="saccode' + counter + '" readonly /></td>';
-             cols+='<td class="text-center"><input style="width:65px;" type="number" placeholder="Amount.." id="taxableval' + counter + '" onchange="calcamount($(this).val(),' + counter + ');" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" /></td>';
+             cols+='<td class="text-center"><input style="width:65px;" type="number" placeholder="Amount.." id="taxableval' + counter + '"  onpaste="this.oninput();" oninput="calcamount($(this).val(),' + counter + ');"  /></td>';
                 cols+= '<td class="text-center" id="cgst' + counter + '"></td>';
                   cols+='<td class="text-center" id="sgst' + counter + '"></td>';
                     cols+= '<td class="text-right count-me" id="pamount' + counter + '"></td>';

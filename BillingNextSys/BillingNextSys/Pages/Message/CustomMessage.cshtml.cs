@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BillingNextSys.Services;
+using Easy_Http;
+using Easy_Http.Builders;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -36,23 +38,30 @@ namespace BillingNextSys.Pages.Message
         public IActionResult OnPostSendMessage([FromBody] Models.DebtorGroup obj)
         {
         
-            SendSmsAsync("whatsapp:" + obj.DebtorGroupPhoneNumber,obj.DebtorGroupCity);
+            SendSmsAsync( obj.DebtorGroupPhoneNumber.Substring(obj.DebtorGroupPhoneNumber.Length-10),obj.DebtorGroupCity);
                 return new JsonResult("Sent Successfully!");
         }
-        public Task SendSmsAsync(string number, string msg)
+        public async Task SendSmsAsync(string number, string msg)
         {
             // Plug in your SMS service here to send a text message.
             // Your Account SID from twilio.com/console
-            var accountSid = Options.WhatsappAccountIdentification;
-            // Your Auth Token from twilio.com/console
-            var authToken = Options.WhatsappAccountPassword;
+            //var accountSid = Options.WhatsappAccountIdentification;
+            //// Your Auth Token from twilio.com/console
+            //var authToken = Options.WhatsappAccountPassword;
 
-            TwilioClient.Init(accountSid, authToken);
+            //TwilioClient.Init(accountSid, authToken);
 
-            return MessageResource.CreateAsync(
-            to: new PhoneNumber(number),
-            from: new PhoneNumber(Options.WhatsappAccountFrom),
-             body: $"{msg}");
+            //return MessageResource.CreateAsync(
+            //to: new PhoneNumber(number),
+            //from: new PhoneNumber(Options.WhatsappAccountFrom),
+            //body: $"{msg}");
+
+            await new RequestBuilder<string>()
+   .SetHost($"http://api.msg91.com/api/sendhttp.php?route=4&sender={Options.WhatsappAccountFrom}&mobiles={number}&authkey={Options.WhatsappAccountIdentification}&message={msg}&country=91")
+   .SetContentType(ContentType.Application_Json)
+   .SetType(RequestType.Get)
+   .Build()
+   .Execute();
 
         }
     }

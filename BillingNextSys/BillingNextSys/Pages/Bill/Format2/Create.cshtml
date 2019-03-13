@@ -59,7 +59,7 @@
                     <div class="col-xs-6">
                         <address>
                             <strong>Billed To:</strong><br>
-                            <div id="to"> <input id="toinfo" class="form-control" style="width:300px;" list="tosearch" autocomplete="off" onchange="fillvalues($(this).val());" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" onfocusout="filladress()"> <datalist id="tosearch"></datalist></div>
+                            <div id="to"> <input id="toinfo" class="form-control" style="width:300px;" list="tosearch" autocomplete="off"  onpaste="this.oninput();" oninput="fillvalues($(this).val());"  onfocusout="filladress()"> <datalist id="tosearch"></datalist></div>
                             <div><p id="toaddress"></p></div><br>
                         </address>
                     </div>
@@ -98,7 +98,7 @@
 
                                     <tr id="row-1" class="">
                                         <td><input id="dname-1" style="width:250px;" class="form-control" placeholder="Debtor Name.." list="debname-1" autocomplete="off" ><datalist id="debname-1"></datalist></td>
-                                        <td ><input id="particulars-1" class="form-control" style="width:250px;" placeholder="Particulars.." list="parti-1" autocomplete="off" onchange="fillparticulars($(this).val(),-1);" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" onfocusout="fillpdetails(-1)"><datalist id="parti-1"></datalist></td>
+                                        <td ><input id="particulars-1" class="form-control" style="width:250px;" placeholder="Particulars.." list="parti-1" autocomplete="off"  onpaste="this.oninput();" oninput="fillparticulars($(this).val(),-1);" onfocusout="fillpdetails(-1)"><datalist id="parti-1"></datalist></td>
                                         <td class="text-center"><select id="year-1" class="form-control" asp-items="Html.GetEnumSelectList(typeof(YearInfo))"> </select> </td>
                                         <td class="text-center"> <input id="period-1" class="form-control" style="width:120px;" placeholder="E.g. 2018-19 " list="periodlist-1" ><datalist id="periodlist-1"></datalist></td>
                                         <td class="text-right count-me" ><input class="form-control pull-right" style="text-align:right; width:120px; " type="number" id="pamount-1" onchange="calcamount($(this).val(),-1);" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();"/></td>
@@ -361,7 +361,7 @@ function calcamount(pamount,idval)
        var newRow = $("<tr id='row"+counter+"'>");
         var cols = "";
         cols+='<td><input id="dname' + counter + '" style="width:250px;" class="form-control" placeholder="Debtor Name.." list="debname' + counter + '" autocomplete="off" ><datalist id="debname' + counter + '"></datalist></td>';
-         cols+='<td ><input id="particulars' + counter + '" class="form-control" style="width:250px;" placeholder="Particulars.." list="parti' + counter + '" autocomplete="off" onchange="fillparticulars($(this).val(),' + counter + ');" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" onfocusout="fillpdetails(' + counter + ')"><datalist id="parti' + counter + '"></datalist></td>';
+         cols+='<td ><input id="particulars' + counter + '" class="form-control" style="width:250px;" placeholder="Particulars.." list="parti' + counter + '" autocomplete="off"  onpaste="this.oninput();" oninput="fillparticulars($(this).val(),' + counter + ');"  onfocusout="fillpdetails(' + counter + ')"><datalist id="parti' + counter + '"></datalist></td>';
           cols+= '<td class="text-center"><select id="year' + counter + '" class="form-control" > </select></td>';
            cols+='<td class="text-center"> <input id="period' + counter + '" class="form-control" style="width:120px;" placeholder="E.g. 2018-19 " list="periodlist' + counter + '" value='+$('#yearser').val()+'><datalist id="periodlist' + counter + '"></datalist></td>';
             cols+= '<td class="text-right count-me" ><input class="form-control pull-right" style="text-align:right; width:120px; " type="number" id="pamount' + counter + '" onchange="calcamount($(this).val(),' + counter + ');" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();"/></td>';

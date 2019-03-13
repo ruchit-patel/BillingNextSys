@@ -118,7 +118,7 @@
                                     {
                                 <tr id="row-@counter">
                                     <td>
-                                     <p id="pp-@counter" style="display:inline-block;">@Html.DisplayFor(modelItem=>item.ParticularsName)</p>   <input style="display:none;" id="particulars-@counter" style="width:250px;" placeholder="Particulars.." value="@Html.DisplayFor(modelItem => item.ParticularsName)" list="parti-@counter" autocomplete="off" onchange="fillparticulars($(this).val(),@counter);" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" onfocusout="fillpdetails(@counter)"><datalist id="parti-@counter"></datalist>       
+                                     <p id="pp-@counter" style="display:inline-block;">@Html.DisplayFor(modelItem=>item.ParticularsName)</p>   <input style="display:none;" id="particulars-@counter" style="width:250px;" placeholder="Particulars.." value="@Html.DisplayFor(modelItem => item.ParticularsName)" list="parti-@counter" autocomplete="off"  onpaste="this.oninput();" oninput="fillparticulars($(this).val(),@counter);"  onfocusout="fillpdetails(@counter)"><datalist id="parti-@counter"></datalist>       
                                         <input type="hidden" id="pid-@counter" value="@Html.DisplayFor(modelItem=>item.ParticularsID)"/>
                                      </td>
                                     <td class="text-center">
@@ -605,7 +605,7 @@ function calcamount(pamount,idval)
     var rowid='row-'+counter;
        var newRow = $("<tr id='row-"+counter+"'>");
         var cols = "";
-         cols+='<td><input id="particulars-' + counter + '" style="width:250px;" placeholder="Particulars.." list="parti-' + counter + '" autocomplete="off" onchange="fillparticulars($(this).val(),' + counter + ');" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" onfocusout="fillpdetails(' + counter + ')"><datalist id="parti-' + counter + '"></datalist></td>';
+         cols+='<td><input id="particulars-' + counter + '" style="width:250px;" placeholder="Particulars.." list="parti-' + counter + '" autocomplete="off"  onpaste="this.oninput();" oninput="fillparticulars($(this).val(),' + counter + ');"  onfocusout="fillpdetails(' + counter + ')"><datalist id="parti-' + counter + '"></datalist></td>';
           cols+='<td class="text-center"><input style="width:65px;" type="number" placeholder="SAC Code.." id="saccode-' + counter + '" readonly /></td>';
              cols+='<td class="text-center"><input style="width:65px;" type="number" placeholder="Amount.." min="0" id="taxableval-' + counter + '" onchange="calcamount($(this).val(),' + counter + ');" onpaste="this.onchange();" oninput="this.onchange();" onkeyup="this.onchange();" /></td>';
                 cols+= '<td class="text-center" id="cgst-' + counter + '"></td>';

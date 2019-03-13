@@ -46,7 +46,7 @@
                             <span asp-validation-for="DebtorGroup.DebtorGroupMail" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label class="control-label">Whatsapp Number: <u>(Without Country Code)</u></label>
+                            <label class="control-label">Contact Number: <u>(Without Country Code)</u></label>
                             <input asp-for="DebtorGroup.DebtorGroupPhoneNumber" id="dphone" class="form-control" />
                             <span asp-validation-for="DebtorGroup.DebtorGroupPhoneNumber" class="text-danger"></span>
                         </div>
@@ -291,7 +291,7 @@
     obj.DebtorGroupName = $("#dname").val();
     obj.DebtorGroupAddress = $("#daddress").val();
     obj.DebtorGroupMail = $("#dmail").val();
-    obj.DebtorGroupPhoneNumber ="+91"+ $("#dphone").val();
+    obj.DebtorGroupPhoneNumber =$("#dphone").val();
     obj.DebtorGroupCity = $("#dcity").val();
     obj.DebtorGSTIN = $("#dgstin").val();
     obj.DebtorOutstanding = $("#doutstand").val();

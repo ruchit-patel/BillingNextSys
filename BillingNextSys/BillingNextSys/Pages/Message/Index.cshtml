@@ -11,7 +11,7 @@
     <a asp-page="/Dashboard/Index"><i class="fa fa-arrow-left" aria-hidden="true"></i> Dashboard</a>
 
     <script>
-        function sendmessage(billno,debtorid,invoicedate,billamt,series,secretcode)
+        function sendmessage(billno,debtorid,invoicedate,billamt,series,secretcode,compid)
         {
 
                 var options = {};
@@ -34,6 +34,7 @@
         obj.BillAmount=billamt;
         obj.SeriesName=series;
         obj.SecretUnlockCode=secretcode;
+        obj.CompanyID=compid;
         if(window.location.port=="" || window.location.port==null)
          {
             obj.Note=""+window.location.protocol+"//"+window.location.hostname;
@@ -43,7 +44,7 @@
         obj.Note=""+window.location.protocol+"//"+window.location.hostname+":"+window.location.port;
         }
         options.data = JSON.stringify(obj);
-        
+
         options.contentType = "application/json; charset=utf-8";
         options.dataType = "json";
 

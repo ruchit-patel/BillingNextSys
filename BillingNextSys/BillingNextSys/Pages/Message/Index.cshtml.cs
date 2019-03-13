@@ -11,6 +11,10 @@ using Microsoft.Extensions.Options;
 using Twilio;
 using Twilio.Rest.Api.V2010.Account;
 using Twilio.Types;
+using Rest;
+using RestRequest;
+using Easy_Http.Builders;
+using Easy_Http;
 
 namespace BillingNextSys.Pages.Message
 {
@@ -83,8 +87,9 @@ namespace BillingNextSys.Pages.Message
                 format = "Format1";
             }
 
-            
-            SendSmsAsync("whatsapp:" + DebtorGroupInfo.DebtorGroupPhoneNumber,fyear,quarter, obj.BillAmount,format,obj.Note,obj.BillNumber,obj.SecretUnlockCode);
+            string companyname = _context.Company.Where(a => a.CompanyID.Equals(obj.CompanyID)).Select(ab => ab.CompanyName).FirstOrDefault().ToString();
+
+             SendSmsAsync(DebtorGroupInfo.DebtorGroupPhoneNumber.Substring(DebtorGroupInfo.DebtorGroupPhoneNumber.Length-10), fyear, quarter, obj.BillAmount, format, Options.WhatsappAccountPassword, obj.BillNumber, obj.SecretUnlockCode,companyname);
 
             var messagesent = new Models.Bill { BillNumber = obj.BillNumber, MessageSent = true };
             _context.Bill.Attach(messagesent).Property(x => x.MessageSent).IsModified = true;
@@ -95,20 +100,26 @@ namespace BillingNextSys.Pages.Message
 
         }
 
-        public Task SendSmsAsync(string number, string year,string quarter, double billamt, string format, string hostname,string billnum, int secretcode)
+        public async Task SendSmsAsync(string number, string year,string quarter, double billamt, string format, string hostname,string billnum, int secretcode,string compname)
         {
+            await new RequestBuilder<string>()
+    .SetHost($"http://api.msg91.com/api/sendhttp.php?route=4&sender={Options.WhatsappAccountFrom}&mobiles={number}&authkey={Options.WhatsappAccountIdentification}&message=Professional bill for quarter {quarter} of F.Y : {year} is Rs. {billamt} and is due for payment. \n   Kindly make payment. \n Thanks for doing business with us. {compname.Replace("&","And")}. \nFind the bill here: {hostname}/Bill/{format}/Verify?id={billnum}   \n Secret Code to unlock bill is: {secretcode}&country=91")
+    .SetContentType(ContentType.Application_Json)
+    .SetType(RequestType.Get)
+    .Build()
+    .Execute();
             // Plug in your SMS service here to send a text message.
             // Your Account SID from twilio.com/console
-            var accountSid = Options.WhatsappAccountIdentification;
-            // Your Auth Token from twilio.com/console
-            var authToken = Options.WhatsappAccountPassword;
+            //var accountSid = Options.WhatsappAccountIdentification;
+            //// Your Auth Token from twilio.com/console
+            //var authToken = Options.WhatsappAccountPassword;
 
-            TwilioClient.Init(accountSid, authToken);
+            //TwilioClient.Init(accountSid, authToken);
 
-            return MessageResource.CreateAsync(
-            to: new PhoneNumber(number),
-            from: new PhoneNumber(Options.WhatsappAccountFrom),
-             body: $"Professional bill for quarter {quarter} of F.Y : {year} is ₹{billamt} and is due for payment. \n  \n Kindly make payment. \n Thanks for doing business with us. \nFind the bill here: {hostname}/Bill/{format}/Verify?id={billnum}   \n Secret Code to unlock bill is: {secretcode}");
+            //return MessageResource.CreateAsync(
+            //to: new PhoneNumber(number),
+            //from: new PhoneNumber(Options.WhatsappAccountFrom),
+            //body: $"Professional bill for quarter {quarter} of F.Y : {year} is ₹{billamt} and is due for payment. \n  \n Kindly make payment. \n Thanks for doing business with us. \nFind the bill here: {hostname}/Bill/{format}/Verify?id={billnum}   \n Secret Code to unlock bill is: {secretcode}");
 
         }
     }
