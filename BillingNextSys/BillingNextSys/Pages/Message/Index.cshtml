@@ -6,6 +6,7 @@
 <br><br>
 <a asp-page="/Message/CustomMessage">Send Custom Message</a>
 <br><br />
+Quarter: <input type="text"  id="quarterss"/> &nbsp;&nbsp; Year:<input type="text" id="yearss"/>
 @Html.AntiForgeryToken()
 @Html.AjaxGrid(Url.Page("IndexGrid"))
     <a asp-page="/Dashboard/Index"><i class="fa fa-arrow-left" aria-hidden="true"></i> Dashboard</a>
@@ -35,14 +36,17 @@
         obj.SeriesName=series;
         obj.SecretUnlockCode=secretcode;
         obj.CompanyID=compid;
-        if(window.location.port=="" || window.location.port==null)
-         {
-            obj.Note=""+window.location.protocol+"//"+window.location.hostname;
-         }
-        else
+
+        var inp = $("#quarterss").val();
+           if(jQuery.trim(inp).length > 0)
         {
-        obj.Note=""+window.location.protocol+"//"+window.location.hostname+":"+window.location.port;
+        obj.Note="Quarter "+ $("#quarterss").val() + " of F.Y: " + $("#yearss").val();
         }
+        else if(jQuery.trim(inp).length <= 0)
+        {
+          obj.Note="F.Y: "+ $("#yearss").val();
+        }
+
         options.data = JSON.stringify(obj);
 
         options.contentType = "application/json; charset=utf-8";

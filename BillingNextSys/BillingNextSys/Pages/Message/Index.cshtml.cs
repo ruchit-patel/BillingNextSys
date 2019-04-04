@@ -42,37 +42,37 @@ namespace BillingNextSys.Pages.Message
         public IActionResult OnPostSendMessage([FromBody] Models.Bill obj)
         {
 
-            var mnth = obj.InvoiceDate.Month;
-            var quarter = "";
-            if(mnth==4 || mnth==5 || mnth==6)
-            {
-                quarter = "1";
-            }
-            else if(mnth == 7 || mnth == 8 || mnth == 9)
-            {
-                quarter = "2";
-            }
-            else if (mnth == 10 || mnth == 11 || mnth == 12)
-            {
-                quarter = "3";
-            }
-            else
-            {
-                quarter = "4";
-            }
-            if(quarter=="")
-            {
-                return NotFound();
-            }
-             var fyear = "";
-            if(quarter=="4")
-            {
-                fyear ="" +((obj.InvoiceDate.Year)-1)+"-"+(obj.InvoiceDate.Year);
-            }
-            else
-            { 
-                fyear= "" + (obj.InvoiceDate.Year) + "-" + ((obj.InvoiceDate.Year)+1);
-            }
+            //var mnth = obj.InvoiceDate.Month;
+            //var quarter = "";
+            //if(mnth==4 || mnth==5 || mnth==6)
+            //{
+            //    quarter = "1";
+            //}
+            //else if(mnth == 7 || mnth == 8 || mnth == 9)
+            //{
+            //    quarter = "2";
+            //}
+            //else if (mnth == 10 || mnth == 11 || mnth == 12)
+            //{
+            //    quarter = "3";
+            //}
+            //else
+            //{
+            //    quarter = "4";
+            //}
+            //if(quarter=="")
+            //{
+            //    return NotFound();
+            //}
+             var fyear = obj.Note;
+            //if(quarter=="4")
+            //{
+            //    fyear ="" +((obj.InvoiceDate.Year)-1)+"-"+(obj.InvoiceDate.Year);
+            //}
+            //else
+            //{ 
+            //    fyear= "" + (obj.InvoiceDate.Year) + "-" + ((obj.InvoiceDate.Year)+1);
+            //}
 
             var DebtorGroupInfo = _context.DebtorGroup.Where(a => a.DebtorGroupID.Equals(obj.DebtorGroupID)).FirstOrDefault();
 
@@ -89,7 +89,7 @@ namespace BillingNextSys.Pages.Message
 
             string companyname = _context.Company.Where(a => a.CompanyID.Equals(obj.CompanyID)).Select(ab => ab.CompanyName).FirstOrDefault().ToString();
 
-             SendSmsAsync(DebtorGroupInfo.DebtorGroupPhoneNumber.Substring(DebtorGroupInfo.DebtorGroupPhoneNumber.Length-10), fyear, quarter, obj.BillAmount, format, Options.WhatsappAccountPassword, obj.BillNumber, obj.SecretUnlockCode,companyname);
+             SendSmsAsync(DebtorGroupInfo.DebtorGroupPhoneNumber.Substring(DebtorGroupInfo.DebtorGroupPhoneNumber.Length-10), fyear, obj.BillAmount, format, Options.WhatsappAccountPassword, obj.BillNumber, obj.SecretUnlockCode,companyname, DebtorGroupInfo.DebtorOutstanding);
 
             var messagesent = new Models.Bill { BillNumber = obj.BillNumber, MessageSent = true };
             _context.Bill.Attach(messagesent).Property(x => x.MessageSent).IsModified = true;
@@ -97,13 +97,12 @@ namespace BillingNextSys.Pages.Message
 
             return new JsonResult("Sent Successfully!");
 
-
         }
 
-        public async Task SendSmsAsync(string number, string year,string quarter, double billamt, string format, string hostname,string billnum, int secretcode,string compname)
+        public async Task SendSmsAsync(string number, string year, double billamt, string format, string hostname,string billnum, int secretcode,string compname,double debtorout)
         {
             await new RequestBuilder<string>()
-    .SetHost($"http://api.msg91.com/api/sendhttp.php?route=4&sender={Options.WhatsappAccountFrom}&mobiles={number}&authkey={Options.WhatsappAccountIdentification}&message=Professional bill for quarter {quarter} of F.Y : {year} is Rs. {billamt} and is due for payment. \n   Kindly make payment. \n Thanks for doing business with us. {compname.Replace("&","And")}. \nFind the bill here: {hostname}/Bill/{format}/Verify?id={billnum}   \n Secret Code to unlock bill is: {secretcode}&country=91")
+    .SetHost($"http://api.msg91.com/api/sendhttp.php?route=4&sender={Options.WhatsappAccountFrom}&mobiles={number}&authkey={Options.WhatsappAccountIdentification}&message=Professional bill for {year} is Rs. {billamt} and is due for payment. Kindly make payment. \n Thanks for doing business with {compname.Replace("&","And")}. \nFind the bill here: {hostname}/Bill/{format}/Verify?id={billnum}   \n Secret Code to unlock bill is: {secretcode} . Your total amount outstanding is Rs. {debtorout}. &country=91")
     .SetContentType(ContentType.Application_Json)
     .SetType(RequestType.Get)
     .Build()
