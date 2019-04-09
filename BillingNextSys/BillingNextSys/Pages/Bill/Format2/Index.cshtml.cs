@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BillingNextSys.Services;
+using Easy_Http;
+using Easy_Http.Builders;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -67,26 +69,31 @@ namespace BillingNextSys.Pages.Bill.Format2
             var DebtorGPhone = Request.Form["dphone"].ToString();
             var DebtorName = Request.Form["dgname"].ToString();
             var CompanyName = Request.Form["compname"].ToString();
-            SendSmsAsync("whatsapp:" + DebtorGPhone,DebtorName,amount,paymode,receivedate,CompanyName);
+            SendSmsAsync(DebtorGPhone.Substring(DebtorGPhone.Length - 10) ,DebtorName,amount,paymode,receivedate,CompanyName);
 
             return Page();
         }
 
-        public Task SendSmsAsync(string number,string name,string amount, string mode, string recdate, string CompanyName)
+        public async Task SendSmsAsync(string number,string name,string amount, string mode, string recdate, string CompanyName)
         {
             // Plug in your SMS service here to send a text message.
             // Your Account SID from twilio.com/console
-            var accountSid = Options.WhatsappAccountIdentification;
-            // Your Auth Token from twilio.com/console
-            var authToken = Options.WhatsappAccountPassword;
+            //var accountSid = Options.WhatsappAccountIdentification;
+            //// Your Auth Token from twilio.com/console
+            //var authToken = Options.WhatsappAccountPassword;
 
-            TwilioClient.Init(accountSid, authToken);
+            //TwilioClient.Init(accountSid, authToken);
 
-            return MessageResource.CreateAsync(
-            to: new PhoneNumber(number),
-            from: new PhoneNumber(Options.WhatsappAccountFrom),
-             body: $"Dear {name}, Thank you for the payment of ₹{amount} by {mode} towards Receipt on {recdate}. \nThank you for showing interest in {CompanyName}");
-
+            //return MessageResource.CreateAsync(
+            //to: new PhoneNumber(number),
+            //from: new PhoneNumber(Options.WhatsappAccountFrom),
+            var msg= $"Dear {name}, Thank you for the payment of Rs.{amount} by {mode} towards Receipt on {recdate}. \nThank you for showing interest in {CompanyName.Replace("&", "And")}";
+            await new RequestBuilder<string>()
+ .SetHost($"http://api.msg91.com/api/sendhttp.php?route=4&sender={Options.WhatsappAccountFrom}&mobiles={number}&authkey={Options.WhatsappAccountIdentification}&message={msg}&country=91")
+ .SetContentType(ContentType.Application_Json)
+ .SetType(RequestType.Get)
+ .Build()
+ .Execute();
         }
     }
     [Authorize]

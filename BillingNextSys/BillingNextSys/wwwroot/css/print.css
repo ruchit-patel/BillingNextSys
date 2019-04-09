@@ -44,4 +44,9 @@
         }
       }
   
-   
+   .panel{
+       border-color:#000;
+   }
+.panel-heading {
+    border-color: #000;
+}

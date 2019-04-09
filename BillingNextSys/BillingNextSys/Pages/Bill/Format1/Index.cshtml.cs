@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BillingNextSys.Services;
+using Easy_Http;
+using Easy_Http.Builders;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -37,13 +39,13 @@ namespace BillingNextSys.Pages.Bill.Format1
 
         public async Task<IActionResult> OnGetSelectAllAsync(string id)
         {
-            List<Models.BillDetails> data = await _context.BillDetails.Where(ab=> ab.BillNumber.Equals(id)).ToListAsync();
+            List<Models.BillDetails> data = await _context.BillDetails.Where(ab => ab.BillNumber.Equals(id)).ToListAsync();
             return new JsonResult(data);
         }
 
-        public IActionResult OnPostInsertReceived(int dgid,[FromBody] Models.Received obj)
-        { 
-            obj.CompanyID= (int)_session.GetInt32("Cid");
+        public IActionResult OnPostInsertReceived(int dgid, [FromBody] Models.Received obj)
+        {
+            obj.CompanyID = (int)_session.GetInt32("Cid");
             _context.Received.Add(obj);
             _context.SaveChanges();
 
@@ -51,7 +53,7 @@ namespace BillingNextSys.Pages.Bill.Format1
             var amtout = _context.BillDetails.Where(a => a.BillDetailsID.Equals(obj.BillDetailsID)).FirstOrDefault().BillAmountOutstanding;
             // var amtout = _context.DebtorGroup.Where(a => a.DebtorGroupID.Equals(dgid)).FirstOrDefault().DebtorOutstanding;
             var billout = amtout - obj.ReceivedAmount;
-            var billdet = new Models.BillDetails { BillDetailsID = obj.BillDetailsID, BillAmountOutstanding= billout };
+            var billdet = new Models.BillDetails { BillDetailsID = obj.BillDetailsID, BillAmountOutstanding = billout };
             _context.BillDetails.Attach(billdet).Property(x => x.BillAmountOutstanding).IsModified = true;
             _context.SaveChanges();
 
@@ -84,46 +86,51 @@ namespace BillingNextSys.Pages.Bill.Format1
             var DebtorGPhone = Request.Form["dphone"].ToString();
             var DebtorName = Request.Form["dgname"].ToString();
             var CompanyName = Request.Form["compname"].ToString();
-            SendSmsAsync("whatsapp:" + DebtorGPhone, DebtorName, amount, paymode, receivedate, CompanyName);
+            SendSmsAsync(DebtorGPhone.Substring(DebtorGPhone.Length - 10), DebtorName, amount, paymode, receivedate, CompanyName);
 
             return Page();
         }
 
-        public Task SendSmsAsync(string number, string name, string amount, string mode, string recdate, string CompanyName)
+        public async Task SendSmsAsync(string number, string name, string amount, string mode, string recdate, string CompanyName)
         {
             // Plug in your SMS service here to send a text message.
             // Your Account SID from twilio.com/console
-            var accountSid = Options.WhatsappAccountIdentification;
-            // Your Auth Token from twilio.com/console
-            var authToken = Options.WhatsappAccountPassword;
+            //var accountSid = Options.WhatsappAccountIdentification;
+            //// Your Auth Token from twilio.com/console
+            //var authToken = Options.WhatsappAccountPassword;
 
-            TwilioClient.Init(accountSid, authToken);
+            //TwilioClient.Init(accountSid, authToken);
 
-            return MessageResource.CreateAsync(
-            to: new PhoneNumber(number),
-            from: new PhoneNumber(Options.WhatsappAccountFrom),
-             body: $"Dear {name}, Thank you for the payment of ₹{amount} by {mode} towards Receipt on {recdate}. \nThank you for showing interest in {CompanyName}");
+            //return MessageResource.CreateAsync(
+            //to: new PhoneNumber(number),
+            //from: new PhoneNumber(Options.WhatsappAccountFrom),
+            var msg = $"Dear {name}, Thank you for the payment of Rs.{amount} by {mode} towards Receipt on {recdate}. \nThank you for showing interest in {CompanyName.Replace("&", "And")}";
+            await new RequestBuilder<string>()
+ .SetHost($"http://api.msg91.com/api/sendhttp.php?route=4&sender={Options.WhatsappAccountFrom}&mobiles={number}&authkey={Options.WhatsappAccountIdentification}&message={msg}&country=91")
+ .SetContentType(ContentType.Application_Json)
+ .SetType(RequestType.Get)
+ .Build()
+ .Execute();
 
         }
     }
 
 
-
-    [Authorize]
-    public class IndexGridModel : PageModel
-    {
-        private readonly BillingNextSys.Models.BillingNextSysContext _context;
-
-        public IndexGridModel(BillingNextSys.Models.BillingNextSysContext context)
+        [Authorize]
+        public class IndexGridModel : PageModel
         {
-            _context = context;
-        }
-        public IQueryable<Models.Bill> Bills { get; set; }
+            private readonly BillingNextSys.Models.BillingNextSysContext _context;
 
-        public void OnGet()
-        {
-            Bills = _context.Bill.Where(a => a.BillActNum.HasValue).Include(b => b.Company).Include(b => b.DebtorGroup).AsQueryable();
+            public IndexGridModel(BillingNextSys.Models.BillingNextSysContext context)
+            {
+                _context = context;
+            }
+            public IQueryable<Models.Bill> Bills { get; set; }
+
+            public void OnGet()
+            {
+                Bills = _context.Bill.Where(a => a.BillActNum.HasValue).Include(b => b.Company).Include(b => b.DebtorGroup).AsQueryable();
+            }
         }
+
     }
-
-}
