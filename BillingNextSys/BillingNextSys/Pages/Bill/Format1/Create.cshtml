@@ -584,8 +584,13 @@ $('input:hidden[name="__RequestVerificationToken"]').val());
     options.url = "/Bill/Format1/Create?handler=InsertBillDetails";
     options.type = "POST";
 
-    @*var myData = $('#insertform').serializeArray();*@
-    countdebout+=parseFloat($(tr).find('td:eq(5)').text());
+    var detoutstandingamt=parseFloat($(tr).find('td:eq(5)').text());
+
+    if(!isNaN(detoutstandingamt))
+    {
+     countdebout+=detoutstandingamt;
+    }
+
     var obj = {};
     obj.ParticularsName =  $(tr).find('td:eq(0)').find("input").val();
     obj.Amount =  $(tr).find('td:eq(5)').text();
@@ -631,8 +636,7 @@ $('input:hidden[name="__RequestVerificationToken"]').val());
 
 
       savedebout(countdebout,debgid);
-    //redirect
-    window.location.pathname="/Bill/Format1/Index";
+
     };
     options.error = function () {
 
@@ -649,11 +653,12 @@ $('input:hidden[name="__RequestVerificationToken"]').val());
             options.dataType = "json";
 
             options.success = function (data) {
-
-
+              //redirect
+              window.location.pathname="/Bill/Format1/Index";
             };
             options.error = function () {
-            alert("Error Updating Debtor Oustanding Amount");
+            alert("Error Updating Debtor Oustanding Amount. If the problem persist, close the current window and manually update the debtor outstanding amount from ledger.");
+            savedebout(debamt,debgid);
             };
             $.ajax(options);
     }

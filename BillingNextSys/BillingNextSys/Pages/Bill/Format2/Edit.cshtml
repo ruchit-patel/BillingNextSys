@@ -32,7 +32,7 @@
     <form onsubmit="return false;">
         @Html.AntiForgeryToken()
         <div class="row">
-            <div class="jumbotron" style="padding: 5px;">
+            <div class="jumbotron" style="padding: 5px; border:1px solid; border-radius:5px;">
                 <input type="hidden" id="billtoid" asp-for="Bill.DebtorGroupID" />
                 <input type="hidden" id="seriesinfo" asp-for="Bill.SeriesName" />
                 <input type="datetime" id="billdate" asp-for="Bill.BillDate" hidden />
@@ -57,22 +57,22 @@
 
                     </div>
                 </div>
-                <hr />
-                <center><h3>Bill Of Supply</h3></center>
-            </div>
 
+            </div>
+            <center><h3>Professional Invoice</h3></center>
+            <hr />
             <div class="col-xs-12">
                 <div class="row">
                     <div class="col-xs-6">
                         <address>
                             <strong>Billed To:</strong><br>
-                            <div id="to"><h4> @Html.DisplayFor(model=>model.Bill.BilledTo)</h4> </div>
-                            <div><p id="toaddress">@Html.DisplayFor(model=>model.Bill.DebtorGroup.DebtorGroupAddress)</p></div><br>
+                            <div id="to"><h4> @Html.DisplayFor(model => model.Bill.BilledTo)</h4> </div>
+                            <div><p id="toaddress">@Html.DisplayFor(model => model.Bill.DebtorGroup.DebtorGroupAddress)</p></div><br>
                         </address>
                     </div>
                     <div class="col-xs-6 text-right">
                         <address>
-                            <strong>Invoice Number:</strong> <div id="invoicenum">@Html.DisplayFor(model=>model.Bill.BillNumber)</div><br>
+                            <strong>Invoice Number:</strong> <div id="invoicenum">@Html.DisplayFor(model => model.Bill.BillNumber)</div><br>
                             <strong>Invoice Date:</strong> <div id="invoicedate"><input asp-for="Bill.InvoiceDate" id="invcdt" style="width:initial; border-radius:4px; height:35px;" /></div><br>
                         </address>
                     </div>
@@ -830,8 +830,13 @@ function convertNumberToWords(amount) {
 
 
                                 var obj = {};
+                var detoutstandingamt=parseFloat($(tr).find('td:eq(4)').find("input").val());
 
-                countdebout+=parseFloat($(tr).find('td:eq(4)').find("input").val());
+                 if(!isNaN(detoutstandingamt))
+                  {
+                      countdebout+=detoutstandingamt;
+                  }
+
                 obj.ParticularsName =  $(tr).find('td:eq(1)').find("input").val();
                 obj.TaxableValue = $(tr).find('td:eq(4)').find("input").val();
                 obj.Period = $(tr).find('td:eq(3)').find("input").val();
@@ -878,7 +883,7 @@ function convertNumberToWords(amount) {
 
                     });
                 savedebout(countdebout);
-                window.location.pathname="/Bill/Format2/Index";
+
             };
             options.error = function () {
                 alert("Error Occured while updating.");
@@ -895,11 +900,11 @@ function convertNumberToWords(amount) {
             options.dataType = "json";
 
             options.success = function (data) {
-
-
+                    window.location.pathname="/Bill/Format2/Index";
             };
             options.error = function () {
-            alert("Error Updating Debtor Oustanding Amount");
+            alert("Error Updating Debtor Oustanding Amount. If the problem persist, close the current window and manually update the debtor outstanding amount from ledger.");
+             savedebout(debamt);
             };
             $.ajax(options);
     }

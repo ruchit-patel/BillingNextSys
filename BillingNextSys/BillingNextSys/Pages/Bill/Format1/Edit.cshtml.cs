@@ -144,14 +144,22 @@ namespace BillingNextSys.Pages.Bill.Format1
 
         public IActionResult OnGetUpdateDebOut(double debout,int dgid)
         {
-            var DebtorGroupOut = _context.DebtorGroup.Where(a => a.DebtorGroupID.Equals(dgid)).Select(a => a.DebtorOutstanding).FirstOrDefault();
+            try
+            {
 
-            var billout = DebtorGroupOut + debout;
-            var dgout = new Models.DebtorGroup { DebtorGroupID = dgid, DebtorOutstanding = billout };
-            _context.DebtorGroup.Attach(dgout).Property(x => x.DebtorOutstanding).IsModified = true;
-            _context.SaveChanges();
+                var DebtorGroupOut = _context.DebtorGroup.Where(a => a.DebtorGroupID.Equals(dgid)).Select(a => a.DebtorOutstanding).FirstOrDefault();
 
-            return new JsonResult("Information Updated!");
+                var billout = DebtorGroupOut + debout;
+                var dgout = new Models.DebtorGroup { DebtorGroupID = dgid, DebtorOutstanding = billout };
+                _context.DebtorGroup.Attach(dgout).Property(x => x.DebtorOutstanding).IsModified = true;
+                _context.SaveChanges();
+
+                return new JsonResult("Information Updated!");
+            }
+            catch(Exception e)
+            {
+                return NotFound();
+            }
         }
     }
 }

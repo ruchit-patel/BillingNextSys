@@ -35,7 +35,7 @@
     <form onsubmit="return false;">
         @Html.AntiForgeryToken()
         <div class="row">
-            <div class="jumbotron" style="padding: 5px;">
+            <div class="jumbotron" style="padding: 5px; border:1px solid; border-radius:5px;">
 
                 <div class="row">
                     <div class="col-md-3">
@@ -50,16 +50,15 @@
                         </div>
                     </div>
                 </div>
-                <hr />
-                <center><h3>Bill Of Supply</h3></center>
             </div>
-
+            <center><h3>Professional Invoice</h3></center>
+            <hr />
             <div class="col-xs-12">
                 <div class="row">
                     <div class="col-xs-6">
                         <address>
                             <strong>Billed To:</strong><br>
-                            <div id="to"> <input id="toinfo" class="form-control" style="width:300px;" list="tosearch" autocomplete="off"  onpaste="this.oninput();" oninput="fillvalues($(this).val());"  onfocusout="filladress()"> <datalist id="tosearch"></datalist></div>
+                            <div id="to"> <input id="toinfo" class="form-control" style="width:300px;" list="tosearch" autocomplete="off" onpaste="this.oninput();" oninput="fillvalues($(this).val());" onfocusout="filladress()"> <datalist id="tosearch"></datalist></div>
                             <div><p id="toaddress"></p></div><br>
                         </address>
                     </div>
@@ -554,8 +553,12 @@ $('input:hidden[name="__RequestVerificationToken"]').val());
     options.url = "/Bill/Format1/Create?handler=InsertBillDetails";
     options.type = "POST";
 
-    @*var myData = $('#insertform').serializeArray();*@
-     countdebout+=parseFloat($(tr).find('td:eq(4)').find("input").val());
+    var detoutstandingamt=parseFloat($(tr).find('td:eq(4)').find("input").val());
+
+    if(!isNaN(detoutstandingamt))
+    {
+     countdebout+=detoutstandingamt;
+    }
     var obj = {};
     obj.ParticularsName =  $(tr).find('td:eq(1)').find("input").val();
     obj.YearInfo = $(tr).find('td:eq(2)').find("select").val();
@@ -610,8 +613,7 @@ $('input:hidden[name="__RequestVerificationToken"]').val());
     }
 
     savedebout(countdebout,debgid);
-    //redirect
-    window.location.pathname="/Bill/Format2/Index";
+
     };
     options.error = function () {
 
@@ -628,11 +630,13 @@ function savedebout(debamt,debgid)
             options.dataType = "json";
 
             options.success = function (data) {
-
+             //redirect
+          window.location.pathname="/Bill/Format2/Index";
 
             };
             options.error = function () {
-            alert("Error Updating Debtor Oustanding Amount");
+            alert("Error Updating Debtor Oustanding Amount. If the problem persist, close the current window and manually update the debtor outstanding amount from ledger.");
+            savedebout(debamt,debgid);
             };
             $.ajax(options);
     }
