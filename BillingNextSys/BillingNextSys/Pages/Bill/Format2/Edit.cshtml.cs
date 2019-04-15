@@ -135,5 +135,25 @@ namespace BillingNextSys.Pages.Bill.Format2
             return _context.Bill.Any(e => e.BillNumber == id);
         }
 
+        public IActionResult OnGetUpdateBillAmt(string bnum, double billamt)
+        {
+            try
+            {
+                if (Double.IsNaN(billamt))
+                {
+                    return NotFound();
+                }
+                var billamtobj = new Models.Bill { BillNumber = bnum, BillAmount = billamt };
+                _context.Bill.Attach(billamtobj).Property(x => x.BillAmount).IsModified = true;
+                _context.SaveChanges();
+
+                return new JsonResult("Information Updated!");
+            }
+            catch (Exception e)
+            {
+                return NotFound();
+            }
+        }
+
     }
 }

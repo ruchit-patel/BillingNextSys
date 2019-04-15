@@ -203,6 +203,7 @@
 <script>
     var diffcount=0;
     var counter=0;
+    var errcnt=0;
     window.onload = function() {
     document.getElementById("del--1").style.display="none";
      filladress();
@@ -352,6 +353,7 @@
                  if(pinfoa==null || pinfoa==="undefined")
                 {
                     alert("Particulars not set properly");
+                    errcnt=1;
                    return false;
                 }
                  $('#pid-'+btnid.substring(5)).val(pinfoa);
@@ -433,7 +435,7 @@
                  document.getElementById("ptamount-"+btnid.substring(5)).style.display = "inline-block";
                  document.getElementById("taxableval-"+btnid.substring(5)).style.display = "none";
 
-
+                 errcnt=0;
             };
             options.error = function () {
                 alert("Error Occured while updating.");
@@ -742,6 +744,10 @@ function convertNumberToWords(amount) {
 
     function editbill()
     {
+
+   saveopen();
+   if(errcnt==0)
+   {
     var countdebout=0;
 
     var billlid=$('#invoicenum').text();
@@ -791,10 +797,14 @@ function convertNumberToWords(amount) {
 
                                var detoutstandingamt=parseFloat($(tr).find('td:eq(5)').text());
 
-                                if(!isNaN(detoutstandingamt))
+                                      if(isNullOrWhitespace($(tr).find('td:eq(0)').find("input").val()))
+                                          {
+                                            return;
+                                          }
+                                @*if(!isNaN(detoutstandingamt))
                                 {
                                     countdebout+=detoutstandingamt;
-                                }
+                                }*@
                                 var obj = {};
                                 obj.ParticularsName =  $(tr).find('td:eq(0)').find("input").val();
                                 obj.Amount =  $(tr).find('td:eq(5)').text();
@@ -805,6 +815,12 @@ function convertNumberToWords(amount) {
                                var inputid=$(tr).find('td:eq(0)').find("input").val();
 
                                 obj.ParticularsID= $(tr).find('td:eq(0)').find("datalist").find('option[value="' + inputid + '"]').attr('id');
+
+                                     if(!isNaN(detoutstandingamt) || obj.ParticularsID!=null || typeof obj.ParticularsID!=="undefined")
+                                {
+                                 countdebout+=detoutstandingamt;
+                                    alert("In here: pid"+obj.ParticularsID);
+                                }
 
                                 obj.BillNumber=$('#invoicenum').text();
                                 obj.DebtorGroupID=$('#billtoid').val();
@@ -837,11 +853,27 @@ function convertNumberToWords(amount) {
                 alert("Error Occured while updating.");
             };
             $.ajax(options);
+    }
+       else if(errcnt==1)
+       {
 
+          return;
+
+        }
 }
 
     function savedebout(debamt)
     {
+    //here to update the final bill amt
+     var grndtotal=calcprevtotal();
+    var ttamt=grndtotal+debamt;
+    var billamtstr= $('#invoicenum').text();
+     var options1 = {};
+    options1.url = "/Bill/Format2/Edit?bnum="+billamtstr+"&&billamt="+ttamt+"&&handler=UpdateBillAmt";
+    options1.type = "GET";
+    options1.dataType = "json";
+    options1.success = function (data) {
+
          var options = {};
             options.url = "/Bill/Format1/Edit?debout="+debamt+"&&dgid="+$('#billtoid').val()+"&&handler=UpdateDebOut";
             options.type = "GET";
@@ -856,5 +888,72 @@ function convertNumberToWords(amount) {
              savedebout(debamt)
             };
             $.ajax(options);
+      };
+   options1.error = function () {
+    alert("Error updating correct bill amount");
+    };
+    $.ajax(options1);
     }
+
+
+    function saveopen()
+    {
+       var lastcnt=($('#lastcount').val())-1;
+       $('#billdet tr').each(function(row, tr){
+            if(typeof($(tr).find('td:eq(0)').find("input").val())!=="undefined")
+             {
+                    var rowid=$(tr).attr('id').substring(4);
+                    if(rowid<=lastcnt)
+                        {
+                            var rowele = document.getElementById("row-"+rowid);
+                                if (window.getComputedStyle(rowele).display !== "none") {
+                                        var savebtid = document.getElementById("save-"+rowid);
+                                        if (window.getComputedStyle(savebtid).display !== "none")
+                                            {
+                                                savebtid.click();
+                                                return false;
+                                            }
+                                }
+                        }
+             }
+
+        });
+
+    }
+
+
+     function isNullOrWhitespace( input ) {
+  return !input || !input.trim();
+}
+
+
+    function calcprevtotal()
+    {
+
+    var grandTotal = 0;
+    var lastcnt=($('#lastcount').val())-1;
+       $('#billdet tr').each(function(row, tr){
+            if(typeof($(tr).find('td:eq(0)').find("input").val())!=="undefined")
+             {
+                    var rowid=$(tr).attr('id').substring(4);
+                    if(rowid<=lastcnt)
+                        {
+                                 var rowele = document.getElementById("row-"+rowid);
+                                if (window.getComputedStyle(rowele).display !== "none") {
+                                   $(this).find('.count-me').each(function () {
+                                          var combat = $(this).text().replace(/[^0-9.]/g,'');
+                                          if (!isNaN(combat) && combat.length !== 0) {
+                                            grandTotal += parseFloat(combat);
+
+                                          }
+                                        });
+                                }
+                        }
+             }
+
+        });
+    return grandTotal;
+    }
+
+
 </script>

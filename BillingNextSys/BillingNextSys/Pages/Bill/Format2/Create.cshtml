@@ -555,10 +555,16 @@ $('input:hidden[name="__RequestVerificationToken"]').val());
 
     var detoutstandingamt=parseFloat($(tr).find('td:eq(4)').find("input").val());
 
-    if(!isNaN(detoutstandingamt))
+    @*if(!isNaN(detoutstandingamt))
     {
      countdebout+=detoutstandingamt;
+    }*@
+
+    if(isNullOrWhitespace($(tr).find('td:eq(0)').find("input").val()))
+    {
+    return;
     }
+
     var obj = {};
     obj.ParticularsName =  $(tr).find('td:eq(1)').find("input").val();
     obj.YearInfo = $(tr).find('td:eq(2)').find("select").val();
@@ -570,6 +576,13 @@ $('input:hidden[name="__RequestVerificationToken"]').val());
    var inputid=$(tr).find('td:eq(1)').find("input").val();
 
     obj.ParticularsID= $(tr).find('td:eq(1)').find("datalist").find('option[value="' + inputid + '"]').attr('id');
+
+     if(!isNaN(detoutstandingamt) || obj.ParticularsID!=null || typeof obj.ParticularsID!=="undefined")
+    {
+     countdebout+=detoutstandingamt;
+        alert("In here: pid"+obj.ParticularsID);
+    }
+
 
     obj.BillNumber=$('#bnum').val();
     obj.DebtorGroupID=$("#tosearch option[value='" + $('#toinfo').val() + "']").attr('id');
@@ -624,6 +637,14 @@ $('input:hidden[name="__RequestVerificationToken"]').val());
 
 function savedebout(debamt,debgid)
     {
+
+    var billamtstr= $('#bnum').val();
+     var options1 = {};
+    options1.url = "/Bill/Format2/Edit?bnum="+billamtstr+"&&billamt="+debamt+"&&handler=UpdateBillAmt";
+    options1.type = "GET";
+    options1.dataType = "json";
+    options1.success = function (data) {
+
          var options = {};
             options.url = "/Bill/Format1/Edit?debout="+debamt+"&&dgid="+debgid+"&&handler=UpdateDebOut";
             options.type = "GET";
@@ -639,6 +660,13 @@ function savedebout(debamt,debgid)
             savedebout(debamt,debgid);
             };
             $.ajax(options);
+
+    };
+    options1.error = function () {
+    alert("Error updating correct bill amount");
+    };
+    $.ajax(options1);
+
     }
     function yearfill()
     {
@@ -660,4 +688,9 @@ function savedebout(debamt,debgid)
     $('#yearser').val(yearstr);
     $('#period-1').val(yearstr);
     }
+
+
+     function isNullOrWhitespace( input ) {
+  return !input || !input.trim();
+}
 </script>

@@ -146,7 +146,10 @@ namespace BillingNextSys.Pages.Bill.Format1
         {
             try
             {
-
+                if(Double.IsNaN(debout))
+                {
+                    return NotFound();
+                }
                 var DebtorGroupOut = _context.DebtorGroup.Where(a => a.DebtorGroupID.Equals(dgid)).Select(a => a.DebtorOutstanding).FirstOrDefault();
 
                 var billout = DebtorGroupOut + debout;
