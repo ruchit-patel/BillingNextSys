@@ -37,11 +37,14 @@ namespace BillingNextSys.Pages.Message
 
         public IActionResult OnPostSendMessage([FromBody] Models.DebtorGroup obj)
         {
-        
-            SendSmsAsync( obj.DebtorGroupPhoneNumber.Substring(obj.DebtorGroupPhoneNumber.Length-10),obj.DebtorGroupCity);
-                return new JsonResult("Sent Successfully!");
+            string[] msgcnt = new string[3];
+            msgcnt[0] = SendSmsAsync(obj.DebtorGroupPhoneNumber.Substring(obj.DebtorGroupPhoneNumber.Length - 10), obj.DebtorGroupCity);
+            msgcnt[1] = (obj.DebtorGroupPhoneNumber.Substring(obj.DebtorGroupPhoneNumber.Length - 10));
+            msgcnt[2] = obj.DebtorGroupName;
+
+                return new JsonResult(msgcnt);
         }
-        public async Task SendSmsAsync(string number, string msg)
+        public string SendSmsAsync(string number, string msg)
         {
             // Plug in your SMS service here to send a text message.
             // Your Account SID from twilio.com/console
@@ -56,13 +59,13 @@ namespace BillingNextSys.Pages.Message
             //from: new PhoneNumber(Options.WhatsappAccountFrom),
             //body: $"{msg}");
 
-            await new RequestBuilder<string>()
-   .SetHost($"http://api.msg91.com/api/sendhttp.php?route=4&sender={Options.WhatsappAccountFrom}&mobiles={number}&authkey={Options.WhatsappAccountIdentification}&message={msg}&country=91")
+             new RequestBuilder<string>()
+   .SetHost($"http://api.msg91.com/api/sendhttp.php?route=4&sender={Options.WhatsappAccountFrom}&mobiles={number}&authkey={Options.WhatsappAccountIdentification}&message={msg.Replace("&","And")}&country=91")
    .SetContentType(ContentType.Application_Json)
    .SetType(RequestType.Get)
    .Build()
    .Execute();
-
+            return msg;
         }
     }
     [Authorize]

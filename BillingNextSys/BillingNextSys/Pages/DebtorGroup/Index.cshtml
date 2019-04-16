@@ -100,7 +100,7 @@
 
                                 <div class="col-md-7 form-group">
                                     <input type="hidden" id="didorg" />
-                                    <input id="dnames" asp-for="Debtor.DebtorName" placeholder="Debtor Name" class="form-control" />
+                                    <input id="dnames" asp-for="Debtor.DebtorName" placeholder="Debtor Name" class="form-control" required />
                                     <span asp-validation-for="Debtor.DebtorName" class="text-danger"></span>
                                 </div>
                                 <div class="col-md-4 form-group">
@@ -158,7 +158,7 @@
                         <div class="row">
                             <div class="col-md-7 form-group">
                                 <input type="hidden" id="dId" />
-                                <input id="dnamess" asp-for="Debtor.DebtorName" placeholder="Debtor Name" class="form-control" />
+                                <input id="dnamess" asp-for="Debtor.DebtorName" placeholder="Debtor Name" class="form-control" required />
                                 <span asp-validation-for="Debtor.DebtorName" class="text-danger"></span>
                             </div>
                             <div class="col-md-4 form-group">
@@ -201,7 +201,7 @@
                         <div class="form-group">
                             <input type="hidden" id="dIdedit" />
                             <label for="dnamessedit">Name Of Individual Debtor</label>
-                            <input id="dnamessedit" asp-for="Debtor.DebtorName" placeholder="Debtor Name" class="form-control" />
+                            <input id="dnamessedit" asp-for="Debtor.DebtorName" placeholder="Debtor Name" class="form-control" required />
                             <span asp-validation-for="Debtor.DebtorName" class="text-danger"></span>
                         </div>
                         <div class="form-group">
@@ -224,6 +224,34 @@
 </div>
 <br /><br />
 
+      <div class="modal" id="modal_delete" tabindex='-1'>
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                      <h4 class="modal-title">Delete Individual Debtor</h4>
+                  </div>
+
+                  <div id="debtorindividualdelete">
+
+                      <form id="indidetdelete">
+                          @Html.AntiForgeryToken()
+                          <div id="manupulationdoindel" style="padding:5px;">
+                              <input type="hidden" id="delidmodal" />
+                              <h5>Are You Sure you want to delete <div style="display:inline-block; font-size:inherit;" id="indidebnamedel"></div> with outstanding balance of <div style="display:inline-block; font-size:inherit;" id="indideboutstnddel"></div> ? </h5>
+                              <div>
+                                  <button class="btn btn-primary" id="delete" type="button" onclick="deleteactual()">Delete</button>
+                              </div>
+                          </div>
+                      </form>
+                  </div>
+                  <div id="msg3"></div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
+              </div>
+          </div>
+      </div>
 @(Html
                                                                                                                             .Grid(Model.DebtorGroups)
                                                                                                                             .Build(columns =>
@@ -265,6 +293,15 @@
           $("#dnamessedit").val(dname);
           $("#doutstandssedit").val(doutstan);
 });
+
+    $('#add-DebtorG').on('hidden.bs.modal', function () {
+     document.getElementById("dginfo").style.display = "block";
+    document.getElementById("insert").style.display = "inline-block";
+     document.getElementById("showdet").style.display = "none";
+    document.getElementById("debtorindi").style.display = "none";
+    $("#didorg").val("");
+});
+
           });
 </script>
 
@@ -375,7 +412,11 @@ function showdgmodal()
     options.url = "/DebtorGroup/Index?handler=InsertD";
     options.type = "POST";
 
-
+    if(isNullOrWhitespace($("#dnames").val()))
+    {
+        alert("Debtor name is empty!");
+        return;
+    }
 
     var obj = {};
     obj.DebtorName = $("#dnames").val();
@@ -443,7 +484,7 @@ $('input:hidden[name="__RequestVerificationToken"]').val());
     options.dataType = "json";
     options.success = function (data) {
     data.forEach(function (element) {
-    newInput +="<tr><td>"+element.debtorName+"</td><td>"+element.debtorOutstanding+"</td><td><button style='padding: 0;border: none;background: none;' onclick='delindidet("+element.debtorID+")'><img src='/images/delete.png' alt='delete' height='20px' width='20px' /></button>&nbsp;&nbsp;&nbsp;&nbsp;<a href='#modal_edit' data-toggle='modal' data-did='"+element.debtorID+"' data-dname='"+element.debtorName+"' data-doutstan='"+element.debtorOutstanding+"' data-dgid='"+element.debtorGroupID+"' ><img src='/images/edit.svg' alt='Edit Record' height='20px' width='20px' /></a></td></tr>";
+    newInput +="<tr><td>"+element.debtorName+"</td><td>"+element.debtorOutstanding+"</td><td><button style='padding: 0;border: none;background: none;' onclick='delindidet("+element.debtorID+",\""+element.debtorName+"\",\""+element.debtorOutstanding+"\")'><img src='/images/delete.png' alt='delete' height='20px' width='20px' /></button>&nbsp;&nbsp;&nbsp;&nbsp;<a href='#modal_edit' data-toggle='modal' data-did='"+element.debtorID+"' data-dname='"+element.debtorName+"' data-doutstan='"+element.debtorOutstanding+"' data-dgid='"+element.debtorGroupID+"' ><img src='/images/edit.svg' alt='Edit Record' height='20px' width='20px' /></a></td></tr>";
 
            });
     document.getElementById('rowbody').innerHTML = newInput;
@@ -469,7 +510,7 @@ $('input:hidden[name="__RequestVerificationToken"]').val());
     options.success = function (data) {
 
     data.forEach(function (element) {
-    newInput +="<tr><td>"+element.debtorName+"</td><td>"+element.debtorOutstanding+"</td><td><button style='padding: 0;border: none;background: none;' onclick='window.location.href=\"/DebtorGroup/DebtorBreakdown?debid="+element.debtorID+"\"'><i class='fa fa-info-circle fa-2x' aria-hidden='true'></i></button>&nbsp;&nbsp;&nbsp;&nbsp;<button style='padding: 0;border: none;background: none;' onclick='delindidet("+element.debtorID+")'><i class='fa fa-trash fa-2x' aria-hidden='true'></i></button>&nbsp;&nbsp;&nbsp;&nbsp;<a href='#modal_edit' data-toggle='modal' data-did='"+element.debtorID+"' data-dname='"+element.debtorName+"' data-doutstan='"+element.debtorOutstanding+"' data-dgid='"+element.debtorGroupID+"' style='color:black;' ><i class='fa fa-pencil fa-2x' aria-hidden='true'></i></a></td></tr>";
+    newInput +="<tr><td>"+element.debtorName+"</td><td>"+element.debtorOutstanding+"</td><td><button style='padding: 0;border: none;background: none;' onclick='window.location.href=\"/DebtorGroup/DebtorBreakdown?debid="+element.debtorID+"\"'><i class='fa fa-info-circle fa-2x' aria-hidden='true'></i></button>&nbsp;&nbsp;&nbsp;&nbsp;<button style='padding: 0;border: none;background: none;' onclick='delindidet("+element.debtorID+",\""+element.debtorName+"\",\""+element.debtorOutstanding+"\")'><i class='fa fa-trash fa-2x' aria-hidden='true'></i></button>&nbsp;&nbsp;&nbsp;&nbsp;<a href='#modal_edit' data-toggle='modal' data-did='"+element.debtorID+"' data-dname='"+element.debtorName+"' data-doutstan='"+element.debtorOutstanding+"' data-dgid='"+element.debtorGroupID+"' style='color:black;' ><i class='fa fa-pencil fa-2x' aria-hidden='true'></i></a></td></tr>";
 
            });
     document.getElementById('rowbody1').innerHTML = newInput;
@@ -494,7 +535,7 @@ $('input:hidden[name="__RequestVerificationToken"]').val());
     options.dataType = "json";
     options.success = function (data) {
     data.forEach(function (element) {
-    newInput +="<tr><td>"+element.debtorName+"</td><td>"+element.debtorOutstanding+"</td><td><button style='padding: 0;border: none;background: none;' onclick='window.location.href=\"/DebtorGroup/DebtorBreakdown?debid="+element.debtorID+"\"'><i class='fa fa-info-circle fa-2x' aria-hidden='true'></i></button>&nbsp;&nbsp;&nbsp;&nbsp;<button style='padding: 0;border: none;background: none;' onclick='delindidet("+element.debtorID+")'><i class='fa fa-trash fa-2x' aria-hidden='true'></i></button>&nbsp;&nbsp;&nbsp;&nbsp;<a href='#modal_edit' data-toggle='modal' data-did='"+element.debtorID+"' data-dname='"+element.debtorName+"' data-doutstan='"+element.debtorOutstanding+"' data-dgid='"+element.debtorGroupID+"' style='color:black;' ><i class='fa fa-pencil fa-2x' aria-hidden='true'></i></a></td></tr>";
+    newInput +="<tr><td>"+element.debtorName+"</td><td>"+element.debtorOutstanding+"</td><td><button style='padding: 0;border: none;background: none;' onclick='window.location.href=\"/DebtorGroup/DebtorBreakdown?debid="+element.debtorID+"\"'><i class='fa fa-info-circle fa-2x' aria-hidden='true'></i></button>&nbsp;&nbsp;&nbsp;&nbsp;<button style='padding: 0;border: none;background: none;' onclick='delindidet("+element.debtorID+",\""+element.debtorName+"\",\""+element.debtorOutstanding+"\")'><i class='fa fa-trash fa-2x' aria-hidden='true'></i></button>&nbsp;&nbsp;&nbsp;&nbsp;<a href='#modal_edit' data-toggle='modal' data-did='"+element.debtorID+"' data-dname='"+element.debtorName+"' data-doutstan='"+element.debtorOutstanding+"' data-dgid='"+element.debtorGroupID+"' style='color:black;' ><i class='fa fa-pencil fa-2x' aria-hidden='true'></i></a></td></tr>";
 
            });
     document.getElementById('rowbody1').innerHTML = newInput;
@@ -515,8 +556,11 @@ $('input:hidden[name="__RequestVerificationToken"]').val());
     options.url = "/DebtorGroup/Index?handler=InsertD";
     options.type = "POST";
 
-    @*var myData = $('#insertform').serializeArray();*@
-
+    if(isNullOrWhitespace($("#dnamess").val()))
+    {
+        alert("Debtor name is empty!");
+        return;
+    }
     var obj = {};
     obj.DebtorName = $("#dnamess").val();
     obj.DebtorOutstanding = $("#doutstandss").val();
@@ -571,7 +615,16 @@ $('input:hidden[name="__RequestVerificationToken"]').val());
 });
 
 
-function delindidet(id){
+function delindidet(id,dname,doutstnd){
+    $('#modal_delete').modal('show');
+    $("#indidebnamedel").text(dname);
+    $("#indideboutstnddel").text(doutstnd);
+    $("#delidmodal").val(id);
+
+}
+function deleteactual()
+ {
+    var id=$("#delidmodal").val();
     var options = {};
     options.url = "/DebtorGroup/Index?id="+id+"&&handler=DeleteDebtor";
     options.type = "DELETE";
@@ -584,17 +637,23 @@ $('input:hidden[name="__RequestVerificationToken"]').val());
         @*$("#msg").html(msg);*@
           if(msg=='"Deleted Success"')
           {
-          var did=$("#dId").val();
+             $('#modal_delete').modal('hide');
+
+                did= $("#didorg").val();
+            if(isNullOrWhitespace(did))
+            {
+                var did=$("#dId").val();
+            }
             displaycusdetails(did);
             displaydetails(did);
+
           }
     };
     options.error = function () {
         $("#msg").html("Error while making Ajax call!");
     };
     $.ajax(options);
-}
-
+ }
 
 $("#savedalledit").click(function () {
     var options = {};
@@ -603,6 +662,11 @@ $("#savedalledit").click(function () {
     options.url = "/DebtorGroup/Index?id="+id+"&&handler=Update";
     options.type = "PUT";
 
+    if(isNullOrWhitespace($("#dnamessedit").val()))
+    {
+        alert("Debtor name is empty!");
+        return;
+    }
     var obj = {};
     obj.DebtorID = $("#dIdedit").val();
     obj.DebtorName = $("#dnamessedit").val();
@@ -637,4 +701,9 @@ $('input:hidden[name="__RequestVerificationToken"]').val());
     };
     $.ajax(options);
 });
+
+    function isNullOrWhitespace( input ) {
+  return !input || !input.trim();
+}
+
 </script>

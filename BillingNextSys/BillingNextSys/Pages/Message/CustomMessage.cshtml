@@ -5,14 +5,18 @@
 }
 <br>
 <br>
-    <input type="text" id="msg" class="form-control" placeholder="Message Content..." required />
-    <h5>Choose Recipient:</h5>
+<div class="form-group">
+    <label for="comment">Message Content:</label>
+    <textarea class="form-control" rows="5" id="msg" placeholder="Message Content..." required></textarea>
+</div>
+
+<h5>Choose Recipient:</h5>
 
 @Html.AntiForgeryToken()
 @Html.AjaxGrid(Url.Page("DebtorPartial"))
-    <a asp-page="/Message/Index"><i class="fa fa-arrow-left" aria-hidden="true"></i> Messages</a>
-    <script>
-     function sendmessage(debtornum,idval)
+<a asp-page="/Message/Index"><i class="fa fa-arrow-left" aria-hidden="true"></i> Messages</a>
+<script>
+     function sendmessage(debtornum,idval,dname)
         {
 
         if($('#msg').val()==null || $('#msg').val()=="" || $('#msg').val()==" ")
@@ -31,6 +35,7 @@
         var obj = {};
         obj.DebtorGroupPhoneNumber = debtornum;
         obj.DebtorGroupCity =  $('#msg').val();
+        obj.DebtorGroupName = dname;
 
         options.data = JSON.stringify(obj);
         options.contentType = "application/json; charset=utf-8";
@@ -41,6 +46,26 @@
     $('input:hidden[name="__RequestVerificationToken"]').val());
         };
         options.success = function (msg) {
+
+        toastr.options = {
+              "closeButton": true,
+              "debug": false,
+              "newestOnTop": true,
+              "progressBar": true,
+              "positionClass": "toast-top-right",
+              "preventDuplicates": false,
+              "showDuration": "300",
+              "hideDuration": "1000",
+              "timeOut": "5000",
+              "extendedTimeOut": "1000",
+              "showEasing": "swing",
+              "hideEasing": "linear",
+              "showMethod": "fadeIn",
+              "hideMethod": "fadeOut"
+            }
+
+            toastr.info(msg[0],"Message Sent to: "+msg[2]+" on "+msg[1]);
+
         document.getElementById(idval).disabled = true;
 
         };
@@ -52,4 +77,4 @@
 
         }
 
-    </script>
+</script>

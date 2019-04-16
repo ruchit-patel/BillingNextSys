@@ -4,14 +4,16 @@
     ViewData["Title"] = "Message";
 }
 <br><br>
+<a asp-page="/Message/resendMessage">Re-Send Messages</a>
+<br><br>
 <a asp-page="/Message/CustomMessage">Send Custom Message</a>
 <br><br />
-Quarter: <input type="text"  id="quarterss"/> &nbsp;&nbsp; Year:<input type="text" id="yearss"/>
+Quarter: <input type="text" id="quarterss" /> &nbsp;&nbsp; Year:<input type="text" id="yearss" />
 @Html.AntiForgeryToken()
 @Html.AjaxGrid(Url.Page("IndexGrid"))
-    <a asp-page="/Dashboard/Index"><i class="fa fa-arrow-left" aria-hidden="true"></i> Dashboard</a>
+<a asp-page="/Dashboard/Index"><i class="fa fa-arrow-left" aria-hidden="true"></i> Dashboard</a>
 
-    <script>
+<script>
         function sendmessage(billno,debtorid,invoicedate,billamt,series,secretcode,compid)
         {
 
@@ -57,7 +59,29 @@ Quarter: <input type="text"  id="quarterss"/> &nbsp;&nbsp; Year:<input type="tex
     $('input:hidden[name="__RequestVerificationToken"]').val());
         };
         options.success = function (msg) {
+   
+            toastr.options = {
+              "closeButton": true,
+              "debug": false,
+              "newestOnTop": true,
+              "progressBar": true,
+              "positionClass": "toast-top-right",
+              "preventDuplicates": false,
+              "showDuration": "300",
+              "hideDuration": "1000",
+              "timeOut": "5000",
+              "extendedTimeOut": "1000",
+              "showEasing": "swing",
+              "hideEasing": "linear",
+              "showMethod": "fadeIn",
+              "hideMethod": "fadeOut"
+            }
+
+            toastr.info(msg[0],"Message Sent to: "+msg[2]+" on "+msg[1]);
+
+
             new MvcGrid(document.querySelector('.mvc-grid')).reload();
+
         };
         options.error = function () {
 
@@ -68,5 +92,5 @@ Quarter: <input type="text"  id="quarterss"/> &nbsp;&nbsp; Year:<input type="tex
         }
 
 
-    </script>
+</script>
 

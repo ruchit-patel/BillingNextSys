@@ -99,17 +99,30 @@ namespace BillingNextSys.Pages.Bill.Format2
     [Authorize]
     public class IndexGridModel : PageModel
     {
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private ISession _session => _httpContextAccessor.HttpContext.Session;
         private readonly BillingNextSys.Models.BillingNextSysContext _context;
 
-        public IndexGridModel(BillingNextSys.Models.BillingNextSysContext context)
+        public IndexGridModel(BillingNextSys.Models.BillingNextSysContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _httpContextAccessor = httpContextAccessor;
         }
         public IQueryable<Models.Bill> Bills { get; set; }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
-            Bills = _context.Bill.Where(ab => !(ab.BillActNum.HasValue)).Include(b => b.Company).Include(b => b.DebtorGroup).AsQueryable();
+            try
+            {
+                int cid = (int)_session.GetInt32("Cid");
+                int bid = (int)_session.GetInt32("Bid");
+                Bills = _context.Bill.Where(ab => !(ab.BillActNum.HasValue)).Where(a => a.CompanyID.Equals(cid)).Where(a => a.BranchID.Equals(bid)).Include(b => b.Company).Include(b => b.DebtorGroup).AsQueryable();
+                return Page();
+            }
+            catch (InvalidOperationException)
+            {
+                return RedirectToPage("/Index");
+            }
         }
     }
 }

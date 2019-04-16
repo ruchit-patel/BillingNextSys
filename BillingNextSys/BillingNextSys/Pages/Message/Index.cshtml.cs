@@ -89,24 +89,31 @@ namespace BillingNextSys.Pages.Message
 
             string companyname = _context.Company.Where(a => a.CompanyID.Equals(obj.CompanyID)).Select(ab => ab.CompanyName).FirstOrDefault().ToString();
 
-             SendSmsAsync(DebtorGroupInfo.DebtorGroupPhoneNumber.Substring(DebtorGroupInfo.DebtorGroupPhoneNumber.Length-10), fyear, obj.BillAmount, format, Options.WhatsappAccountPassword, obj.BillNumber, obj.SecretUnlockCode,companyname, DebtorGroupInfo.DebtorOutstanding);
+            string[] msgcnt = new string[3];
+            msgcnt[0] = SendSmsAsync(DebtorGroupInfo.DebtorGroupPhoneNumber.Substring(DebtorGroupInfo.DebtorGroupPhoneNumber.Length - 10), fyear, obj.BillAmount, format, Options.WhatsappAccountPassword, obj.BillNumber, obj.SecretUnlockCode, companyname, DebtorGroupInfo.DebtorOutstanding);
+            msgcnt[1] = (DebtorGroupInfo.DebtorGroupPhoneNumber.Substring(DebtorGroupInfo.DebtorGroupPhoneNumber.Length - 10));
+            msgcnt[2] = DebtorGroupInfo.DebtorGroupName;
+
+           // SendSmsAsync(DebtorGroupInfo.DebtorGroupPhoneNumber.Substring(DebtorGroupInfo.DebtorGroupPhoneNumber.Length-10), fyear, obj.BillAmount, format, Options.WhatsappAccountPassword, obj.BillNumber, obj.SecretUnlockCode,companyname, DebtorGroupInfo.DebtorOutstanding);
 
             var messagesent = new Models.Bill { BillNumber = obj.BillNumber, MessageSent = true };
             _context.Bill.Attach(messagesent).Property(x => x.MessageSent).IsModified = true;
             _context.SaveChanges();
 
-            return new JsonResult("Sent Successfully!");
+            return new JsonResult(msgcnt);
 
         }
 
-        public async Task SendSmsAsync(string number, string year, double billamt, string format, string hostname,string billnum, int secretcode,string compname,double debtorout)
+        public string SendSmsAsync(string number, string year, double billamt, string format, string hostname,string billnum, int secretcode,string compname,double debtorout)
         {
-            await new RequestBuilder<string>()
-    .SetHost($"http://api.msg91.com/api/sendhttp.php?route=4&sender={Options.WhatsappAccountFrom}&mobiles={number}&authkey={Options.WhatsappAccountIdentification}&message=Professional bill for {year} is Rs. {billamt} and is due for payment. Kindly make payment. \n Thanks for doing business with {compname.Replace("&","And")}. \nFind the bill here: {hostname}/Bill/{format}/Verify?id={billnum}   \n Secret Code to unlock bill is: {secretcode} . Your total amount outstanding is Rs. {debtorout}. &country=91")
+            var msgcnt = $"Professional bill for {year} is Rs. {billamt} and is due for payment.Kindly make payment. \n Thanks for doing business with {compname.Replace("&", "And")}. \nFind the bill here: {hostname}/Bill/{format}/Verify?id={billnum} \n Secret Code to unlock bill is: {secretcode} . Your total amount outstanding is Rs. {debtorout}.";
+             new RequestBuilder<string>()
+    .SetHost($"http://api.msg91.com/api/sendhttp.php?route=4&sender={Options.WhatsappAccountFrom}&mobiles={number}&authkey={Options.WhatsappAccountIdentification}&message={msgcnt} &country=91")
     .SetContentType(ContentType.Application_Json)
     .SetType(RequestType.Get)
     .Build()
     .Execute();
+            return msgcnt;
             // Plug in your SMS service here to send a text message.
             // Your Account SID from twilio.com/console
             //var accountSid = Options.WhatsappAccountIdentification;
@@ -137,7 +144,7 @@ namespace BillingNextSys.Pages.Message
 
         public void OnGet()
         {
-            Bills = _context.Bill.Where(a => a.MessageSent == false).AsQueryable();
+            Bills = _context.Bill.Include(a=>a.Company).Include(b=>b.Branch).Where(a => a.MessageSent == false).AsQueryable();
         }
     }
 }

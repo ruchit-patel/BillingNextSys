@@ -13,6 +13,12 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
+            @Html.DisplayNameFor(model => model.Bill.BillNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Bill.BillNumber)
+        </dd>
+        <dt>
             @Html.DisplayNameFor(model => model.Bill.BilledTo)
         </dt>
         <dd>
@@ -25,10 +31,10 @@
             @Html.DisplayFor(model => model.Bill.BillAmount)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Bill.Note)
+            Bill Amount Outstanding
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Bill.Note)
+                     ₹ @Model.amtoutstnding
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Bill.InvoiceDate)
@@ -37,34 +43,38 @@
             @Html.DisplayFor(model => model.Bill.InvoiceDate)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Bill.PlaceOfSupply)
+            @Html.DisplayNameFor(model => model.Bill.BillDelivered)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Bill.PlaceOfSupply)
+            @Html.DisplayFor(model => model.Bill.BillDelivered)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Bill.DebtorGroup)
+            @Html.DisplayNameFor(model => model.Bill.SecretUnlockCode)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Bill.SecretUnlockCode)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Bill.DebtorGroup.DebtorGroupAddress)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Bill.DebtorGroup.DebtorGroupAddress)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Bill.Company)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Bill.Company.AccountNumber)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Bill.BillSeries)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Bill.BillSeries.SeriesName)
         </dd>
     </dl>
     
     <form method="post">
         <input type="hidden" asp-for="Bill.BillNumber" />
         <input type="submit" value="Delete" class="btn btn-default" /> |
-        <a asp-page="./Index">Back to List</a>
+
+        @{
+        if (Model.Bill.SeriesName == null)
+        {
+            <a asp-page="/Bill/Format2/Index">Back to List</a>
+    }
+    else
+    {
+        <a asp-page="/Bill/Format1/Index">Back to List</a>
+}
+        }
     </form>
 </div>

@@ -1,0 +1,92 @@
+﻿@page
+@model resendMessageModel
+@{
+    ViewData["Title"] = "Re-send Message";
+}
+
+<div id="toast"></div>
+<br><br>
+<a asp-page="/Message/Index">Send Messages</a>
+<br><br>
+<a asp-page="/Message/CustomMessage">Send Custom Message</a>
+
+<br><br />
+Quarter: <input type="text" id="quarterss" /> &nbsp;&nbsp; Year:<input type="text" id="yearss" />
+@Html.AntiForgeryToken()
+@Html.AjaxGrid(Url.Page("resendMessageGrid"))
+<a asp-page="/Dashboard/Index"><i class="fa fa-arrow-left" aria-hidden="true"></i> Dashboard</a>
+
+<script>
+function sendmessage(billno,debtorid,invoicedate,billamt,series,secretcode,compid)
+        {
+
+                var options = {};
+                options.url = "/Message/resendMessage?handler=SendMessage";
+                options.type = "POST";
+
+        var obj = {};
+        obj.BillNumber = billno;
+        obj.DebtorGroupID =  debtorid;
+         var datearray;
+        if (invoicedate.indexOf('-') > -1)
+        {
+          datearray = invoicedate.split("-");
+        }
+        else
+        {
+         datearray = invoicedate.split("/");
+        }
+        obj.InvoiceDate=datearray[1] + '/' + datearray[0] + '/' + datearray[2];
+        obj.BillAmount=billamt;
+        obj.SeriesName=series;
+        obj.SecretUnlockCode=secretcode;
+        obj.CompanyID=compid;
+
+        var inp = $("#quarterss").val();
+           if(jQuery.trim(inp).length > 0)
+        {
+        obj.Note="Quarter "+ $("#quarterss").val() + " of F.Y: " + $("#yearss").val();
+        }
+        else if(jQuery.trim(inp).length <= 0)
+        {
+          obj.Note="F.Y: "+ $("#yearss").val();
+        }
+
+        options.data = JSON.stringify(obj);
+
+        options.contentType = "application/json; charset=utf-8";
+        options.dataType = "json";
+
+        options.beforeSend = function (xhr) {
+            xhr.setRequestHeader("MY-XSRF-TOKEN",
+    $('input:hidden[name="__RequestVerificationToken"]').val());
+        };
+        options.success = function (msg) {
+            toastr.options = {
+              "closeButton": true,
+              "debug": false,
+              "newestOnTop": true,
+              "progressBar": true,
+              "positionClass": "toast-top-right",
+              "preventDuplicates": false,
+              "showDuration": "300",
+              "hideDuration": "1000",
+              "timeOut": "5000",
+              "extendedTimeOut": "1000",
+              "showEasing": "swing",
+              "hideEasing": "linear",
+              "showMethod": "fadeIn",
+              "hideMethod": "fadeOut"
+            }
+
+            toastr.info(msg[0],"Message Sent to: "+msg[2]+" on "+msg[1]);
+
+        };
+        options.error = function () {
+
+        alert("error");
+        };
+        $.ajax(options);
+
+        }
+</script>
