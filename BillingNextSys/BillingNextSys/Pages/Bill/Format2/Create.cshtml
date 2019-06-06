@@ -577,11 +577,7 @@ $('input:hidden[name="__RequestVerificationToken"]').val());
 
     obj.ParticularsID= $(tr).find('td:eq(1)').find("datalist").find('option[value="' + inputid + '"]').attr('id');
 
-     if(!isNaN(detoutstandingamt) || obj.ParticularsID!=null || typeof obj.ParticularsID!=="undefined")
-    {
-     countdebout+=detoutstandingamt;
-        alert("In here: pid"+obj.ParticularsID);
-    }
+
 
 
     obj.BillNumber=$('#bnum').val();
@@ -592,9 +588,14 @@ $('input:hidden[name="__RequestVerificationToken"]').val());
 
     if(obj.DebtorID==null || obj.DebtorID=="undefined")
     {
+    alert("Sub Debtor not set properly! Skipping the entry in bill");
      return;
     }
+    if(!isNaN(detoutstandingamt) && obj.ParticularsID!=null && typeof obj.ParticularsID!=="undefined"  && !isNaN(obj.ParticularsID))
+    {
+     countdebout+=detoutstandingamt;
 
+    }
     options.data = JSON.stringify(obj);
 
     options.contentType = "application/json; charset=utf-8";

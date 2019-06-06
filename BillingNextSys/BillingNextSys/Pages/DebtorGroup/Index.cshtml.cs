@@ -75,6 +75,12 @@ namespace BillingNextSys.Pages.DebtorGroup
         public IActionResult OnGetSelectAll(int id)
         {
             List<Models.Debtor> data = _context.Debtor.Where(a => a.DebtorGroupID.Equals(id)).ToList();
+           
+            foreach (var item in data)
+            {
+                item.DebtorOutstanding = _context.BillDetails.Where(a => a.DebtorID.Equals(item.DebtorID)).Select(a => a.BillAmountOutstanding).Sum()+item.DebtorOutstanding;
+            }
+           
             return new JsonResult(data);
         }
 

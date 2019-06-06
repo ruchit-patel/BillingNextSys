@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BillingNextSys.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BillingNextSys.Pages.Received
 {
+    [Authorize(Roles = "Admin")]
     public class IndexModel : PageModel
     {
         private readonly BillingNextSys.Models.BillingNextSysContext _context;
@@ -18,13 +20,13 @@ namespace BillingNextSys.Pages.Received
             _context = context;
         }
 
-        public IQueryable<Models.Received> Received { get;set; }
+        public IList<Models.Received> Received { get;set; }
 
         public void OnGet(int companyid)
         {
             Received = _context.Received.Where(a=>a.CompanyID.Equals(companyid))
-                .Include(r => r.BillDetails)
-                .Include(r => r.Company).AsQueryable();
+                .Include(r=>r.BillDetails)
+                .Include(r => r.Company).ToList();
         }
 
     }

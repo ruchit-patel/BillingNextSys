@@ -867,10 +867,11 @@ function convertNumberToWords(amount) {
                 {
                     return;
                  }
-                if(!isNaN(detoutstandingamt) || obj.ParticularsID!=null || typeof obj.ParticularsID!=="undefined")
+                if(!isNaN(detoutstandingamt) && obj.ParticularsID!=null && typeof obj.ParticularsID!=="undefined"  && !isNaN(obj.ParticularsID))
                    {
                           countdebout+=detoutstandingamt;
-                          alert("In here: pid"+obj.ParticularsID);
+                          @*alert("In here: pid"+obj.ParticularsID);*@
+
                    }
 
 

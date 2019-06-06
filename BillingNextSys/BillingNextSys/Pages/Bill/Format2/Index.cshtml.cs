@@ -50,15 +50,16 @@ namespace BillingNextSys.Pages.Bill.Format2
             return new JsonResult(query);
         }
 
-        public IActionResult OnPost()
+       
+        public IActionResult OnPostSendSms([FromBody] Models.Received obj, string debname, string companyname, string debphone)
         {
-            string amount = Request.Form["recamt"].ToString();
-            string chequepayment = Request.Form["chqpaymt"].ToString();
-            string receivedate = Request.Form["redate"].ToString();
-      
+            double amount = obj.ReceivedAmount;
+            bool chequepayment = obj.ChequePaymet;
+            string receivedate = obj.ReceivedDate.ToShortDateString();
+
 
             var paymode = "";
-            if(string.IsNullOrEmpty(chequepayment))
+            if (chequepayment==false)
             {
                 paymode = "Cash";
             }
@@ -66,15 +67,15 @@ namespace BillingNextSys.Pages.Bill.Format2
             {
                 paymode = "Cheque";
             }
-            var DebtorGPhone = Request.Form["dphone"].ToString();
-            var DebtorName = Request.Form["dgname"].ToString();
-            var CompanyName = Request.Form["compname"].ToString();
-            SendSmsAsync(DebtorGPhone.Substring(DebtorGPhone.Length - 10) ,DebtorName,amount,paymode,receivedate,CompanyName);
+            var DebtorGPhone = debphone;
+            var DebtorName = debname;
+            var CompanyName = companyname;
+            SendSmsAsync(DebtorGPhone.Substring(DebtorGPhone.Length - 10), DebtorName, amount, paymode, receivedate, CompanyName);
 
-            return Page();
+            return new JsonResult("SMS Sent to "+DebtorName+" on "+DebtorGPhone);
         }
 
-        public async Task SendSmsAsync(string number,string name,string amount, string mode, string recdate, string CompanyName)
+        public async Task SendSmsAsync(string number,string name,double amount, string mode, string recdate, string CompanyName)
         {
             // Plug in your SMS service here to send a text message.
             // Your Account SID from twilio.com/console

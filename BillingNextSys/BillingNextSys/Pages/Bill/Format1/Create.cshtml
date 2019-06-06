@@ -603,10 +603,11 @@ $('input:hidden[name="__RequestVerificationToken"]').val());
 
     obj.ParticularsID= $(tr).find('td:eq(0)').find("datalist").find('option[value="' + inputid + '"]').attr('id');
 
-     if(!isNaN(detoutstandingamt) || obj.ParticularsID!=null || typeof obj.ParticularsID!=="undefined")
+     if(!isNaN(detoutstandingamt) && obj.ParticularsID!=null && typeof obj.ParticularsID!=="undefined"  && !isNaN(obj.ParticularsID))
     {
      countdebout+=detoutstandingamt;
-        alert("In here: pid"+obj.ParticularsID);
+        @*alert("In here: pid"+obj.ParticularsID);*@
+
     }
 
     obj.BillNumber=($("#Series option[value='" + $('#invoiceseries').val() + "']").val())+"/"+($('#yearser').val())+"/"+($('#bnum').val());

@@ -39,7 +39,7 @@
                         <tbody id="rowbody1"></tbody>
                     </table>
                 </div>
-                <div class="table-responsive"><form method="POST"> <table class="table"><tr class="info"><td>Send Receipt Message:<input type="hidden" name="dgname"><input type="hidden" name="dphone"><input type="hidden" name="compname"></td><td>Amount:<input type="number" name="recamt" required /></td><td>Cheque payment?<input type="checkbox" name="chqpaymt" /></td><td>Received On:<input type="date" name="redate" /></td><td><input type="submit" class="btn btn-default" /></td></tr></table></form></div>
+                <div class="table-responsive"><form method="POST"> <table class="table"><tr class="info"><td>Send Receipt Message:<input type="hidden" name="dgname"><input type="hidden" name="dphone"><input type="hidden" name="compname"></td><td>Amount:<input type="number" name="recamt" required /></td><td>Cheque payment?<input type="checkbox" name="chqpaymt" id="chqpayy" /></td><td>Received On:<input type="date" name="redate" /></td><td><button type="button" onclick="sendsms()" class="btn btn-default">Send Message</button></td></tr></table></form></div>
             </div>
 
             <div id="msg1"></div>
@@ -176,5 +176,80 @@
                 };
                 $.ajax(options);
         }
+    }
+
+
+    function sendsms()
+    {
+
+                var options = {};
+                options.url = "/Bill/Format2/Index?debname="+$('input[name=dgname]').val()+"&&companyname="+ $('input[name=compname]').val()+"&&debphone="+$('input[name=dphone]').val()+"&&handler=SendSms";
+                options.type = "POST";
+
+                var obj = {};
+                obj.ReceivedAmount = $('input[name=recamt]').val();
+                obj.ReceivedDate= $('input[name=redate]').val();
+
+                if(document.getElementById('chqpayy').checked)
+                 {
+                    obj.ChequePaymet=true;
+                 }
+                else
+                {
+                    obj.ChequePaymet=false;
+                }
+                options.data = JSON.stringify(obj);
+                options.contentType = "application/json; charset=utf-8";
+                options.dataType = "json";
+
+                options.beforeSend = function (xhr) {
+                    xhr.setRequestHeader("MY-XSRF-TOKEN",
+            $('input:hidden[name="__RequestVerificationToken"]').val());
+                };
+                options.success = function (msg) {
+
+                toastr.options = {
+              "closeButton": true,
+              "debug": false,
+              "newestOnTop": true,
+              "progressBar": true,
+              "positionClass": "toast-top-right",
+              "preventDuplicates": false,
+              "showDuration": "300",
+              "hideDuration": "1000",
+              "timeOut": "5000",
+              "extendedTimeOut": "1000",
+              "showEasing": "swing",
+              "hideEasing": "linear",
+              "showMethod": "fadeIn",
+              "hideMethod": "fadeOut"
+            }
+
+            toastr.success(msg,"Message Sent");
+
+                };
+                options.error = function () {
+                 toastr.options = {
+              "closeButton": true,
+              "debug": false,
+              "newestOnTop": true,
+              "progressBar": true,
+              "positionClass": "toast-top-right",
+              "preventDuplicates": false,
+              "showDuration": "300",
+              "hideDuration": "1000",
+              "timeOut": "5000",
+              "extendedTimeOut": "1000",
+              "showEasing": "swing",
+              "hideEasing": "linear",
+              "showMethod": "fadeIn",
+              "hideMethod": "fadeOut"
+            }
+
+            toastr.error("Error Occured While Sending SMS","Error Occured While Sending SMS");
+
+                };
+                $.ajax(options);
+                return false;
     }
 </script>

@@ -22,6 +22,9 @@ namespace BillingNextSys.Models
         [Display(Name = "Cheque Number")]
         public string ChequeNumber { get; set; }
 
+        public int DebtorGroupID { get; set; }
+        public DebtorGroup DebtorGroup { get; set; }
+
         public int CompanyID { get; set; }
         public Company Company { get; set; }
 

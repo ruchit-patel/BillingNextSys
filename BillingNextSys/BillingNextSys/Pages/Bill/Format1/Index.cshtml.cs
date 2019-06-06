@@ -46,6 +46,7 @@ namespace BillingNextSys.Pages.Bill.Format1
         public IActionResult OnPostInsertReceived(int dgid, [FromBody] Models.Received obj)
         {
             obj.CompanyID = (int)_session.GetInt32("Cid");
+            obj.DebtorGroupID = _context.BillDetails.Where(a => a.BillDetailsID.Equals(obj.BillDetailsID)).Select(a => a.DebtorGroupID).FirstOrDefault();
             _context.Received.Add(obj);
             _context.SaveChanges();
 
@@ -74,7 +75,7 @@ namespace BillingNextSys.Pages.Bill.Format1
             string receivedate = Request.Form["redate"].ToString();
 
 
-            var paymode = "";
+           var paymode = "";
             if (string.IsNullOrEmpty(chequepayment))
             {
                 paymode = "Cash";

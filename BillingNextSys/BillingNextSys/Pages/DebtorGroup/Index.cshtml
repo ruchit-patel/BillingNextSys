@@ -206,7 +206,7 @@
                         </div>
                         <div class="form-group">
                             <label for="doutstandssedit">Individual Debtor Outstanding</label>
-                            <input id="doutstandssedit" asp-for="Debtor.DebtorOutstanding" placeholder="Debtor Outstanding Amount" class="form-control" />
+                            <input id="doutstandssedit" asp-for="Debtor.DebtorOutstanding" placeholder="Debtor Outstanding Amount" type="number" class="form-control" />
                             <span asp-validation-for="Debtor.DebtorOutstanding" class="text-danger"></span>
                         </div>
                         <div>
@@ -224,53 +224,53 @@
 </div>
 <br /><br />
 
-      <div class="modal" id="modal_delete" tabindex='-1'>
-          <div class="modal-dialog">
-              <div class="modal-content">
-                  <div class="modal-header">
-                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                      <h4 class="modal-title">Delete Individual Debtor</h4>
-                  </div>
+<div class="modal" id="modal_delete" tabindex='-1'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Delete Individual Debtor</h4>
+            </div>
 
-                  <div id="debtorindividualdelete">
+            <div id="debtorindividualdelete">
 
-                      <form id="indidetdelete">
-                          @Html.AntiForgeryToken()
-                          <div id="manupulationdoindel" style="padding:5px;">
-                              <input type="hidden" id="delidmodal" />
-                              <h5>Are You Sure you want to delete <div style="display:inline-block; font-size:inherit;" id="indidebnamedel"></div> with outstanding balance of <div style="display:inline-block; font-size:inherit;" id="indideboutstnddel"></div> ? </h5>
-                              <div>
-                                  <button class="btn btn-primary" id="delete" type="button" onclick="deleteactual()">Delete</button>
-                              </div>
-                          </div>
-                      </form>
-                  </div>
-                  <div id="msg3"></div>
-                  <div class="modal-footer">
-                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                  </div>
-              </div>
-          </div>
-      </div>
+                <form id="indidetdelete">
+                    @Html.AntiForgeryToken()
+                    <div id="manupulationdoindel" style="padding:5px;">
+                        <input type="hidden" id="delidmodal" />
+                        <h5>Are You Sure you want to delete <div style="display:inline-block; font-size:inherit;" id="indidebnamedel"></div> with outstanding balance of <div style="display:inline-block; font-size:inherit;" id="indideboutstnddel"></div> ? </h5>
+                        <div>
+                            <button class="btn btn-primary" id="delete" type="button" onclick="deleteactual()">Delete</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div id="msg3"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 @(Html
-                                                                                                                            .Grid(Model.DebtorGroups)
-                                                                                                                            .Build(columns =>
-                                                                                                                            {
-                                                                                                                                columns.Add(model => model.DebtorGroupName).Titled("Debtor Group Name");
-                                                                                                                                columns.Add(model => model.DebtorOutstanding).Titled("Outstanding Amount");
-                                                                                                                                columns.Add(model => model.DebtorGroupAddress).Titled("Debtor Group Address");
-                                                                                                                                columns.Add(model => model.DebtorGroupPhoneNumber).Titled("Debtor Group Phone Number");
-                                                                                                                                columns.Add(model => model.DebtorGSTIN).Titled("Debtor GSTIN");
-                                                                                                                                columns.Add(model => model.DebtorGroupMail).Titled("Mail Id");
-                                                                                                                                columns.Add(model => model.DebtorGroupCity).Titled("City");
-                                                                                                                                columns.Add(model => model.DebtorGroupID).Titled("Options").Encoded(false).RenderedAs(model => "<a href='/DebtorGroup/OutstandingBreakDown?debid=" + model.DebtorGroupID + "'><i class='fa fa-money fa-2x' aria-hidden='true'></i></a> | <a href='/DebtorGroup/Edit?id=" + model.DebtorGroupID + "'><i class='fa fa-pencil fa-2x' aria-hidden='true'></i></a> | <a href='#my_modal' data-toggle='modal' data-did='" + model.DebtorGroupID + "' data-dname='" + model.DebtorGroupName + "' ><i class='fa fa-info-circle fa-2x' aria-hidden='true'></i></a> | <a href='/DebtorGroup/Delete?id=" + model.DebtorGroupID + "'><i class='fa fa-trash fa-2x' aria-hidden='true'></i></a>");
-                                                                                                                            })
+                                                                                                                                        .Grid(Model.DebtorGroups)
+                                                                                                                                        .Build(columns =>
+                                                                                                                                        {
+                                                                                                                                            columns.Add(model => model.DebtorGroupName).Titled("Debtor Group Name");
+                                                                                                                                            columns.Add(model => model.DebtorOutstanding).Titled("Outstanding Amount");
+                                                                                                                                            columns.Add(model => model.DebtorGroupAddress).Titled("Debtor Group Address");
+                                                                                                                                            columns.Add(model => model.DebtorGroupPhoneNumber).Titled("Debtor Group Phone Number");
+                                                                                                                                            columns.Add(model => model.DebtorGSTIN).Titled("Debtor GSTIN");
+                                                                                                                                            columns.Add(model => model.DebtorGroupMail).Titled("Mail Id");
+                                                                                                                                            columns.Add(model => model.DebtorGroupCity).Titled("City");
+                                                                                                                                            columns.Add(model => model.DebtorGroupID).Titled("Options").Encoded(false).RenderedAs(model => "<a href='/DebtorGroup/OutstandingBreakDown?debid=" + model.DebtorGroupID + "'><i class='fa fa-money fa-2x' aria-hidden='true'></i></a> | <a href='/DebtorGroup/Edit?id=" + model.DebtorGroupID + "'><i class='fa fa-pencil fa-2x' aria-hidden='true'></i></a> | <a href='#my_modal' data-toggle='modal' data-did='" + model.DebtorGroupID + "' data-dname='" + model.DebtorGroupName + "' ><i class='fa fa-info-circle fa-2x' aria-hidden='true'></i></a> | <a href='/DebtorGroup/Delete?id=" + model.DebtorGroupID + "'><i class='fa fa-trash fa-2x' aria-hidden='true'></i></a> | <a href='/DebtorGroup/DebtorOutstandingReceive?debtorgname=" + model.DebtorGroupName + "&&debtorid="+model.DebtorGroupID+"'><i class='fa fa-inr fa-2x' aria-hidden='true'></i></a>");
+                                                                                                                                        })
 
-                                                                                                                            .Empty("No data found")
-                                                                                                                            .Filterable()
-                                                                                                                            .Sortable()
-                                                                                                                            .Pageable()
-                                                                                                                            .Css("table-hover hgtincdet") // Overwrites all classes with the new ones
+                                                                                                                                        .Empty("No data found")
+                                                                                                                                        .Filterable()
+                                                                                                                                        .Sortable()
+                                                                                                                                        .Pageable()
+                                                                                                                                        .Css("table-hover hgtincdet") // Overwrites all classes with the new ones
 
 )
 <a asp-page="/Dashboard/Index"><i class="fa fa-arrow-left" aria-hidden="true"></i> Dashboard</a>
