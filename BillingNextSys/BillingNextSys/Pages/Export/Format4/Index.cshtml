@@ -1,0 +1,11 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Export";
+}
+<h2>Debtor Outstanding Report</h2>
+<a asp-page="/Dashboard/Index"><i class="fa fa-arrow-left" aria-hidden="true"></i> Dashboard</a><br>
+<br>
+<form method="post"><input type="image" src="/images/export.png" alt="Export" width="40px" height="40px" /></form>
+
+@(new HtmlGrid<Models.DebtorGroup>(Html, Model.gridd))

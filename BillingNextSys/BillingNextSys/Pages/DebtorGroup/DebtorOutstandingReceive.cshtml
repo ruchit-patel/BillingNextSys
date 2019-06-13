@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form method="post">
+        <form method="post" id="myform" name="myform">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Received.DebtorGroupID" value="@Model.debtorgid"/>
             <div class="form-group">
@@ -26,17 +26,17 @@
             <div class="form-group">
                 <div class="checkbox">
                     <label>
-                        <input asp-for="Received.ChequePaymet" /> @Html.DisplayNameFor(model => model.Received.ChequePaymet))
+                        <input asp-for="Received.ChequePaymet" onclick="checkboxchk()" checked id="chkbx"/> @Html.DisplayNameFor(model => model.Received.ChequePaymet)
                     </label>
                 </div>
             </div>
             <div class="form-group">
                 <label asp-for="Received.ChequeNumber" class="control-label"></label>
-                <input asp-for="Received.ChequeNumber" class="form-control" />
+                <input asp-for="Received.ChequeNumber"  id="chkpay" class="form-control" />
                 <span asp-validation-for="Received.ChequeNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="button" onclick="onsbchk();"  value="Receive" class="btn btn-default" />
             </div>
         </form>
     </div>
@@ -51,4 +51,48 @@
 }
 <script>
     document.querySelector("#mydate").valueAsDate = new Date();
+
+    function checkboxchk() {
+          var checkBox = document.getElementById("chkbx");
+          var txtbxchk = document.getElementById("chkpay");
+          if (checkBox.checked == true){
+                txtbxchk.disabled = false;
+          } else {
+                txtbxchk.value='';
+                txtbxchk.disabled = true;
+
+          }
+    }
+
+    function onsbchk()
+    {
+          var checkBox = document.getElementById("chkbx");
+          var txtbxchk = document.getElementById("chkpay");
+          if (checkBox.checked == true && txtbxchk.value == ''){
+                 toastr.options = {
+              "closeButton": true,
+              "debug": false,
+              "newestOnTop": true,
+              "progressBar": true,
+              "positionClass": "toast-top-right",
+              "preventDuplicates": false,
+              "showDuration": "300",
+              "hideDuration": "1000",
+              "timeOut": "5000",
+              "extendedTimeOut": "1000",
+              "showEasing": "swing",
+              "hideEasing": "linear",
+              "showMethod": "fadeIn",
+              "hideMethod": "fadeOut"
+            }
+
+            toastr.error("Please fill cheque number in case of cheque payemnt","Error Occured");
+
+                return false;
+
+
+          } else {
+                document.forms['myform'].submit();
+          }
+    }
 </script>

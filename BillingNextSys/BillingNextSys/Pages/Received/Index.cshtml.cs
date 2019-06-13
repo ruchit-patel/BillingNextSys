@@ -26,6 +26,7 @@ namespace BillingNextSys.Pages.Received
         {
             Received = _context.Received.Where(a=>a.CompanyID.Equals(companyid))
                 .Include(r=>r.BillDetails)
+                .Include(r=>r.DebtorGroup)
                 .Include(r => r.Company).ToList();
         }
 

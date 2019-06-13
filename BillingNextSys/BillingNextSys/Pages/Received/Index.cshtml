@@ -10,21 +10,23 @@
 
 <br><br>
 @(Html
-                                                                    .Grid(Model.Received)
-                                                                    .Build(columns =>
-                                                                    {
-                                                                        columns.Add(model => model.BillDetails.BillNumber).Titled("Billed Number");
-                                                                        columns.Add(model => model.BillDetails.ParticularsName).Titled("Bill To");
-                                                                        columns.Add(model => model.ReceivedAmount).Titled("Amount Received");
-                                                                        columns.Add(model => model.ChequePaymet).Titled("Payment Method:").RenderedAs(model => model.ChequePaymet == true ? "Cheque" : "Cash");
-                                                                        columns.Add(model => model.ChequeNumber).Titled("Cheque Number");
-                                                                        columns.Add(model => model.ReceivedDate).Titled("Received Date");
-                                                                    })
-                                                                    .Empty("No data found")
-                                                                    .Filterable()
-                                                                    .Sortable()
-                                                                    .Pageable()
-                                                                    .Css("table-hover hgtinc")
+                                                                                .Grid(Model.Received)
+                                                                                .Build(columns =>
+                                                                                {
+                                                                                    columns.Add(model => model.BillDetails.DebtorGroup.DebtorGroupName).Titled("Billed To");
+                                                                                    columns.Add(model => model.BillDetails.BillNumber).Titled("Bill Number");
+                                                                                    columns.Add(model => model.BillDetails.ParticularsName).Titled("Bill For");
+                                                                                    columns.Add(model => model.ReceivedAmount).Titled("Amount Received");
+                                                                                    columns.Add(model => model.ChequePaymet).Titled("Payment Method").RenderedAs(model => model.ChequePaymet == true ? "Cheque" : "Cash");
+                                                                                    columns.Add(model => model.ChequeNumber).Titled("Cheque Number");
+                                                                                    columns.Add(model => model.ReceivedDate).Titled("Received Date").Formatted("{0:d}");
+                                                                                    columns.Add(model => model.ReceivedID).Titled("Options").Encoded(false).RenderedAs(model => "<a href='/Received/Delete?id=" + model.ReceivedID + "'><i class='fa fa-trash fa-2x' aria-hidden='true'></i></a>");
+                                                                                })
+                                                                                .Empty("No data found")
+                                                                                .Filterable()
+                                                                                .Sortable()
+                                                                                .Pageable()
+                                                                                .Css("table-hover hgtinc")
 )
 <br>
 

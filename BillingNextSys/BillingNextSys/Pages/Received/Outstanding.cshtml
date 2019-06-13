@@ -9,20 +9,21 @@
 
 <br><br>
 @(Html
-                                                                        .Grid(Model.Received)
-                                                                        .Build(columns =>
-                                                                        {
-                                                                            columns.Add(model => model.DebtorGroup.DebtorGroupName).Titled("Debtor Group Name");
-                                                                            columns.Add(model => model.ReceivedAmount).Titled("Amount Received");
-                                                                            columns.Add(model => model.ChequePaymet).Titled("Payment Method:").RenderedAs(model => model.ChequePaymet == true ? "Cheque" : "Cash");
-                                                                            columns.Add(model => model.ChequeNumber).Titled("Cheque Number");
-                                                                            columns.Add(model => model.ReceivedDate).Titled("Received Date");
-                                                                        })
-                                                                        .Empty("No data found")
-                                                                        .Filterable()
-                                                                        .Sortable()
-                                                                        .Pageable()
-                                                                        .Css("table-hover hgtinc")
+                                                                                .Grid(Model.Received)
+                                                                                .Build(columns =>
+                                                                                {
+                                                                                    columns.Add(model => model.DebtorGroup.DebtorGroupName).Titled("Debtor Group Name");
+                                                                                    columns.Add(model => model.ReceivedAmount).Titled("Amount Received");
+                                                                                    columns.Add(model => model.ChequePaymet).Titled("Payment Method").RenderedAs(model => model.ChequePaymet == true ? "Cheque" : "Cash");
+                                                                                    columns.Add(model => model.ChequeNumber).Titled("Cheque Number");
+                                                                                    columns.Add(model => model.ReceivedDate).Titled("Received Date").Formatted("{0:d}");
+                                                                                    columns.Add(model => model.ReceivedID).Titled("Options").Encoded(false).RenderedAs(model => "<a href='/Received/DeleteOut?id=" + model.ReceivedID + "'><i class='fa fa-trash fa-2x' aria-hidden='true'></i></a>");
+                                                                            })
+                                                                                .Empty("No data found")
+                                                                                .Filterable()
+                                                                                .Sortable()
+                                                                                .Pageable()
+                                                                                .Css("table-hover hgtinc")
 )
 <br>
 
