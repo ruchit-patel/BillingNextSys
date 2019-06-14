@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace BillingNextSys.Pages.Received
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,Accountant,Developer")]
     public class IndexModel : PageModel
     {
         private readonly BillingNextSys.Models.BillingNextSysContext _context;

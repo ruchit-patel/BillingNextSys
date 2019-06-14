@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BillingNextSys.Pages.Received
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,Accountant,Developer")]
     public class OutstandingModel : PageModel
     {
         private readonly BillingNextSys.Models.BillingNextSysContext _context;
