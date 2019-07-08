@@ -90,14 +90,14 @@ namespace BillingNextSys.Pages.DebtorGroup
             return new JsonResult(data);
         }
 
-        public IActionResult OnDeleteDeleteDebtor(int id)
+        public async Task<IActionResult> OnDeleteDeleteDebtorAsync(int id)
         {
-            Debtor = _context.Debtor.Find(id);
+            Debtor =await _context.Debtor.FindAsync(id);
 
             if (Debtor != null)
             {
-                _context.Debtor.Remove(Debtor);
-                 _context.SaveChangesAsync();
+                 _context.Debtor.Remove(Debtor);
+                await _context.SaveChangesAsync();
                 return new JsonResult("Deleted Success");
             }
             return new JsonResult("Delete Unsuccess");
