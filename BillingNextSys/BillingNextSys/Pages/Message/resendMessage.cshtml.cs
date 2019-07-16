@@ -62,9 +62,9 @@ namespace BillingNextSys.Pages.Message
 
         public string SendSmsAsync(string number, string year, double billamt, string format, string hostname, string billnum, int secretcode, string compname, double debtorout)
         {
-            var msgcnt = $"Professional bill for {year} is Rs. {billamt} and is due for payment.Kindly make payment. \n Thanks for doing business with {compname.Replace("&", "And")}. \nFind the bill here: {hostname}/Bill/{format}/Verify?id={billnum} \n Secret Code to unlock bill is: {secretcode} . Your total amount outstanding is Rs. {debtorout}.";
+            var msgcnt = $"Professional bill for {year} is Rs. {billamt} and is due for payment.Kindly make payment. \n Thanks for doing business with {compname.Replace("&", "And")}. \nFind the bill here: {hostname}/Bill/{format}/Verify?id={billnum} \n Secret Code to unlock bill is: {secretcode} .";
              new RequestBuilder<string>()
-    .SetHost($"http://api.msg91.com/api/sendhttp.php?route=4&sender={Options.WhatsappAccountFrom}&mobiles={number}&authkey={Options.WhatsappAccountIdentification}&message={msgcnt} &country=91")
+    .SetHost($"http://api.msg91.com/api/sendhttp.php?route=4&sender={Options.WhatsappAccountFrom}&mobiles={number}&authkey={Options.WhatsappAccountIdentification}&message={msgcnt}&country=91")
     .SetContentType(ContentType.Application_Json)
     .SetType(RequestType.Get)
     .Build()
