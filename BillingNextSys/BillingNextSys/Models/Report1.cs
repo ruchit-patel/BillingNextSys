@@ -27,5 +27,7 @@ namespace BillingNextSys.Models
         public double Amount { get; set; }
 
         public int CompanyID { get; set; }
+
+        public string Period { get; set; }
     }
 }
