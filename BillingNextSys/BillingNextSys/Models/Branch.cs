@@ -51,5 +51,7 @@ namespace BillingNextSys.Models
         public ICollection<DebtorGroup> DebtorGroups { get; set; }
 
         public ICollection<Bill> Bills { get; set; }
+
+        public ICollection<AdvancePay> AdvancePays { get; set; }
     }
 }

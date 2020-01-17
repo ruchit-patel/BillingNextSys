@@ -24,13 +24,13 @@
   </ItemGroup>
 
 <ItemGroup>
-  <Folder Include="Models\" />
   <Folder Include="Pages\Company\" />
   <Folder Include="Pages\Branch\" />
   <Folder Include="Pages\DebtorGroup\" />
   <Folder Include="Pages\Debtor\" />
   <Folder Include="Pages\Bill\" />
   <Folder Include="Pages\BillDetails\" />
+  <Folder Include="Pages\AdvancePay\" />
   <Folder Include="Pages\Particulars\" />
   <Folder Include="Pages\Received\" />
   <Folder Include="Pages\BillSeries\" />
@@ -44,5 +44,11 @@
   <Folder Include="Pages\Dashboard\" />
   <Folder Include="Pages\Message\" />
   <Folder Include="Pages\Export\Format4\" />
+</ItemGroup>
+
+<ItemGroup>
+  <Content Update="wwwroot\favicon.ico">
+    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+  </Content>
 </ItemGroup>
 </Project>

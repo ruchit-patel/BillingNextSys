@@ -5,6 +5,7 @@
 }
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/lib/keymaster/keymaster.js"></script>
+<script src="~/Scripts/AjaxTransport/billindexf1.js"></script>
 <h2>Bill Index</h2>
 <p>
     <a asp-page="Create">Create New</a>
@@ -21,7 +22,8 @@
 
             <div id="showdetails" style="padding:5px;">
                 @Html.AntiForgeryToken()
-                <table class="table table-hover"><tr class="success"><td id="billno"></td><td id="billto"></td><td id="billamount"></td><td id="billpaid"></td></></tr></table>
+                <div class="row" id='rowAdvance' ><div class="col-sm-6"></div><div class="col-sm-2"><h4>Total Amount:</h4></div><div class="col-sm-2"><input type="number" id="dist_amt" style="width:100%;" /></div><div class="col-sm-1"><button class="btn btn-default"  onclick="distribute(document.getElementById('dist_amt').value)">Distribute</button></div></div>
+                <table class="table table-hover"><tr class="success"><td id="billno"></td><td id="billto"></td><td id="billamount"></td><td id="billpaid"></td></tr></table>
                 <div class="table-responsive">
                     <table class="table table-hover">
                         <thead>
@@ -37,219 +39,39 @@
                             </tr>
                         </thead>
                         <tbody id="rowbody1"></tbody>
+                        <tbody id="rowAdvanceBody"></tbody>
                     </table>
                 </div>
                 <div class="table-responsive"><form method="POST"> <table class="table"><tr class="info"><td>Send Receipt Message:<input type="hidden" name="dgname"><input type="hidden" name="dphone"><input type="hidden" name="compname"></td><td>Amount:<input type="number" name="recamt" required /></td><td>Cheque payment?<input type="checkbox" name="chqpaymt" id="chqpayy" /></td><td>Received On:<input type="date" name="redate" /></td><td><button type="button" onclick="sendsms()" class="btn btn-default">Send Message</button></td></tr></table></form></div>
             </div>
 
-            <div id="msg1"></div>
-            @*<div class="modal-body">
-                    <p>some content</p>
-                    <input type="text" name="bookId" value="" />
-                </div>*@
+            <div  id="msg1"></div>
+          
             <div class="modal-footer">
                 <button type="button" id="closedet" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
-<script>
-    var dtt;
-    $(document).ready(function() {
-
-     var now = new Date();
-    var month = (now.getMonth() + 1);
-    var day = now.getDate();
-    if (month < 10)
-        month = "0" + month;
-    if (day < 10)
-        day = "0" + day;
-    dtt = now.getFullYear() + '-' + month + '-' + day;
-
-    $('#my_modal').on('show.bs.modal', function(e) {
-           var bId = $(e.relatedTarget).data('bid');
-            var dgid = $(e.relatedTarget).data('dgid');
-             $('input[name=redate]').val(dtt);
-            $('input[name=dphone]').val($(e.relatedTarget).data('debtorpnum'));
-            $('input[name=compname]').val($(e.relatedTarget).data('companyname'));
-            $('input[name=dgname]').val($(e.relatedTarget).data('bto'));
-
-            $('#billno').text("Bill No: "+$(e.relatedTarget).data('bid')).css("fontWeight","bold");
-              $('#billto').text("Billed To: "+$(e.relatedTarget).data('bto')).css("fontWeight","bold");
-             $('#billamount').text("Bill Amount: "+$(e.relatedTarget).data('bamount')).css("fontWeight","bold");
-          displaymoredetails(bId,dgid);
-        });
-   });
-
-    function displaymoredetails(inid,dgid)
-    {
-     var newInput="";
-    var options = {};
-    options.url = "/Bill/Format1/Index?id="+inid +"&&handler=SelectAll";
-    options.type = "GET";
-    options.dataType = "json";
-    console.log(options);
-    options.success = function (data) {
-    data.forEach(function (element) {
-    if(element.billAmountOutstanding==0)
-    {
-
-        newInput +="<tr><td>"+element.particularsName+"</td><td>"+element.amount+"</td><td id='amtout-"+element.billDetailsID+"'>"+element.billAmountOutstanding+"</td></tr>";
-    }
-    else
-    {
-         newInput +="<tr><td>"+element.particularsName+"</td><td>"+element.amount+"</td><td id='amtout-"+element.billDetailsID+"'>"+element.billAmountOutstanding+"</td><td><input type='number'  id='amt-"+element.billDetailsID+"' /></td><td>Cheque Payment? &nbsp;<input type='checkbox' checked id='chkpay-"+element.billDetailsID+"' onclick='chkenable(this.id)' ></td><td><input type='number' id='chknum-"+element.billDetailsID+"' style='width:100px;'/></td><td><input type='date' id='dt-"+element.billDetailsID+"' value='"+dtt+"' style='width:150px;' /></td><td><button onclick='savepaymt("+element.billDetailsID+");' class='btn btn-default' ><img src='/images/save.png' alt='save' height='20px' width='20px' /></button><input type='hidden' id='dgid-"+element.billDetailsID+"' value='"+dgid+"' ></td></tr>";
-    }
-           });
-    document.getElementById('rowbody1').innerHTML = newInput;
-
-    };
-    options.error = function () {
-        $("#msg1").html("Error while making Ajax call!");
-    };
-    $.ajax(options);
-    }
-
-    function chkenable(strid)
-    {
-        if(document.getElementById(strid).checked)
-        {
-            document.getElementById("chknum-"+strid.substr(strid.indexOf('-')+1)).disabled = false;;
-        }
-        else
-        {
-
-            document.getElementById("chknum-"+strid.substr(strid.indexOf('-')+1)).disabled = true;
-        }
-    }
-
-    function savepaymt(stid)
-    {
-        if(document.getElementById('chkpay-'+stid).checked && document.getElementById("chknum-"+stid).value=="")
-         {
-            alert("Please provide cheque number.");
-            return true;
-         }
-        if(parseFloat($("#amt-"+stid).val())>parseFloat($("#amtout-"+stid).text()))
-        {
-            alert("The amout is more than outstanding amount.");
-            $("#amt-"+stid).val('');
-        }
-        else
-        {
-
-                var options = {};
-                options.url = "/Bill/Format1/Index?dgid="+$("#dgid-"+stid).val()+"&&handler=InsertReceived";
-                options.type = "POST";
-
-                var obj = {};
-                obj.ReceivedAmount = $("#amt-"+stid).val();
-                obj.ReceivedDate= $("#dt-"+stid).val();
-
-                if(document.getElementById('chkpay-'+stid).checked)
-                 {
-                    obj.ChequePaymet=true;
-                    obj.ChequeNumber=$("#chknum-"+stid).val();
-                 }
-                else
-                {
-                    obj.ChequePaymet=false;
-                }
-                obj.BillDetailsID = stid;
 
 
-
-                options.data = JSON.stringify(obj);
-                options.contentType = "application/json; charset=utf-8";
-                options.dataType = "json";
-
-                options.beforeSend = function (xhr) {
-                    xhr.setRequestHeader("MY-XSRF-TOKEN",
-            $('input:hidden[name="__RequestVerificationToken"]').val());
-                };
-                options.success = function (msg) {
-                    var bnum=$('#billno').text();
-                   displaymoredetails(bnum.substr(bnum.indexOf(':')+2),$("#dgid-"+stid).val());
-                };
-                options.error = function () {
-                    alert("Error Occured While Executing Transaction.");
-                };
-                $.ajax(options);
-        }
-    }
-
-
-    function sendsms()
-    {
-
-                var options = {};
-                options.url = "/Bill/Format2/Index?debname="+$('input[name=dgname]').val()+"&&companyname="+ $('input[name=compname]').val()+"&&debphone="+$('input[name=dphone]').val()+"&&handler=SendSms";
-                options.type = "POST";
-
-                var obj = {};
-                obj.ReceivedAmount = $('input[name=recamt]').val();
-                obj.ReceivedDate= $('input[name=redate]').val();
-
-                if(document.getElementById('chqpayy').checked)
-                 {
-                    obj.ChequePaymet=true;
-                 }
-                else
-                {
-                    obj.ChequePaymet=false;
-                }
-                options.data = JSON.stringify(obj);
-                options.contentType = "application/json; charset=utf-8";
-                options.dataType = "json";
-
-                options.beforeSend = function (xhr) {
-                    xhr.setRequestHeader("MY-XSRF-TOKEN",
-            $('input:hidden[name="__RequestVerificationToken"]').val());
-                };
-                options.success = function (msg) {
-
-                toastr.options = {
-              "closeButton": true,
-              "debug": false,
-              "newestOnTop": true,
-              "progressBar": true,
-              "positionClass": "toast-top-right",
-              "preventDuplicates": false,
-              "showDuration": "300",
-              "hideDuration": "1000",
-              "timeOut": "5000",
-              "extendedTimeOut": "1000",
-              "showEasing": "swing",
-              "hideEasing": "linear",
-              "showMethod": "fadeIn",
-              "hideMethod": "fadeOut"
-            }
-
-            toastr.success(msg,"Message Sent");
-
-                };
-                options.error = function () {
-                 toastr.options = {
-              "closeButton": true,
-              "debug": false,
-              "newestOnTop": true,
-              "progressBar": true,
-              "positionClass": "toast-top-right",
-              "preventDuplicates": false,
-              "showDuration": "300",
-              "hideDuration": "1000",
-              "timeOut": "5000",
-              "extendedTimeOut": "1000",
-              "showEasing": "swing",
-              "hideEasing": "linear",
-              "showMethod": "fadeIn",
-              "hideMethod": "fadeOut"
-            }
-
-            toastr.error("Error Occured While Sending SMS","Error Occured While Sending SMS");
-
-                };
-                $.ajax(options);
-                return false;
-    }
-</script>
+ <div class="modal fade" id="confirmationModal" tabindex="0">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Confirmation</h4>
+        </div>
+        <div class="modal-body">
+          <p>Add ₹​ <span id="amtid"></span> as advance payment?.</p>
+           <div class="table-responsive"><form method="POST"> <table class="table"><tr class="info"><td><input type="hidden" id="dgnameadv"><input type="hidden" id="compnameadv"></td><td>Cheque payment?<input type="checkbox"  onclick='chkenableadv()' id="chqpayyadv" checked/></td><td>Cheque Number:<input type="number" id="chqnumadv" /></td><td>Received On:<input type="date" id="redateadv" /></td></tr></table></form></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" id="amtyes" onclick="addRowAdv($('#amtid').html())" data-dismiss="modal">Yes</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>

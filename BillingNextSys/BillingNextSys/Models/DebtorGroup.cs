@@ -44,10 +44,10 @@ namespace BillingNextSys.Models
 
         public Branch Branch { get; set; }
 
-         public ICollection<Debtor> Debtors { get; set; }
+        public ICollection<Debtor> Debtors { get; set; }
         public ICollection<Bill> Bills { get; set; }
         public ICollection<Received> Receiveds { get; set; }
         public ICollection<BillDetails> BillDetails { get; set; }
-      
+        public ICollection<AdvancePay> AdvancePays { get; set; }
     }
 }

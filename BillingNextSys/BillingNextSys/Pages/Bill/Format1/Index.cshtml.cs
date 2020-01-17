@@ -107,12 +107,29 @@ namespace BillingNextSys.Pages.Bill.Format1
             //from: new PhoneNumber(Options.WhatsappAccountFrom),
             var msg = $"Dear {name}, Thank you for the payment of Rs.{amount} by {mode} towards Receipt on {recdate}. \nThank you for showing interest in {CompanyName.Replace("&", "And")}";
             await new RequestBuilder<string>()
- .SetHost($"http://api.msg91.com/api/sendhttp.php?route=4&sender={Options.WhatsappAccountFrom}&mobiles={number}&authkey={Options.WhatsappAccountIdentification}&message={msg}&country=91")
- .SetContentType(ContentType.Application_Json)
- .SetType(RequestType.Get)
- .Build()
- .Execute();
+            .SetHost($"http://api.msg91.com/api/sendhttp.php?route=4&sender={Options.WhatsappAccountFrom}&mobiles={number}&authkey={Options.WhatsappAccountIdentification}&message={msg}&country=91")
+            .SetContentType(ContentType.Application_Json)
+            .SetType(RequestType.Get)
+            .Build()
+            .Execute();
 
+        }
+
+        public IActionResult OnPostAmtAdvance( [FromBody] Models.AdvancePay obj)
+        {
+            try
+            {
+                obj.CompanyID= (int)_session.GetInt32("Cid");
+                obj.BranchID = (int)_session.GetInt32("Bid");
+                _context.AdvancePay.Add(obj);
+                _context.SaveChanges();
+                return new JsonResult(1);
+            }
+            catch(Exception e)
+            {
+                return new JsonResult(0);
+            }
+            
         }
     }
 
