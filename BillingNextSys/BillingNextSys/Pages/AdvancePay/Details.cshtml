@@ -1,0 +1,61 @@
+﻿@page
+@model BillingNextSys.Pages.AdvancePay.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>AdvancePay</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.AdvancePay.AdvanceAmount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AdvancePay.AdvanceAmount)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AdvancePay.ChequePaymet)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AdvancePay.ChequePaymet)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AdvancePay.ChequeNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AdvancePay.ChequeNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AdvancePay.ReceivedDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AdvancePay.ReceivedDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AdvancePay.DebtorGroup)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AdvancePay.DebtorGroup.DebtorGroupName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AdvancePay.Company)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AdvancePay.Company.CompanyName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AdvancePay.Branch)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AdvancePay.Branch.BranchName)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.AdvancePay.AdvancePayID">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>

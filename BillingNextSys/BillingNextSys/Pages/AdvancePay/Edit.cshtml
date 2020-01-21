@@ -1,0 +1,67 @@
+﻿@page
+@model BillingNextSys.Pages.AdvancePay.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Edit</h2>
+
+<h4>AdvancePay</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="AdvancePay.AdvancePayID" />
+            <div class="form-group">
+                <label asp-for="AdvancePay.AdvanceAmount" class="control-label"></label>
+                <input asp-for="AdvancePay.AdvanceAmount" class="form-control" />
+                <span asp-validation-for="AdvancePay.AdvanceAmount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="AdvancePay.ChequePaymet" /> @Html.DisplayNameFor(model => model.AdvancePay.ChequePaymet)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="AdvancePay.ChequeNumber" class="control-label"></label>
+                <input asp-for="AdvancePay.ChequeNumber" class="form-control" />
+                <span asp-validation-for="AdvancePay.ChequeNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AdvancePay.ReceivedDate" class="control-label"></label>
+                <input asp-for="AdvancePay.ReceivedDate" class="form-control" />
+                <span asp-validation-for="AdvancePay.ReceivedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AdvancePay.DebtorGroupID" class="control-label"></label>
+                <select asp-for="AdvancePay.DebtorGroupID" class="form-control" asp-items="ViewBag.DebtorGroupId"></select>
+                <span asp-validation-for="AdvancePay.DebtorGroupID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AdvancePay.CompanyID" class="control-label"></label>
+                <select asp-for="AdvancePay.CompanyID" class="form-control" asp-items="ViewBag.CompanyId"></select>
+                <span asp-validation-for="AdvancePay.CompanyID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AdvancePay.BranchID" class="control-label"></label>
+                <select asp-for="AdvancePay.BranchID" class="form-control" asp-items="ViewBag.BranchID"></select>
+                <span asp-validation-for="AdvancePay.BranchID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

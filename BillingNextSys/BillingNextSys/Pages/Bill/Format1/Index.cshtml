@@ -12,7 +12,7 @@
 </p>
 @Html.AjaxGrid(Url.Page("IndexGrid"))
 <a asp-page="/Dashboard/Index"><i class="fa fa-arrow-left" aria-hidden="true"></i> Dashboard</a>
-<div class="modal" id="my_modal" tabindex='-1'>
+<div class="modal fade" id="my_modal" tabindex='-1' data-modal-index="1" data-focus-on="input:first">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -22,7 +22,7 @@
 
             <div id="showdetails" style="padding:5px;">
                 @Html.AntiForgeryToken()
-                <div class="row" id='rowAdvance' ><div class="col-sm-6"></div><div class="col-sm-2"><h4>Total Amount:</h4></div><div class="col-sm-2"><input type="number" id="dist_amt" style="width:100%;" /></div><div class="col-sm-1"><button class="btn btn-default"  onclick="distribute(document.getElementById('dist_amt').value)">Distribute</button></div></div>
+                <div class="row" id='rowAdvance'><div class="col-sm-6"></div><div class="col-sm-2"><h4>Total Amount:</h4></div><div class="col-sm-2"><input type="number" id="dist_amt" style="width:100%;" /></div><div class="col-sm-1"><button class="btn btn-default" onclick="distribute(document.getElementById('dist_amt').value)">Distribute</button></div></div>
                 <table class="table table-hover"><tr class="success"><td id="billno"></td><td id="billto"></td><td id="billamount"></td><td id="billpaid"></td></tr></table>
                 <div class="table-responsive">
                     <table class="table table-hover">
@@ -45,8 +45,8 @@
                 <div class="table-responsive"><form method="POST"> <table class="table"><tr class="info"><td>Send Receipt Message:<input type="hidden" name="dgname"><input type="hidden" name="dphone"><input type="hidden" name="compname"></td><td>Amount:<input type="number" name="recamt" required /></td><td>Cheque payment?<input type="checkbox" name="chqpaymt" id="chqpayy" /></td><td>Received On:<input type="date" name="redate" /></td><td><button type="button" onclick="sendsms()" class="btn btn-default">Send Message</button></td></tr></table></form></div>
             </div>
 
-            <div  id="msg1"></div>
-          
+            <div id="msg1"></div>
+
             <div class="modal-footer">
                 <button type="button" id="closedet" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
@@ -55,23 +55,39 @@
 </div>
 
 
- <div class="modal fade" id="confirmationModal" tabindex="0">
+<div class="modal fade" id="confirmationModal" tabindex="-1" data-modal-index="2" data-focus-on="input:first">
     <div class="modal-dialog">
-    
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Confirmation</h4>
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Confirmation</h4>
+            </div>
+            <div class="modal-body">
+                <p>Add ₹​ <span id="amtid"></span> as advance payment?.</p>
+                <div class="table-responsive"><form method="POST"> <table class="table"><tr class="info"><td><input type="hidden" id="dgnameadv"><input type="hidden" id="compnameadv"></td><td>Cheque payment?<input type="checkbox" onclick='chkenableadv()' id="chqpayyadv" checked /></td><td>Cheque Number:<input type="number" id="chqnumadv" /></td><td>Received On:<input type="date" id="redateadv" /></td></tr></table></form></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="amtyes" onclick="addRowAdv($('#amtid').html())" data-dismiss="modal">Yes</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
         </div>
-        <div class="modal-body">
-          <p>Add ₹​ <span id="amtid"></span> as advance payment?.</p>
-           <div class="table-responsive"><form method="POST"> <table class="table"><tr class="info"><td><input type="hidden" id="dgnameadv"><input type="hidden" id="compnameadv"></td><td>Cheque payment?<input type="checkbox"  onclick='chkenableadv()' id="chqpayyadv" checked/></td><td>Cheque Number:<input type="number" id="chqnumadv" /></td><td>Received On:<input type="date" id="redateadv" /></td></tr></table></form></div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-success" id="amtyes" onclick="addRowAdv($('#amtid').html())" data-dismiss="modal">Yes</button>
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
-      </div>
     </div>
-  </div>
+</div>
+
+
+<div id="wait" class="modal fade" tabindex="-1" data-modal-index="3" data-focus-on="input:first" >
+    <div class="modal-dialog modal-sm loader" >
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-6"></div>
+                <div class="col-md-6">
+                    <center><img src='~/images/ajax-loader.gif' width="100%" height="100%" /></center>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

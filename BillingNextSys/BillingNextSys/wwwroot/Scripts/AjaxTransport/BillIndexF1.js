@@ -1,5 +1,7 @@
 ﻿var dtt;
 var dgid;
+
+
 $(document).ready(function () {
 
     var now = new Date();
@@ -13,7 +15,22 @@ $(document).ready(function () {
 
     $('#redateadv').val(dtt);
 
+     function alignModal(){
+         var modalDialog = $(this).find(".loader");
+        
+         // Applying the top margin on modal dialog to align it vertically center
+         modalDialog.css("margin-top", Math.max(0, ($(window).height() - modalDialog.height()) / 2));
+     }
+     // Align modal when it is displayed
+     $(".modal").on("shown.bs.modal", alignModal);
+    
+     // Align modal when user resize the window
+     $(window).on("resize", function(){
+         $(".modal:visible").each(alignModal);
+     });   
+
     $('#my_modal').on('show.bs.modal', function (e) {
+
         var bId = $(e.relatedTarget).data('bid');
          dgid = $(e.relatedTarget).data('dgid');
         $('input[name=redate]').val(dtt);
@@ -26,7 +43,26 @@ $(document).ready(function () {
         $('#billamount').text("Bill Amount: " + $(e.relatedTarget).data('bamount')).css("fontWeight", "bold");
         displaymoredetails(bId, dgid);
     });
+
+    $(document).on('show.bs.modal', '.modal', function (event) {
+        var zIndex = 1040 + (10 * $('.modal:visible').length);
+        $(this).css('z-index', zIndex);
+        setTimeout(function () {
+            $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+        }, 0);
+    });
+
+
+    $('#my_modal').on('hidden.bs.modal', function () {
+        $('#dist_amt').val("");
+        $('#chqnumadv').val('');
+        $('#chqpayyadv').prop('checked', true);
+        document.getElementById('rowAdvanceBody').innerHTML='';
+        $('#rowAdvance').show();
+    });
+
 });
+
 
 function chkenableadv()
 {
@@ -84,6 +120,7 @@ function addRowAdv(amt)
 
 function addadvance(amt)
 {
+  
     var options = {};
         options.url = "/Bill/Format1/Index?handler=AmtAdvance";
         options.type = "POST";
@@ -123,12 +160,22 @@ function addadvance(amt)
 }
 
 function displaymoredetails(inid, dgid) {
+    $(document).ajaxStart(function () {
+        $("#wait").modal({ show: true, backdrop: 'static' });
+        $("#wait").show();
+    });
+
+
+    $(document).ajaxComplete(function () {
+        $("#wait").modal('hide');
+        $("#wait").hide();
+    });
+
     var newInput = "";
     var options = {};
     options.url = "/Bill/Format1/Index?id=" + inid + "&&handler=SelectAll";
     options.type = "GET";
     options.dataType = "json";
-    console.log(options);
     options.success = function (data) {
         data.forEach(function (element) {
             if (element.billAmountOutstanding == 0) {

@@ -1,0 +1,64 @@
+﻿@page
+@model BillingNextSys.Pages.AdvancePay.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>AdvancePay</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.AdvancePay.AdvanceAmount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AdvancePay.AdvanceAmount)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AdvancePay.ChequePaymet)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AdvancePay.ChequePaymet)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AdvancePay.ChequeNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AdvancePay.ChequeNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AdvancePay.ReceivedDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AdvancePay.ReceivedDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AdvancePay.DebtorGroup)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AdvancePay.DebtorGroup.DebtorGroupName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AdvancePay.Company)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AdvancePay.Company.CompanyName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AdvancePay.Branch)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AdvancePay.Branch.BranchName)
+        </dd>
+    </dl>
+    
+    <form method="post">
+        <input type="hidden" asp-for="AdvancePay.AdvancePayID" />
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <a asp-page="./Index">Back to List</a>
+    </form>
+</div>
