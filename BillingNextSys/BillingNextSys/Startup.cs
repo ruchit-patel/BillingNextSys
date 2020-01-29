@@ -8,19 +8,20 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using BillingNextSys.Models;
 using System.Globalization;
 using BillingNextSys.Services;
+using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BillingNextSys
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration, IHostingEnvironment env)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-IN");
             var builder = new ConfigurationBuilder()
@@ -49,17 +50,25 @@ namespace BillingNextSys
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddMvc()
+            .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+            .AddSessionStateTempDataProvider();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddJsonOptions(jsonOptions =>
+            services.AddSession(options =>
             {
-                jsonOptions.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+                // Set a short timeout for easy testing.
+                options.IdleTimeout = TimeSpan.FromSeconds(10000);
+                options.Cookie.HttpOnly = true;
+                // Make the session cookie essential
+                options.Cookie.IsEssential = true;
             });
+
+            services.AddRazorPages();
 
             services.AddDbContext<BillingNextSysContext>(options =>
                     options.UseNpgsql(Configuration.GetConnectionString("BillingNextSysContext")));
 
             services.AddDistributedMemoryCache(); // Adds a default in-memory implementation of IDistributedCache
-            services.AddSession();
             services.AddOptions();
             services.AddAntiforgery(options =>options.HeaderName = "MY-XSRF-TOKEN");
             services.Configure<Whatsappoptions>(Configuration.GetSection("WhatsappSettings"));
@@ -67,7 +76,7 @@ namespace BillingNextSys
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -84,7 +93,12 @@ namespace BillingNextSys
             app.UseCookiePolicy();
             app.UseAuthentication();
             app.UseSession();
-            app.UseMvc();
+            app.UseRouting();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapRazorPages();
+            });
             CreateRoles(serviceProvider).Wait();
         }
 

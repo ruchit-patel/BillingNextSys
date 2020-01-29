@@ -70,7 +70,7 @@ namespace BillingNextSys.Pages.Export.Format1
 
         public  IGrid<Models.Report1> CreateExportableGrid()
         {
-            var result = _context.Report1s.FromSql(" SELECT \"Bill\".\"BillNumber\",\"Bill\".\"InvoiceDate\",\"BillDetails\".\"ParticularsName\",\"Bill\".\"BilledTo\",\"Bill\".\"DebtorGroupID\",\"DebtorGroup\".\"DebtorGSTIN\",\"BillDetails\".\"YearInfo\",\"BillDetails\".\"TaxableValue\",\"BillDetails\".\"CGSTAmount\",\"BillDetails\".\"SGSTAmount\",\"BillDetails\".\"Amount\",\"BillDetails\".\"CompanyID\",\"BillDetails\".\"Period\" FROM \"Bill\" INNER JOIN \"BillDetails\" ON \"Bill\".\"BillNumber\" = \"BillDetails\".\"BillNumber\" INNER JOIN \"DebtorGroup\" ON \"BillDetails\".\"DebtorGroupID\" = \"DebtorGroup\".\"DebtorGroupID\" ");
+            var result = _context.Report1s.FromSqlRaw(" SELECT \"Bill\".\"BillNumber\",\"Bill\".\"InvoiceDate\",\"BillDetails\".\"ParticularsName\",\"Bill\".\"BilledTo\",\"Bill\".\"DebtorGroupID\",\"DebtorGroup\".\"DebtorGSTIN\",\"BillDetails\".\"YearInfo\",\"BillDetails\".\"TaxableValue\",\"BillDetails\".\"CGSTAmount\",\"BillDetails\".\"SGSTAmount\",\"BillDetails\".\"Amount\",\"BillDetails\".\"CompanyID\",\"BillDetails\".\"Period\" FROM \"Bill\" INNER JOIN \"BillDetails\" ON \"Bill\".\"BillNumber\" = \"BillDetails\".\"BillNumber\" INNER JOIN \"DebtorGroup\" ON \"BillDetails\".\"DebtorGroupID\" = \"DebtorGroup\".\"DebtorGroupID\" ");
 
             IGrid<Models.Report1> grid = new Grid<Models.Report1>(result);
             grid.ViewContext = new ViewContext { HttpContext = HttpContext };

@@ -1,5 +1,4 @@
 ﻿@using NonFactors.Mvc.Grid;
-
 @model IGridPager
 @{
     Int32 totalPages = Model.TotalPages;
@@ -12,13 +11,13 @@
     {
         if (currentPage > 1)
         {
-            <button type="button" data-page="1">&laquo;</button>
-            <button type="button" data-page="@(currentPage - 1)">&lsaquo;</button>
+            <button type="button" data-page="1">&#171;</button>
+            <button type="button" data-page="@(currentPage - 1)">&#8249;</button>
         }
         else
         {
-            <button type="button" class="disabled" tabindex="-1">&laquo;</button>
-            <button type="button" class="disabled" tabindex="-1">&lsaquo;</button>
+            <button type="button" class="disabled" tabindex="-1">&#171;</button>
+            <button type="button" class="disabled" tabindex="-1">&#8249;</button>
         }
         for (Int32 page = firstDisplayPage; page <= totalPages && page < firstDisplayPage + Model.PagesToDisplay; page++)
         {
@@ -33,13 +32,13 @@
         }
         if (currentPage < totalPages)
         {
-            <button type="button" data-page="@(currentPage + 1)">&rsaquo;</button>
-            <button type="button" data-page="@totalPages">&raquo;</button>
+            <button type="button" data-page="@(currentPage + 1)">&#8250;</button>
+            <button type="button" data-page="@totalPages">&#187;</button>
         }
         else
         {
-            <button type="button" class="disabled" tabindex="-1">&rsaquo;</button>
-            <button type="button" class="disabled" tabindex="-1">&raquo;</button>
+            <button type="button" class="disabled" tabindex="-1">&#8250;</button>
+            <button type="button" class="disabled" tabindex="-1">&#187;</button>
         }
         if (Model.ShowPageSizes)
         {
