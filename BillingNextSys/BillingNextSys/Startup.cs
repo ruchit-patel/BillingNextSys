@@ -17,6 +17,7 @@ using BillingNextSys.Services;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Mvc;
 
+
 namespace BillingNextSys
 {
     public class Startup
@@ -49,26 +50,29 @@ namespace BillingNextSys
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+            
+            services.AddDistributedMemoryCache(); // Adds a default in-memory implementation of IDistributedCache
 
             services.AddMvc()
             .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
             .AddSessionStateTempDataProvider();
+            
 
             services.AddSession(options =>
             {
                 // Set a short timeout for easy testing.
-                options.IdleTimeout = TimeSpan.FromSeconds(10000);
+                options.IdleTimeout = TimeSpan.FromHours(6);
                 options.Cookie.HttpOnly = true;
                 // Make the session cookie essential
                 options.Cookie.IsEssential = true;
             });
 
-            services.AddRazorPages();
+            services.AddRazorPages().AddNewtonsoftJson();
 
             services.AddDbContext<BillingNextSysContext>(options =>
                     options.UseNpgsql(Configuration.GetConnectionString("BillingNextSysContext")));
 
-            services.AddDistributedMemoryCache(); // Adds a default in-memory implementation of IDistributedCache
+            
             services.AddOptions();
             services.AddAntiforgery(options =>options.HeaderName = "MY-XSRF-TOKEN");
             services.Configure<Whatsappoptions>(Configuration.GetSection("WhatsappSettings"));

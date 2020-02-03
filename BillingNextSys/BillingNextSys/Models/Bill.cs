@@ -107,17 +107,22 @@ namespace BillingNextSys.Models
 
         public int DebtorGroupID { get; set; }
 
+        [ForeignKey("DebtorGroupID")]
         public DebtorGroup DebtorGroup { get; set; }
 
         public int CompanyID { get; set; }
 
+        [ForeignKey("CompanyID")]
         public Company Company { get; set; }
 
         public int BranchID { get; set; }
 
+        [ForeignKey("BranchID")]
         public Branch Branch { get; set; }
 
         public string SeriesName { get; set; }
+
+        [ForeignKey("SeriesName")]
         public BillSeries BillSeries { get; set; }
 
         public int SecretUnlockCode { get; set; }

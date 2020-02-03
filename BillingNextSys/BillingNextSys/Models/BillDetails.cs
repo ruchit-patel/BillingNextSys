@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BillingNextSys.Models
 {
@@ -52,18 +53,27 @@ namespace BillingNextSys.Models
 
         public int CompanyID { get; set; }
 
+        [ForeignKey("CompanyID")]
         public Company Company { get; set; }
 
         public int ParticularsID { get; set; }
+
+        [ForeignKey("ParticularsID")]
         public Particulars Particulars { get; set; }
 
         public string BillNumber { get; set; }
+
+        [ForeignKey("BillNumber")]
         public Bill Bill { get; set; }
 
         public int? DebtorID { get; set; }
+
+        [ForeignKey("DebtorID")]
         public Debtor Debtor { get; set; }
 
         public int DebtorGroupID { get; set; }
+
+        [ForeignKey("DebtorGroupID")]
         public DebtorGroup DebtorGroup { get; set; }
 
         public ICollection<Received> Receiveds { get; set; }

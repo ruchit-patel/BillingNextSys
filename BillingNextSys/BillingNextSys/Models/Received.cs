@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BillingNextSys.Models
 {
@@ -23,12 +24,18 @@ namespace BillingNextSys.Models
         public string ChequeNumber { get; set; }
 
         public int DebtorGroupID { get; set; }
+
+        [ForeignKey("DebtorGroupID")]
         public DebtorGroup DebtorGroup { get; set; }
 
         public int CompanyID { get; set; }
+
+        [ForeignKey("CompanyID")]
         public Company Company { get; set; }
 
         public int BillDetailsID { get; set; }
+
+        [ForeignKey("BillDetailsID")]
         public BillDetails BillDetails { get; set; }
     }
 }

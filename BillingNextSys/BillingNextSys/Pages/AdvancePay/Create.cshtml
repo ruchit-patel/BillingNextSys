@@ -10,15 +10,18 @@
 
 <h4>AdvancePay</h4>
 <hr />
+
+<div mvc-lookup-for="Models.AdvancePay.DebtorGroupID" url="AllDebtorGroups" title="Debtor Group"></div>
 <div class="row">
     <div class="col-md-4">
         <form method="post" id="advancePayForm" onsubmit="addDebtorGroupID()">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="AdvancePay.DebtorGroupID" class="control-label"></label>
-                <input asp-for="AdvancePay.DebtorGroupID" id="hiddenDebtorGroupID" style="display:none;">
-                <input id="debtorGroupId" class="form-control" style="width:300px;" list="debtorGroupNames" autocomplete="off" onpaste="this.oninput();" oninput="filldebtor($(this).val());" onfocusout="addDebtorGroupID()"> <datalist id="debtorGroupNames"></datalist>
 
+            <div class="form-group">
+
+                <label asp-for="AdvancePay.DebtorGroupID" class="control-label"></label>
+                @Html.LookupFor(model => model.AdvancePay.DebtorGroupID, new DebtorGroupLookup())
+               
             </div>
             <div class="form-group">
                 <label asp-for="AdvancePay.AdvanceAmount" class="control-label"></label>
@@ -39,7 +42,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="AdvancePay.ReceivedDate" class="control-label"></label>
-                <input asp-for="AdvancePay.ReceivedDate" class="form-control" id="dateReceived" type="date"/>
+                <input asp-for="AdvancePay.ReceivedDate" class="form-control" id="dateReceived" type="date" />
                 <span asp-validation-for="AdvancePay.ReceivedDate" class="text-danger"></span>
             </div>
 

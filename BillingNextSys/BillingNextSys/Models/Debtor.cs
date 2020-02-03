@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BillingNextSys.Models
 {
@@ -19,6 +20,7 @@ namespace BillingNextSys.Models
 
         public int DebtorGroupID { get; set; }
 
+        [ForeignKey("DebtorGroupID")]
         public DebtorGroup DebtorGroup { get; set; }
 
         public ICollection<BillDetails> BillDetails { get; set; }

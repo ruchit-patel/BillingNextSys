@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using NonFactors.Mvc.Lookup;
 using System.Linq;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace BillingNextSys.Pages.AdvancePay
 {
@@ -29,6 +31,15 @@ namespace BillingNextSys.Pages.AdvancePay
         public IActionResult OnGetDebtorNames(string str)
         {
             return new JsonResult(_context.DebtorGroup.Where(a => a.DebtorGroupName.ToLower().Contains(str.ToLower())).Select(x => new { x.DebtorGroupID, x.DebtorGroupName }).ToList());
+        }
+
+
+
+        
+        public JsonResult OnGetAllDebtorGroups(LookupFilter filter)
+        {
+            DebtorGroupLookup lookup = new DebtorGroupLookup(_context) { Filter = filter };
+            return new JsonResult(lookup.GetData());
         }
 
 
@@ -57,6 +68,26 @@ namespace BillingNextSys.Pages.AdvancePay
 
 
             return RedirectToPage("./Index");
+        }
+    }
+    public class DebtorGroupLookup : MvcLookup<Models.DebtorGroup>
+    {
+        private readonly BillingNextSys.Models.BillingNextSysContext _context;
+
+        public DebtorGroupLookup(BillingNextSys.Models.BillingNextSysContext context)
+        {
+            _context = context;
+        }
+        public DebtorGroupLookup()
+        {
+            Url = "Create?handler=AllDebtorGroups";
+            Title = "Debtor Group";
+            Filter.Order = LookupSortOrder.Desc;
+        }
+
+        public override IQueryable<Models.DebtorGroup> GetModels()
+        {
+            return _context.Set<Models.DebtorGroup>();
         }
     }
 }
