@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using NonFactors.Mvc.Lookup;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
@@ -27,14 +29,6 @@ namespace BillingNextSys.Pages.AdvancePay
             ViewData["CompanyID"] = new SelectList(_context.Company, "CompanyID", "CompanyName");
             return Page();
         }
-
-        public IActionResult OnGetDebtorNames(string str)
-        {
-            return new JsonResult(_context.DebtorGroup.Where(a => a.DebtorGroupName.ToLower().Contains(str.ToLower())).Select(x => new { x.DebtorGroupID, x.DebtorGroupName }).ToList());
-        }
-
-
-
         
         public JsonResult OnGetAllDebtorGroups(LookupFilter filter)
         {
@@ -50,7 +44,6 @@ namespace BillingNextSys.Pages.AdvancePay
         {
             AdvancePay.CompanyID = (int)_session.GetInt32("Cid");
             AdvancePay.BranchID = (int)_session.GetInt32("Bid");
-
             if (!ModelState.IsValid)
             {
                 return Page();
@@ -77,6 +70,7 @@ namespace BillingNextSys.Pages.AdvancePay
         public DebtorGroupLookup(BillingNextSys.Models.BillingNextSysContext context)
         {
             _context = context;
+            GetId = (model) => model.DebtorGroupID.ToString();
         }
         public DebtorGroupLookup()
         {
@@ -89,5 +83,6 @@ namespace BillingNextSys.Pages.AdvancePay
         {
             return _context.Set<Models.DebtorGroup>();
         }
-    }
+
+    } 
 }

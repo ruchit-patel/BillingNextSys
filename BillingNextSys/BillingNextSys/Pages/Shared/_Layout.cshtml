@@ -24,7 +24,7 @@
     <link rel="stylesheet" href="/css/print.css" />
 </head>
 <body>
-    
+
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -49,10 +49,12 @@
 
     <partial name="_CookieConsentPartial" />
 
+    <partial name="MvcLookup/_Dialog" />
+    @*@Html.Partial("")*@
     <div class="container body-content">
 
         @RenderBody()
-        @Html.Partial("MvcLookup/_Dialog")
+
         <script src="~/js/mvc-lookup/mvc-lookup.js"></script>
         <script src="~/Scripts/mvc-grid/mvc-grid.js"></script>
         <script>
