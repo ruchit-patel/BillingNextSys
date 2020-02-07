@@ -59,7 +59,7 @@
     box-sizing: border-box;
     line-height: 1.5;
     background: none;
-    font-size: 1em;
+    font-size: 1.5em;
     color: #495057;
     outline: none;
     border: none;
@@ -186,9 +186,7 @@
     display: none;
     z-index: 1000;
     height: 100%;
-    width: 100%;
-    left: 0;
-    top: 0;
+    width: 100%; 
 }
 
 .mvc-lookup-wrapper {
@@ -197,7 +195,7 @@
 }
 
 .mvc-lookup-dialog {
-    min-width: 400px;
+    min-width: 700px;
     max-width: 100%;
     z-index: 1100;
 }
@@ -220,7 +218,7 @@
 }
 
 .mvc-lookup-title {
-    font-size: 1.1em;
+    font-size: 2em;
     flex: 1;
 }
 
@@ -229,7 +227,7 @@
     transition: color 0.3s;
     font-weight: bold;
     background: none;
-    font-size: 1.2em;
+    font-size: 2em;
     cursor: pointer;
     line-height: 1;
     border: none;
@@ -243,7 +241,7 @@
     border: 1px solid rgba(30, 54, 101, 0.8);
     border-radius: 0 0 0.25em 0.25em;
     background: #ffffff;
-    font-size: 0.875em;
+    font-size: 1.5em;
     padding: 1em;
 }
 
