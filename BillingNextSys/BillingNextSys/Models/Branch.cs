@@ -46,6 +46,7 @@ namespace BillingNextSys.Models
 
         public int CompanyID { get; set; }
 
+        [ForeignKey("CompanyID")]
         public Company Company { get; set; }
 
         public ICollection<DebtorGroup> DebtorGroups { get; set; }

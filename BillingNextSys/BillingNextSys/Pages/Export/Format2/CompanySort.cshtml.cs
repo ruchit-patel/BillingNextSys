@@ -76,7 +76,7 @@ namespace BillingNextSys.Pages.Export.Format2
 
         public IGrid<Models.Report2> CreateExportableGrid(int ccid)
         {
-            var result = _context.Report2s.FromSql("SELECT \"Bill\".\"BilledTo\",\"Bill\".\"DebtorGroupID\",\"Bill\".\"InvoiceDate\",\"BillDetails\".\"BillNumber\",sum(\"BillDetails\".\"BillAmountOutstanding\") As \"OutstandingAmount\" FROM \"BillDetails\"  INNER JOIN \"Bill\" ON \"BillDetails\".\"BillNumber\"=\"Bill\".\"BillNumber\" where \"Bill\".\"CompanyID\"=" + ccid + " GROUP BY \"BillDetails\".\"BillNumber\",\"Bill\".\"InvoiceDate\",\"Bill\".\"BilledTo\",\"Bill\".\"DebtorGroupID\" ;");
+            var result = _context.Report2s.FromSqlRaw("SELECT \"Bill\".\"BilledTo\",\"Bill\".\"DebtorGroupID\",\"Bill\".\"InvoiceDate\",\"BillDetails\".\"BillNumber\",sum(\"BillDetails\".\"BillAmountOutstanding\") As \"OutstandingAmount\" FROM \"BillDetails\"  INNER JOIN \"Bill\" ON \"BillDetails\".\"BillNumber\"=\"Bill\".\"BillNumber\" where \"Bill\".\"CompanyID\"=" + ccid + " GROUP BY \"BillDetails\".\"BillNumber\",\"Bill\".\"InvoiceDate\",\"Bill\".\"BilledTo\",\"Bill\".\"DebtorGroupID\" ;");
 
             IGrid<Models.Report2> grid = new Grid<Models.Report2>(result);
             grid.ViewContext = new ViewContext { HttpContext = HttpContext };

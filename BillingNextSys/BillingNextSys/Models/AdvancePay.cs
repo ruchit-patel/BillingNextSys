@@ -12,7 +12,8 @@ namespace BillingNextSys.Models
         [Key]
         [Display(Name = "Advance Pay ID")]
         public int AdvancePayID { get; set; }
-        
+
+       
         [Required(ErrorMessage ="Please provide advance Amount")]
         [DataType(DataType.Currency)]
         public double AdvanceAmount { get;set; }
@@ -29,14 +30,17 @@ namespace BillingNextSys.Models
 
         public int DebtorGroupID { get; set; }
 
+        [ForeignKey("DebtorGroupID")]
         public DebtorGroup DebtorGroup { get; set; }
 
         public int CompanyID { get; set; }
 
+        [ForeignKey("CompanyID")]
         public Company Company { get; set; }
 
         public int BranchID { get; set; }
 
+        [ForeignKey("BranchID")]
         public Branch Branch { get; set; }
 
     }

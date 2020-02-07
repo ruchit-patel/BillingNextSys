@@ -8,21 +8,23 @@
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
-        <link rel="stylesheet" href="~/lib/toastr/build/toastr.css" />
+        <link rel="stylesheet" href="~/lib/toastr/nuget/content/content/toastr.css" />
     </environment>
     <environment exclude="Development">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css"
-              asp-fallback-href="~/lib/toastr/build/toastr.css" />
+              asp-fallback-href="~/lib/toastr/nuget/content/content/toastr.css" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
-    <link href="~/Content/MvcGrid/mvc-grid.css" rel="stylesheet">
+    <link href="~/Content/mvc-grid/mvc-grid.css" rel="stylesheet">
+    <link href="~/css/mvc-lookup/mvc-lookup.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/css/print.css" />
 </head>
 <body>
+
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -47,17 +49,26 @@
 
     <partial name="_CookieConsentPartial" />
 
+    <partial name="MvcLookup/_Dialog" />
+    @*@Html.Partial("")*@
     <div class="container body-content">
+
         @RenderBody()
-        <script src="~/Scripts/MvcGrid/mvc-grid.js"></script>
+
+        <script src="~/js/mvc-lookup/mvc-lookup.js"></script>
+        <script src="~/Scripts/mvc-grid/mvc-grid.js"></script>
         <script>
             [].forEach.call(document.getElementsByClassName('mvc-grid'), function (element) {
                 new MvcGrid(element);
             });
+            [].forEach.call(document.getElementsByClassName('mvc-lookup'), function (element) {
+                new MvcLookup(element);
+            });
         </script>
+
         <hr />
         <footer>
-            <p class="pull-right">&copy; 2019 - BillingNext - Developed By Ruchit Patel</p>
+            <p class="pull-right">&copy; 2020 - BillingNext - Developed By Ruchit Patel</p>
         </footer>
     </div>
 
@@ -83,7 +94,7 @@
         </script>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"
-                asp-fallback-src="~/lib/toastr/build/toastr.min.js"
+                asp-fallback-src="~/lib/toastr/nuget/content/scripts/toastr.min.js"
                 crossorigin="anonymous">
         </script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
