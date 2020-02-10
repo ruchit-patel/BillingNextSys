@@ -96,6 +96,7 @@ namespace BillingNextSys
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseAuthentication();
+            app.UseStaticFiles();
             app.UseSession();
             app.UseRouting();
             app.UseAuthorization();
