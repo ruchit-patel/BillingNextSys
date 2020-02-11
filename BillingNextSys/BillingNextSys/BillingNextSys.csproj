@@ -54,5 +54,8 @@
   <Content Update="wwwroot\favicon.ico">
     <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
   </Content>
+  <Content Update="wwwroot\logo.png">
+    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+  </Content>
 </ItemGroup>
 </Project>
