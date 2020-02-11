@@ -1,2 +1,3 @@
-BillingNextSys
-[![Run on Repl.it](https://repl.it/badge/github/ruchit-patel/BillingNextSys)](https://repl.it/github/ruchit-patel/BillingNextSys)
+# BillingNextSys
+**Click On Logo Below to Launch Demo**
+[![Launch Demo](https://billingnextsys.azurewebsites.net/logo.png)](https://billingnextsys.azurewebsites.net/)
