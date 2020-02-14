@@ -39,8 +39,37 @@ namespace BillingNextSys.Pages.Bill.Format1
 
         public async Task<IActionResult> OnGetSelectAllAsync(string id)
         {
-            List<Models.BillDetails> data = await _context.BillDetails.Where(ab => ab.BillNumber.Equals(id)).ToListAsync();
-            return new JsonResult(data);
+            // List<Models.BillDetails> data = await _context.BillDetails.Where(ab => ab.BillNumber.Equals(id)).ToListAsync();
+            // return new JsonResult(data);
+            //return new JsonResult(from b in _context.BillDetails where b.BillNumber == id   // outer sequence
+            //           join d in _context.DebtorGroup //inner sequence 
+            //           on b.DebtorGroupID equals d.DebtorGroupID 
+            //           join ap in _context.AdvancePay
+            //           on d.DebtorGroupID equals ap.DebtorGroupID
+            //                      // key selector 
+            //           select new
+            //           { // result selector 
+            //               b.ParticularsName,
+            //               b.Amount,
+            //               b.BillDetailsID,
+            //               b.BillAmountOutstanding
+            //           });
+
+
+            return new JsonResult((from b in _context.BillDetails   
+                                  join d in _context.DebtorGroup 
+                                  on b.DebtorGroupID equals d.DebtorGroupID
+                                  join ap in _context.AdvancePay 
+                                  on d.DebtorGroupID equals ap.DebtorGroupID
+                                  where b.BillNumber == id
+                                  select new
+                                  {
+                                      ap.AdvanceAmount,
+                                      b.ParticularsName,
+                                      b.Amount,
+                                      b.BillDetailsID,
+                                      b.BillAmountOutstanding
+                                  }).Distinct());
         }
 
         public IActionResult OnPostInsertReceived(int dgid, [FromBody] Models.Received obj)
