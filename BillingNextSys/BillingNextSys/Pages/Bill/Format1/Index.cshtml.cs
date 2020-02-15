@@ -14,6 +14,7 @@ using Microsoft.Extensions.Options;
 using Twilio;
 using Twilio.Rest.Api.V2010.Account;
 using Twilio.Types;
+using MoreLinq;
 
 namespace BillingNextSys.Pages.Bill.Format1
 {
@@ -39,37 +40,37 @@ namespace BillingNextSys.Pages.Bill.Format1
 
         public async Task<IActionResult> OnGetSelectAllAsync(string id)
         {
-            // List<Models.BillDetails> data = await _context.BillDetails.Where(ab => ab.BillNumber.Equals(id)).ToListAsync();
-            // return new JsonResult(data);
-            //return new JsonResult(from b in _context.BillDetails where b.BillNumber == id   // outer sequence
-            //           join d in _context.DebtorGroup //inner sequence 
-            //           on b.DebtorGroupID equals d.DebtorGroupID 
-            //           join ap in _context.AdvancePay
-            //           on d.DebtorGroupID equals ap.DebtorGroupID
-            //                      // key selector 
-            //           select new
-            //           { // result selector 
-            //               b.ParticularsName,
-            //               b.Amount,
-            //               b.BillDetailsID,
-            //               b.BillAmountOutstanding
-            //           });
+        //     return new JsonResult((from b in _context.BillDetails   
+        //                           join d in _context.DebtorGroup 
+        //                           on b.DebtorGroupID equals d.DebtorGroupID
+        //                           join ap in _context.AdvancePay 
+        //                           on d.DebtorGroupID equals ap.DebtorGroupID
+        //                           where b.BillNumber == id
+        //                           select new
+        //                           {
+        //                               ap.AdvanceAmount,
+        //                               b.ParticularsName,
+        //                               b.Amount,
+        //                               b.BillDetailsID,
+        //                               b.BillAmountOutstanding
+                                      
+        //                           }).Distinct());
 
+           
 
-            return new JsonResult((from b in _context.BillDetails   
-                                  join d in _context.DebtorGroup 
-                                  on b.DebtorGroupID equals d.DebtorGroupID
-                                  join ap in _context.AdvancePay 
-                                  on d.DebtorGroupID equals ap.DebtorGroupID
-                                  where b.BillNumber == id
-                                  select new
-                                  {
-                                      ap.AdvanceAmount,
-                                      b.ParticularsName,
-                                      b.Amount,
-                                      b.BillDetailsID,
-                                      b.BillAmountOutstanding
-                                  }).Distinct());
+            return new JsonResult(_context.BillDetails.Where(x=>x.BillNumber == id).Join
+            (_context.AdvancePay, 
+            bd=>bd.DebtorGroupID,
+            ap => ap.DebtorGroupID,
+           (bd,ap)=>new
+           {
+               AdvanceAmount= _context.AdvancePay.Where(a=>a.DebtorGroupID== ap.DebtorGroupID).Select(x=>x.AdvanceAmount).Sum(),
+               bd.ParticularsName,
+               bd.Amount,
+               bd.BillDetailsID,
+               bd.BillAmountOutstanding
+           }).Distinct());
+
         }
 
         public IActionResult OnPostInsertReceived(int dgid, [FromBody] Models.Received obj)
