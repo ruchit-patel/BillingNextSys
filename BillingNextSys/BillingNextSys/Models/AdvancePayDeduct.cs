@@ -7,30 +7,29 @@ using System.Threading.Tasks;
 
 namespace BillingNextSys.Models
 {
-    public class AdvancePay
+    public class AdvancePayDeduct
     {
         [Key]
-        [Display(Name = "Advance Pay ID")]
-        public int AdvancePayID { get; set; }
+        [Display(Name = "Advance Pay Deduct ID")]
+        public int AdvancePayDeductID { get; set; }
 
-        [Required(ErrorMessage ="Please provide advance Amount")]
+        [Required(ErrorMessage = "Please provide advance deduct Amount")]
         [DataType(DataType.Currency)]
-        public double AdvanceAmount { get;set; }
-
-        [Display(Name = "Is It a Cheque Payment?")]
-        public bool ChequePaymet { get; set; }
-
-        [Display(Name = "Cheque Number")]
-        public string ChequeNumber { get; set; }
+        public double AdvanceAmountDeducted{ get; set; }
 
         [DataType(DataType.DateTime)]
-        [Required(ErrorMessage ="Please provide received date")]
-        public DateTime ReceivedDate { get; set; }
+        [Required(ErrorMessage = "Please provide deduct date")]
+        public DateTime DeductDate { get; set; }
 
         public int DebtorGroupID { get; set; }
 
         [ForeignKey("DebtorGroupID")]
         public DebtorGroup DebtorGroup { get; set; }
+
+        public int BillDetailsID { get; set; }
+
+        [ForeignKey("BillDetailsID")]
+        public BillDetails BillDetails { get; set; }
 
         public int CompanyID { get; set; }
 
@@ -41,6 +40,5 @@ namespace BillingNextSys.Models
 
         [ForeignKey("BranchID")]
         public Branch Branch { get; set; }
-
     }
 }

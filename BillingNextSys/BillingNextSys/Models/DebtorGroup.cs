@@ -52,6 +52,10 @@ namespace BillingNextSys.Models
         [Display(Name = "Debtor Outstanding Amount")]
         public double DebtorOutstanding { get; set; }
 
+        [DataType(DataType.Currency)]
+        [Display(Name = "AdvancePay Amount")]
+        public double AdvancePayAmount { get; set; }
+
         public int BranchID { get; set; }
 
         [ForeignKey("BranchID")]
@@ -62,5 +66,6 @@ namespace BillingNextSys.Models
         public ICollection<Received> Receiveds { get; set; }
         public ICollection<BillDetails> BillDetails { get; set; }
         public ICollection<AdvancePay> AdvancePays { get; set; }
+        public ICollection<AdvancePayDeduct> AdvancePayDeducts { get; set; }
     }
 }

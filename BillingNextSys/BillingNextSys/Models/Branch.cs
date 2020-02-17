@@ -54,5 +54,7 @@ namespace BillingNextSys.Models
         public ICollection<Bill> Bills { get; set; }
 
         public ICollection<AdvancePay> AdvancePays { get; set; }
+
+        public ICollection<AdvancePayDeduct> AdvancePayDeducts { get; set; }
     }
 }

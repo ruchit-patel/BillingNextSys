@@ -78,5 +78,7 @@ namespace BillingNextSys.Models
 
         public ICollection<Received> Receiveds { get; set; }
 
+        public ICollection<AdvancePayDeduct> AdvancePayDeducts { get; set; }
+
     }
 }

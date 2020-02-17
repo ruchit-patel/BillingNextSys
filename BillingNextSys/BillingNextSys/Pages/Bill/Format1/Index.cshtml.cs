@@ -59,12 +59,12 @@ namespace BillingNextSys.Pages.Bill.Format1
            
 
             return new JsonResult(_context.BillDetails.Where(x=>x.BillNumber == id).Join
-            (_context.AdvancePay, 
+            (_context.DebtorGroup, 
             bd=>bd.DebtorGroupID,
-            ap => ap.DebtorGroupID,
-           (bd,ap)=>new
+            dg => dg.DebtorGroupID,
+           (bd,dg)=>new
            {
-               AdvanceAmount= _context.AdvancePay.Where(a=>a.DebtorGroupID== ap.DebtorGroupID).Select(x=>x.AdvanceAmount).Sum(),
+               dg.AdvancePayAmount,
                bd.ParticularsName,
                bd.Amount,
                bd.BillDetailsID,
