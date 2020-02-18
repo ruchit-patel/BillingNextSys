@@ -256,7 +256,20 @@ function savepaymt(stid) {
 
 function advancepaymt(billdetid, advanceamt)
 {
-    console.log("Here:" + billdetid + "::" + advanceamt);
+    var options = {};
+    options.url = "/Bill/Format1/Index?billdetid=" + billdetid + "&&advancepayamt=" + advanceamt + "&&handler=AdvancePaySettle";
+    options.type = "GET";
+    options.dataType = "json";
+
+    options.success = function (data){
+        var bnum = $('#billno').text();
+        displaymoredetails(bnum.substr(bnum.indexOf(':') + 2), $("#dgid-" + billdetid).val());
+    };
+    options.error = function () {
+        alert("Error executing transaction!");
+    };
+    $.ajax(options);
+
 }
 
     

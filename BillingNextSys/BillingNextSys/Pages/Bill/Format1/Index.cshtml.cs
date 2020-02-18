@@ -38,6 +38,53 @@ namespace BillingNextSys.Pages.Bill.Format1
         {
         }
 
+        public async Task<IActionResult> OnGetAdvancePaySettleAsync(int billdetid, double advancepayamt)
+        {
+            double billamtout = _context.BillDetails.Where(bd => bd.BillDetailsID.Equals(billdetid)).Select(a => a.BillAmountOutstanding).FirstOrDefault();
+
+            Models.AdvancePayDeduct adpd = new Models.AdvancePayDeduct();
+            adpd.CompanyID= (int)_session.GetInt32("Cid");
+            adpd.BranchID = (int)_session.GetInt32("Bid"); 
+            adpd.DebtorGroupID = _context.BillDetails.Where(a => a.BillDetailsID.Equals(billdetid)).Select(a => a.DebtorGroupID).FirstOrDefault();
+            adpd.DeductDate = DateTime.Now;
+            adpd.BillDetailsID = billdetid;
+            if(advancepayamt<=billamtout)
+            {
+                adpd.AdvanceAmountDeducted =  advancepayamt;
+            }
+            else
+            {
+                adpd.AdvanceAmountDeducted = billamtout;
+            }
+            _context.AdvancePayDeduct.Add(adpd);
+            _context.SaveChanges();
+
+            _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+            var billout = billamtout- adpd.AdvanceAmountDeducted;
+            var billdet = new Models.BillDetails { BillDetailsID = billdetid, BillAmountOutstanding = billout };
+            _context.BillDetails.Attach(billdet).Property(x => x.BillAmountOutstanding).IsModified = true;
+            _context.SaveChanges();
+
+            var dgout = _context.BillDetails.Where(a => a.BillDetailsID.Equals(billdetid)).Join(
+                _context.DebtorGroup,
+                bd=>bd.DebtorGroupID,
+                dg=>dg.DebtorGroupID,
+                (bd,dg)=>new { 
+                dg.DebtorGroupID,
+                dg.DebtorOutstanding,
+                dg.AdvancePayAmount
+                }).FirstOrDefault();
+
+            var debtorgroup = _context.DebtorGroup.Find(dgout.DebtorGroupID);
+            debtorgroup.DebtorOutstanding = dgout.DebtorOutstanding + adpd.AdvanceAmountDeducted;
+            debtorgroup.AdvancePayAmount = dgout.AdvancePayAmount - adpd.AdvanceAmountDeducted;
+
+            _context.Entry(debtorgroup).State = EntityState.Modified;
+            _context.SaveChanges();
+
+            return new JsonResult("Successful!");
+        }
+
         public async Task<IActionResult> OnGetSelectAllAsync(string id)
         {
         //     return new JsonResult((from b in _context.BillDetails   

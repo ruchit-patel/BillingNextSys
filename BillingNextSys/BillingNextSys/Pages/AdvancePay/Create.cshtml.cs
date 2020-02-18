@@ -53,10 +53,14 @@ namespace BillingNextSys.Pages.AdvancePay
             await _context.SaveChangesAsync();
 
             _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-            var dgout = _context.DebtorGroup.Where(a => a.DebtorGroupID.Equals(AdvancePay.DebtorGroupID)).FirstOrDefault().DebtorOutstanding;
-            var debout = dgout - AdvancePay.AdvanceAmount;
-            var dgdet = new Models.DebtorGroup { DebtorGroupID = AdvancePay.DebtorGroupID, DebtorOutstanding = debout };
-            _context.DebtorGroup.Attach(dgdet).Property(x => x.DebtorOutstanding).IsModified = true;
+            var dgout = _context.DebtorGroup.Where(a => a.DebtorGroupID.Equals(AdvancePay.DebtorGroupID)).Select(x=> new { x.DebtorOutstanding, x.AdvancePayAmount}).FirstOrDefault();
+
+
+            var debtorgroup = _context.DebtorGroup.Find(AdvancePay.DebtorGroupID);
+            debtorgroup.DebtorOutstanding = dgout.DebtorOutstanding - AdvancePay.AdvanceAmount;
+            debtorgroup.AdvancePayAmount = dgout.AdvancePayAmount + AdvancePay.AdvanceAmount;
+
+            _context.Entry(debtorgroup).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 
 

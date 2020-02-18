@@ -44,7 +44,9 @@ namespace BillingNextSys.Models
         public DbSet<BillingNextSys.Models.BillSeries> BillSeries { get; set; }
 
         public DbSet<BillingNextSys.Models.AdvancePay> AdvancePay { get; set; }
-        
+
+        public DbSet<BillingNextSys.Models.AdvancePayDeduct> AdvancePayDeduct { get; set; }
+
         public DbQuery<BillingNextSys.Models.AdHocReturn> AdHocReturns { get; set; }
 
         public DbQuery<BillingNextSys.Models.Report1> Report1s { get; set; }
