@@ -23,6 +23,10 @@ namespace BillingNextSys.Models
              .HasOne(p => p.Bill)
              .WithMany(b => b.BillDetails)
              .OnDelete(DeleteBehavior.Cascade);
+
+            
+            modelBuilder.Entity<Report1>().ToView("vw_Report1").HasNoKey();
+            modelBuilder.Entity<Report2>().ToView("vw_Report2").HasNoKey();
         }
 
         public DbSet<BillingNextSys.Models.Company> Company { get; set; }
@@ -47,10 +51,8 @@ namespace BillingNextSys.Models
 
         public DbSet<BillingNextSys.Models.AdvancePayDeduct> AdvancePayDeduct { get; set; }
 
-        public DbQuery<BillingNextSys.Models.AdHocReturn> AdHocReturns { get; set; }
+        public DbSet<BillingNextSys.Models.Report1> Report1s { get; set; }
 
-        public DbQuery<BillingNextSys.Models.Report1> Report1s { get; set; }
-
-        public DbQuery<BillingNextSys.Models.Report2> Report2s { get; set; }
+        public DbSet<BillingNextSys.Models.Report2> Report2s { get; set; }
     }
 }

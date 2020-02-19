@@ -34,7 +34,6 @@
 <ItemGroup>
   <Folder Include="Pages\Company\" />
   <Folder Include="Pages\Branch\" />
-  <Folder Include="Pages\DebtorGroup\" />
   <Folder Include="Pages\Debtor\" />
   <Folder Include="Pages\Bill\" />
   <Folder Include="Pages\BillDetails\" />

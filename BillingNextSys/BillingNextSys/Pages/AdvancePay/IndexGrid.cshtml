@@ -1,0 +1,29 @@
+﻿@page
+@model IndexGridModel
+
+@{ Layout = null; }
+
+@(Html
+
+                .Grid(Model.AdvancePays)
+                  .Build(columns =>
+                    {
+                        columns.Add(model => model.AdvanceAmount).Titled("Advance Amount");
+                        columns.Add(model => model.ChequePaymet).Titled("Cheque Payment");
+                        columns.Add(model => model.ChequeNumber).Titled("Cheque Number");
+                        columns.Add(model => model.ReceivedDate).Titled("Received Date").Formatted("{0:d}");
+                        columns.Add(model => model.DebtorGroup.DebtorGroupName).Titled("Debtor Group Name");
+                        columns.Add(model => model.Company.CompanyName).Titled("Company Name");
+                        columns.Add(model => model.Branch.BranchName).Titled("Branch Name");
+                    })
+                           .Empty("No data found")
+                           .Id("my-ajax-grid")
+                           .Pageable(pager =>
+                             {
+                                 pager.PagesToDisplay = 4;
+                                 pager.RowsPerPage = 10;
+                             })
+                             .Filterable()
+                             .Sortable()
+                             .Css("table-hover hgtinc")
+)

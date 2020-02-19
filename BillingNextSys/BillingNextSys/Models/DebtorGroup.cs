@@ -11,6 +11,7 @@ namespace BillingNextSys.Models
         [Key]
         public int DebtorGroupID { get; set; }
 
+        //general purpose use int field to be used for multiple purpose, e.g. for LookUp Sorting(internal call), last debtor Group ID vaue return
         [NotMapped]
         public Int32 Id { get; set; }
 

@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BillingNextSys.Models
 {
-    [NotMapped]
     public class Report2
     {
         public string BilledTo { get; set; }

@@ -32,15 +32,23 @@ namespace BillingNextSys.Models
         [ForeignKey("DebtorGroupID")]
         public DebtorGroup DebtorGroup { get; set; }
 
+        [NotMapped]
+        public string DebtorGroupName { get; set; }
+
         public int CompanyID { get; set; }
 
         [ForeignKey("CompanyID")]
         public Company Company { get; set; }
+
+        [NotMapped]
+        public string CompanyName { get; set; }
 
         public int BranchID { get; set; }
 
         [ForeignKey("BranchID")]
         public Branch Branch { get; set; }
 
+        [NotMapped]
+        public string BranchName { get; set; }
     }
 }

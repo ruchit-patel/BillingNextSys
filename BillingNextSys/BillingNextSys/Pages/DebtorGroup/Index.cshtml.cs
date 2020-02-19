@@ -61,8 +61,9 @@ namespace BillingNextSys.Pages.DebtorGroup
             _context.DebtorGroup.Add(obj);
             _context.SaveChanges();
 
-            var result = _context.AdHocReturns.FromSqlRaw("SELECT last_value FROM \"DebtorGroup_DebtorGroupID_seq\"").FirstOrDefault().last_value;
-
+            //  var result = _context.AdHocReturns.FromSqlRaw("SELECT last_value FROM \"DebtorGroup_DebtorGroupID_seq\"").FirstOrDefault().last_value;
+            //  var result = _context.DebtorGroup.FromSqlRaw("SELECT last_value FROM \"DebtorGroup_DebtorGroupID_seq\"").FirstOrDefault().Id;
+            var result = obj.DebtorGroupID;
             return new JsonResult("Debtor Added Successfully!"+result);
         }
         public IActionResult OnPostInsertD([FromBody] Models.Debtor obj)

@@ -192,21 +192,28 @@ namespace BillingNextSys.Pages.Bill.Format1
 
         }
 
-        public IActionResult OnPostAmtAdvance( [FromBody] Models.AdvancePay obj)
+        public async Task<IActionResult> OnPostAmtAdvanceAsync( [FromBody] Models.AdvancePay obj)
         {
             try
             {
                 obj.CompanyID= (int)_session.GetInt32("Cid");
                 obj.BranchID = (int)_session.GetInt32("Bid");
                 _context.AdvancePay.Add(obj);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 
                 _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-                var dgout = _context.DebtorGroup.Where(a => a.DebtorGroupID.Equals(obj.DebtorGroupID)).FirstOrDefault().DebtorOutstanding;
-                var debout = dgout - obj.AdvanceAmount;
-                var dgdet = new Models.DebtorGroup { DebtorGroupID = obj.DebtorGroupID, DebtorOutstanding = debout };
-                _context.DebtorGroup.Attach(dgdet).Property(x => x.DebtorOutstanding).IsModified = true;
-                _context.SaveChanges();
+                var dgout = _context.DebtorGroup.Where(a => a.DebtorGroupID.Equals(obj.DebtorGroupID)).Select(x => new { x.DebtorOutstanding, x.AdvancePayAmount }).FirstOrDefault();
+                var debtorgroup = _context.DebtorGroup.Find(obj.DebtorGroupID);
+                debtorgroup.DebtorOutstanding = dgout.DebtorOutstanding - obj.AdvanceAmount;
+                debtorgroup.AdvancePayAmount = dgout.AdvancePayAmount + obj.AdvanceAmount;
+                _context.Entry(debtorgroup).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+
+                //var dgout = _context.DebtorGroup.Where(a => a.DebtorGroupID.Equals(obj.DebtorGroupID)).FirstOrDefault().DebtorOutstanding;
+                //var debout = dgout - obj.AdvanceAmount;
+                //var dgdet = new Models.DebtorGroup { DebtorGroupID = obj.DebtorGroupID, DebtorOutstanding = debout };
+                //_context.DebtorGroup.Attach(dgdet).Property(x => x.DebtorOutstanding).IsModified = true;
+                //_context.SaveChanges();
                 
                 return new JsonResult(1);
             }
