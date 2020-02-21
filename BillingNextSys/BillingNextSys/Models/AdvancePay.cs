@@ -27,6 +27,10 @@ namespace BillingNextSys.Models
         [Required(ErrorMessage ="Please provide received date")]
         public DateTime ReceivedDate { get; set; }
 
+        public bool AdvancePayLock { get; set; }
+
+        public DateTime ActualDateTimeReceived { get; set; }
+
         public int DebtorGroupID { get; set; }
 
         [ForeignKey("DebtorGroupID")]

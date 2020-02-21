@@ -12,9 +12,9 @@
                         columns.Add(model => model.ChequePaymet).Titled("Cheque Payment");
                         columns.Add(model => model.ChequeNumber).Titled("Cheque Number");
                         columns.Add(model => model.ReceivedDate).Titled("Received Date").Formatted("{0:d}");
-                        columns.Add(model => model.DebtorGroup.DebtorGroupName).Titled("Debtor Group Name");
-                        columns.Add(model => model.Company.CompanyName).Titled("Company Name");
-                        columns.Add(model => model.Branch.BranchName).Titled("Branch Name");
+                        columns.Add(model => model.DebtorGroupName).Titled("Debtor Group Name");
+                        columns.Add(model => model.CompanyName).Titled("Company Name");
+                        columns.Add(model => model.BranchName).Titled("Branch Name");
                     })
                            .Empty("No data found")
                            .Id("my-ajax-grid")

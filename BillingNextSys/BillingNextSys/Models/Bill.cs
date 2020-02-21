@@ -131,6 +131,8 @@ namespace BillingNextSys.Models
 
         public bool? MessageSent { get; set; }
 
+        public bool BillLocked { get; set; }
+
         public ICollection<BillDetails> BillDetails { get; set; }
     }
 }

@@ -21,6 +21,8 @@ namespace BillingNextSys.Models
         [Required(ErrorMessage = "Please provide deduct date")]
         public DateTime DeductDate { get; set; }
 
+        public bool AdvancePayDeductLock { get; set; }
+
         public int DebtorGroupID { get; set; }
 
         [ForeignKey("DebtorGroupID")]

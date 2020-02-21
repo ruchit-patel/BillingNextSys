@@ -3,15 +3,17 @@ using System;
 using BillingNextSys.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace BillingNextSys.Migrations.BillingNextSys
 {
     [DbContext(typeof(BillingNextSysContext))]
-    partial class BillingNextSysContextModelSnapshot : ModelSnapshot
+    [Migration("20200221071055_AddedLock_AP_Bill")]
+    partial class AddedLock_AP_Bill
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

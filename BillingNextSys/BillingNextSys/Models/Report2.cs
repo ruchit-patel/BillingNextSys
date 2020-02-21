@@ -14,5 +14,7 @@ namespace BillingNextSys.Models
         public string BillNumber { get; set; }
 
         public DateTime InvoiceDate { get; set; }
+
+        public string CompanyName { get; set; }
     }
 }

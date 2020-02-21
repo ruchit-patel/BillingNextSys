@@ -78,8 +78,6 @@ namespace BillingNextSys.Pages.Export.Format4
             grid.Columns.Add(model => model.DebtorGroupID).Titled("Client Code");
             grid.Columns.Add(model => model.DebtorOutstanding).Titled("Debtor Outstanding Amount");
 
-
-
             foreach (IGridColumn column in grid.Columns)
             {
                 column.Filter.IsEnabled = true;

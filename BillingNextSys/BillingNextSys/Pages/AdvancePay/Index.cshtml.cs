@@ -43,7 +43,7 @@ namespace BillingNextSys.Pages.AdvancePay
             {
                 int cid = (int)_session.GetInt32("Cid");
                 int bid = (int)_session.GetInt32("Bid");
-             var AdvancePays =  _context.AdvancePay.Join(
+              AdvancePays =  _context.AdvancePay.Join(
                     _context.Company,
                        bb => bb.CompanyID,
                        cc => cc.CompanyID,
@@ -82,9 +82,18 @@ namespace BillingNextSys.Pages.AdvancePay
                             bb.ChequePaymet,
                             bb.ChequeNumber,
                             bb.ReceivedDate,
-                            bb.AdvanceAmount
+                            bb.AdvanceAmount,
+                            bb.CompanyName,
+                            bb.BranchName
                         }
-                    );
+                    ).Select(x=>new Models.AdvancePay{ 
+                        AdvanceAmount=x.AdvanceAmount,
+                        DebtorGroupName=x.DebtorGroupName,
+                        ChequePaymet=x.ChequePaymet, 
+                        ChequeNumber=x.ChequeNumber,
+                        ReceivedDate=x.ReceivedDate,
+                        CompanyName=x.CompanyName,
+                        BranchName=x.BranchName });
                       
                 
                 return Page();

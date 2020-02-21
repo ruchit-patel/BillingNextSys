@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using MoreLinq;
 using NonFactors.Mvc.Grid;
 using OfficeOpenXml;
 
@@ -69,8 +70,21 @@ namespace BillingNextSys.Pages.Export.Format2
 
         public IGrid<Models.Report2> CreateExportableGrid()
         {
-            var result = _context.Report2s.FromSqlRaw("SELECT \"Bill\".\"BilledTo\",\"Bill\".\"DebtorGroupID\",\"Bill\".\"InvoiceDate\",\"BillDetails\".\"BillNumber\",sum(\"BillDetails\".\"BillAmountOutstanding\") As \"OutstandingAmount\" FROM \"BillDetails\"  INNER JOIN \"Bill\" ON \"BillDetails\".\"BillNumber\"=\"Bill\".\"BillNumber\" GROUP BY \"BillDetails\".\"BillNumber\",\"Bill\".\"InvoiceDate\",\"Bill\".\"BilledTo\",\"Bill\".\"DebtorGroupID\" ;");
-           
+            //var result = _context.Report2s.FromSqlRaw("SELECT \"Bill\".\"BilledTo\",\"Bill\".\"DebtorGroupID\",\"Bill\".\"InvoiceDate\",\"BillDetails\".\"BillNumber\",sum(\"BillDetails\".\"BillAmountOutstanding\") As \"OutstandingAmount\" FROM \"BillDetails\"  INNER JOIN \"Bill\" ON \"BillDetails\".\"BillNumber\"=\"Bill\".\"BillNumber\" GROUP BY \"BillDetails\".\"BillNumber\",\"Bill\".\"InvoiceDate\",\"Bill\".\"BilledTo\",\"Bill\".\"DebtorGroupID\" ;");
+            var result = _context.Bill.Join(
+                _context.BillDetails,
+                b => b.BillNumber,
+                bd => bd.BillNumber,
+                (b, bd) => new
+                {
+                    BilledTo = b.BilledTo,
+                    DebtorGroupID = b.DebtorGroupID,
+                    OutstandingAmount = _context.BillDetails.Where(x => x.BillNumber.Equals(b.BillNumber)).Sum(x => x.BillAmountOutstanding),
+                    BillNumber = b.BillNumber,
+                    InvoiceDate = b.InvoiceDate,
+                    CompanyName = _context.Company.Where(x => x.CompanyID.Equals(b.CompanyID)).Select(x => x.CompanyName).FirstOrDefault()
+                }).Select(x => new Models.Report2 { BilledTo = x.BilledTo, DebtorGroupID = x.DebtorGroupID, OutstandingAmount = x.OutstandingAmount, BillNumber = x.BillNumber, InvoiceDate = x.InvoiceDate, CompanyName = x.CompanyName }).DistinctBy(x=>x.BillNumber);
+
             IGrid<Models.Report2> grid = new Grid<Models.Report2>(result);
             grid.ViewContext = new ViewContext { HttpContext = HttpContext };
             grid.Query = Request.Query;
@@ -80,11 +94,12 @@ namespace BillingNextSys.Pages.Export.Format2
             grid.Columns.Add(model => model.OutstandingAmount).Titled("Outstanding Amount");
             grid.Columns.Add(model => model.BillNumber).Titled("Invoice Reference Number");
             grid.Columns.Add(model => model.InvoiceDate).Titled("Invoice date").Formatted("{0:d}");
-           
+            grid.Columns.Add(model => model.CompanyName).Titled("Company Name");
+
             foreach (IGridColumn column in grid.Columns)
             {
-                column.Filter.IsEnabled = false;
-                column.Sort.IsEnabled = false;
+                column.Filter.IsEnabled = true;
+                column.Sort.IsEnabled = true;
             }
 
             return grid;
