@@ -171,21 +171,30 @@ function displaymoredetails(inid, dgid) {
         $("#wait").hide();
     });
 
+    $("#loadAllFromAdvance").css("visibility", "hidden");
     var newInput = "";
     var options = {};
     options.url = "/Bill/Format1/Index?id=" + inid + "&&handler=SelectAll";
     options.type = "GET";
     options.dataType = "json";
+    var sum = 0;
     options.success = function (data) {
         data.forEach(function (element) {
-            if (element.billAmountOutstanding == 0) {
 
+            if (element.billAmountOutstanding == 0) {
                 newInput += "<tr><td>" + element.particularsName + "</td><td>" + element.amount + "</td><td id='amtout-" + element.billDetailsID + "'>" + element.billAmountOutstanding + "</td></tr>";
             }
             else {
+                sum += element.billAmountOutstanding;
                 newInput += "<tr><td>" + element.particularsName + "</td><td>" + element.amount + "</td><td id='amtout-" + element.billDetailsID + "'>" + element.billAmountOutstanding + "</td><td><input type='number'  id='amt-" + element.billDetailsID + "' /></td><td>Cheque Payment? &nbsp;<input type='checkbox' checked id='chkpay-" + element.billDetailsID + "' onclick='chkenable(this.id)' ></td><td><input type='number' id='chknum-" + element.billDetailsID + "' style='width:100px;'/></td><td><input type='date' id='dt-" + element.billDetailsID + "' value='" + dtt + "' style='width:150px;' /></td><td><button onclick='savepaymt(" + element.billDetailsID + ");' class='btn btn-default' ><img src='/images/save.png' alt='save' height='20px' width='20px' /></button><td><button onclick='advancepaymt(" + element.billDetailsID + "," + element.advancePayAmount + ");' class='btn btn-default'> <i class='fa fa-bolt' aria-hidden='true'></i> ₹ " + element.advancePayAmount + "  </button><input type='hidden' id='dgid-" + element.billDetailsID + "' value='" + dgid + "' ></td></tr>";
             }
         });
+        
+        if (sum > 0 && data[0].advancePayAmount > 0) {
+            console.log("here");
+            $("#loadAllFromAdvance").css("visibility", "visible");
+        }
+
         document.getElementById('rowbody1').innerHTML = newInput;
 
     };
