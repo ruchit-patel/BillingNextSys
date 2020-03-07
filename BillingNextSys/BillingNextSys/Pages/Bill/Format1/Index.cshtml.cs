@@ -11,10 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Twilio;
-using Twilio.Rest.Api.V2010.Account;
-using Twilio.Types;
 using MoreLinq;
+using Newtonsoft.Json;
 
 namespace BillingNextSys.Pages.Bill.Format1
 {
@@ -222,6 +220,18 @@ namespace BillingNextSys.Pages.Bill.Format1
                 return new JsonResult(0);
             }
             
+        }
+
+        public async Task<IActionResult> OnPostAllAdvanceSettleAsync([FromBody] object obj)
+        {
+            
+            var aa=obj.ToString();
+
+            dynamic stuff = JsonConvert.DeserializeObject("{\n  \"billid\": \"I/19-20/22\",\n  \"amt\": \"1200\"\n}");
+            string billid = stuff.billid;
+            string amount = stuff.amt;
+            
+            return new JsonResult(1);
         }
     }
 

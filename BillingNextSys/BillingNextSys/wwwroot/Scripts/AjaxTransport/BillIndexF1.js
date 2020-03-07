@@ -63,6 +63,33 @@ $(document).ready(function () {
 
 });
 
+function loadFromAdvance()
+{
+    var options = {};
+    options.url = "/Bill/Format1/Index?handler=AllAdvanceSettle";
+    options.type = "POST";
+
+    var obj = {};
+    obj.billid = $("#loadAllFromAdvance").attr("data-billid");
+    obj.amt= $("#loadAllFromAdvance").attr("data-amt");
+
+    options.data = JSON.stringify(obj);
+    options.contentType = "application/json; charset=utf-8";
+    options.dataType = "json";
+
+    options.beforeSend = function (xhr) {
+        xhr.setRequestHeader("MY-XSRF-TOKEN",
+            $('input:hidden[name="__RequestVerificationToken"]').val());
+    };
+    options.success = function (msg) {
+        var bnum = $('#billno').text();
+        displaymoredetails(bnum.substr(bnum.indexOf(':') + 2), $("#dgid-" + stid).val());
+    };
+    options.error = function () {
+        alert("Error Occured While Executing Transaction.");
+    };
+    $.ajax(options);
+}
 
 function chkenableadv()
 {
@@ -193,6 +220,8 @@ function displaymoredetails(inid, dgid) {
         if (sum > 0 && data[0].advancePayAmount > 0) {
             console.log("here");
             $("#loadAllFromAdvance").css("visibility", "visible");
+            $("#loadAllFromAdvance").attr("data-amt", data[0].advancePayAmount);
+            $("#loadAllFromAdvance").attr("data-billid",inid);
         }
 
         document.getElementById('rowbody1').innerHTML = newInput;
