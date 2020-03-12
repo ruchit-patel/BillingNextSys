@@ -225,12 +225,64 @@ namespace BillingNextSys.Pages.Bill.Format1
         public async Task<IActionResult> OnPostAllAdvanceSettleAsync([FromBody] object obj)
         {
             
-            var aa=obj.ToString();
-
-            dynamic stuff = JsonConvert.DeserializeObject("{\n  \"billid\": \"I/19-20/22\",\n  \"amt\": \"1200\"\n}");
+            dynamic stuff = JsonConvert.DeserializeObject(obj.ToString());
             string billid = stuff.billid;
-            string amount = stuff.amt;
-            
+            double advancePayAmount = stuff.amt;
+
+           List<Models.BillDetails> listbill= _context.BillDetails.Where(a => a.BillNumber.Equals(billid)).Where(b=>b.BillAmountOutstanding>0).AsNoTracking().ToList();
+            foreach (var item in listbill)
+            {
+                double billamtout = _context.BillDetails.Where(bd => bd.BillDetailsID.Equals(item.BillDetailsID)).Select(a => a.BillAmountOutstanding).FirstOrDefault();
+                //if (advancePayAmount >= billamtout)
+                //{
+                    Models.AdvancePayDeduct adpd = new Models.AdvancePayDeduct();
+                    adpd.CompanyID = (int)_session.GetInt32("Cid");
+                    adpd.BranchID = (int)_session.GetInt32("Bid");
+                    adpd.DebtorGroupID = _context.BillDetails.Where(a => a.BillDetailsID.Equals(item.BillDetailsID)).Select(a => a.DebtorGroupID).FirstOrDefault();
+                    adpd.DeductDate = DateTime.Now;
+                    adpd.BillDetailsID = item.BillDetailsID;
+                    if (advancePayAmount <= billamtout)
+                    {
+                       adpd.AdvanceAmountDeducted = advancePayAmount;
+                    }
+                    else
+                    {
+                       adpd.AdvanceAmountDeducted = billamtout;
+                    }
+                    _context.AdvancePayDeduct.Add(adpd);
+                    _context.SaveChanges();
+
+                    _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+                    var billout = billamtout - adpd.AdvanceAmountDeducted;
+                    var billdet = new Models.BillDetails { BillDetailsID = item.BillDetailsID, BillAmountOutstanding = billout };
+                    _context.BillDetails.Attach(billdet).Property(x => x.BillAmountOutstanding).IsModified = true;
+                    _context.SaveChanges();
+
+                    var dgout = _context.BillDetails.Where(a => a.BillDetailsID.Equals(item.BillDetailsID)).Join(
+                        _context.DebtorGroup,
+                        bd => bd.DebtorGroupID,
+                        dg => dg.DebtorGroupID,
+                        (bd, dg) => new
+                        {
+                            dg.DebtorGroupID,
+                            dg.DebtorOutstanding,
+                            dg.AdvancePayAmount
+                        }).FirstOrDefault();
+
+                    var debtorgroup = _context.DebtorGroup.Find(dgout.DebtorGroupID);
+                    debtorgroup.DebtorOutstanding = dgout.DebtorOutstanding + adpd.AdvanceAmountDeducted;
+                    debtorgroup.AdvancePayAmount = dgout.AdvancePayAmount - adpd.AdvanceAmountDeducted;
+
+                    _context.Entry(debtorgroup).State = EntityState.Modified;
+                    _context.SaveChanges();
+
+                    advancePayAmount -= billamtout;
+                //}
+                //else
+                //{
+                //    return new JsonResult("Missed out from: " + item.BillDetailsID);
+                //}
+            }
             return new JsonResult(1);
         }
     }

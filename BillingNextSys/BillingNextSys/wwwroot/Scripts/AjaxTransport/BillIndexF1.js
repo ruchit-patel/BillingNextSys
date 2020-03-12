@@ -82,12 +82,19 @@ function loadFromAdvance()
             $('input:hidden[name="__RequestVerificationToken"]').val());
     };
     options.success = function (msg) {
-        var bnum = $('#billno').text();
-        displaymoredetails(bnum.substr(bnum.indexOf(':') + 2), $("#dgid-" + stid).val());
+        if (msg == 1) {
+            toastr.success(msg, "Updated Everything Successfully!");
+            var bnum = $('#billno').text();
+            displaymoredetails(bnum.substr(bnum.indexOf(':') + 2), dgid);
+        }
+        else {
+            toastr.success(msg, "Error!");
+        }
     };
     options.error = function () {
         alert("Error Occured While Executing Transaction.");
     };
+    $("#waittxt").css("display", "block");
     $.ajax(options);
 }
 
@@ -196,6 +203,7 @@ function displaymoredetails(inid, dgid) {
     $(document).ajaxComplete(function () {
         $("#wait").modal('hide');
         $("#wait").hide();
+        $("#waittxt").css("display","none");
     });
 
     $("#loadAllFromAdvance").css("visibility", "hidden");

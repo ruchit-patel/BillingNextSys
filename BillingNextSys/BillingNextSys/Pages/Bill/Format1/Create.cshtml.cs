@@ -76,7 +76,7 @@ namespace BillingNextSys.Pages.Bill.Format1
 
         public IActionResult OnGetBillTo(string str)
         {
-            List<Models.DebtorGroup> data = _context.DebtorGroup.Where(a => a.DebtorGroupName.ToLower().Contains(str.ToLower())).ToList();
+           List<Models.DebtorGroup> data = _context.DebtorGroup.Where(a => a.DebtorGroupName.ToLower().Contains(str.ToLower())).ToList();
             return new JsonResult(data);
         }
 
