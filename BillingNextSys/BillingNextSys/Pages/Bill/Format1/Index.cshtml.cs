@@ -74,7 +74,7 @@ namespace BillingNextSys.Pages.Bill.Format1
                 }).FirstOrDefault();
 
             var debtorgroup = _context.DebtorGroup.Find(dgout.DebtorGroupID);
-            debtorgroup.DebtorOutstanding = dgout.DebtorOutstanding + adpd.AdvanceAmountDeducted;
+           // debtorgroup.DebtorOutstanding = dgout.DebtorOutstanding + adpd.AdvanceAmountDeducted;
             debtorgroup.AdvancePayAmount = dgout.AdvancePayAmount - adpd.AdvanceAmountDeducted;
 
             _context.Entry(debtorgroup).State = EntityState.Modified;
@@ -270,7 +270,7 @@ namespace BillingNextSys.Pages.Bill.Format1
                         }).FirstOrDefault();
 
                     var debtorgroup = _context.DebtorGroup.Find(dgout.DebtorGroupID);
-                    debtorgroup.DebtorOutstanding = dgout.DebtorOutstanding + adpd.AdvanceAmountDeducted;
+                    //debtorgroup.DebtorOutstanding = dgout.DebtorOutstanding + adpd.AdvanceAmountDeducted;
                     debtorgroup.AdvancePayAmount = dgout.AdvancePayAmount - adpd.AdvanceAmountDeducted;
 
                     _context.Entry(debtorgroup).State = EntityState.Modified;

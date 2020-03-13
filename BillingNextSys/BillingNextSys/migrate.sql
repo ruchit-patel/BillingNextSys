@@ -4,105 +4,6 @@ CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
     CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY ("MigrationId")
 );
 
-CREATE TABLE "AspNetRoles" (
-    "Id" text NOT NULL,
-    "Name" character varying(256) NULL,
-    "NormalizedName" character varying(256) NULL,
-    "ConcurrencyStamp" text NULL,
-    CONSTRAINT "PK_AspNetRoles" PRIMARY KEY ("Id")
-);
-
-CREATE TABLE "AspNetUsers" (
-    "Id" text NOT NULL,
-    "UserName" character varying(256) NULL,
-    "NormalizedUserName" character varying(256) NULL,
-    "Email" character varying(256) NULL,
-    "NormalizedEmail" character varying(256) NULL,
-    "EmailConfirmed" boolean NOT NULL,
-    "PasswordHash" text NULL,
-    "SecurityStamp" text NULL,
-    "ConcurrencyStamp" text NULL,
-    "PhoneNumber" text NULL,
-    "PhoneNumberConfirmed" boolean NOT NULL,
-    "TwoFactorEnabled" boolean NOT NULL,
-    "LockoutEnd" timestamp with time zone NULL,
-    "LockoutEnabled" boolean NOT NULL,
-    "AccessFailedCount" integer NOT NULL,
-    CONSTRAINT "PK_AspNetUsers" PRIMARY KEY ("Id")
-);
-
-CREATE TABLE "AspNetRoleClaims" (
-    "Id" serial NOT NULL,
-    "RoleId" text NOT NULL,
-    "ClaimType" text NULL,
-    "ClaimValue" text NULL,
-    CONSTRAINT "PK_AspNetRoleClaims" PRIMARY KEY ("Id"),
-    CONSTRAINT "FK_AspNetRoleClaims_AspNetRoles_RoleId" FOREIGN KEY ("RoleId") REFERENCES "AspNetRoles" ("Id") ON DELETE CASCADE
-);
-
-CREATE TABLE "AspNetUserClaims" (
-    "Id" serial NOT NULL,
-    "UserId" text NOT NULL,
-    "ClaimType" text NULL,
-    "ClaimValue" text NULL,
-    CONSTRAINT "PK_AspNetUserClaims" PRIMARY KEY ("Id"),
-    CONSTRAINT "FK_AspNetUserClaims_AspNetUsers_UserId" FOREIGN KEY ("UserId") REFERENCES "AspNetUsers" ("Id") ON DELETE CASCADE
-);
-
-CREATE TABLE "AspNetUserLogins" (
-    "LoginProvider" character varying(128) NOT NULL,
-    "ProviderKey" character varying(128) NOT NULL,
-    "ProviderDisplayName" text NULL,
-    "UserId" text NOT NULL,
-    CONSTRAINT "PK_AspNetUserLogins" PRIMARY KEY ("LoginProvider", "ProviderKey"),
-    CONSTRAINT "FK_AspNetUserLogins_AspNetUsers_UserId" FOREIGN KEY ("UserId") REFERENCES "AspNetUsers" ("Id") ON DELETE CASCADE
-);
-
-CREATE TABLE "AspNetUserRoles" (
-    "UserId" text NOT NULL,
-    "RoleId" text NOT NULL,
-    CONSTRAINT "PK_AspNetUserRoles" PRIMARY KEY ("UserId", "RoleId"),
-    CONSTRAINT "FK_AspNetUserRoles_AspNetRoles_RoleId" FOREIGN KEY ("RoleId") REFERENCES "AspNetRoles" ("Id") ON DELETE CASCADE,
-    CONSTRAINT "FK_AspNetUserRoles_AspNetUsers_UserId" FOREIGN KEY ("UserId") REFERENCES "AspNetUsers" ("Id") ON DELETE CASCADE
-);
-
-CREATE TABLE "AspNetUserTokens" (
-    "UserId" text NOT NULL,
-    "LoginProvider" character varying(128) NOT NULL,
-    "Name" character varying(128) NOT NULL,
-    "Value" text NULL,
-    CONSTRAINT "PK_AspNetUserTokens" PRIMARY KEY ("UserId", "LoginProvider", "Name"),
-    CONSTRAINT "FK_AspNetUserTokens_AspNetUsers_UserId" FOREIGN KEY ("UserId") REFERENCES "AspNetUsers" ("Id") ON DELETE CASCADE
-);
-
-CREATE INDEX "IX_AspNetRoleClaims_RoleId" ON "AspNetRoleClaims" ("RoleId");
-
-CREATE UNIQUE INDEX "RoleNameIndex" ON "AspNetRoles" ("NormalizedName");
-
-CREATE INDEX "IX_AspNetUserClaims_UserId" ON "AspNetUserClaims" ("UserId");
-
-CREATE INDEX "IX_AspNetUserLogins_UserId" ON "AspNetUserLogins" ("UserId");
-
-CREATE INDEX "IX_AspNetUserRoles_RoleId" ON "AspNetUserRoles" ("RoleId");
-
-CREATE INDEX "EmailIndex" ON "AspNetUsers" ("NormalizedEmail");
-
-CREATE UNIQUE INDEX "UserNameIndex" ON "AspNetUsers" ("NormalizedUserName");
-
-INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-VALUES ('20181213062107_idenmigration', '2.1.11-servicing-32099');
-
-ALTER TABLE "AspNetUsers" ADD "Name" text NULL;
-
-INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-VALUES ('20181213064503_CustomUserData', '2.1.11-servicing-32099');
-
-CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
-    "MigrationId" character varying(150) NOT NULL,
-    "ProductVersion" character varying(32) NOT NULL,
-    CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY ("MigrationId")
-);
-
 CREATE TABLE "BillSeries" (
     "SeriesName" text NOT NULL,
     CONSTRAINT "PK_BillSeries" PRIMARY KEY ("SeriesName")
@@ -247,31 +148,31 @@ CREATE INDEX "IX_Received_CompanyID" ON "Received" ("CompanyID");
 CREATE INDEX "IX_Received_DebtorGroupID" ON "Received" ("DebtorGroupID");
 
 INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-VALUES ('20181218060410_ModelMigrate', '2.1.11-servicing-32099');
+VALUES ('20181218060410_ModelMigrate', '3.1.1');
 
 ALTER TABLE "Company" DROP COLUMN "CompanyLogo";
 
 ALTER TABLE "Company" ADD "CompanyLogoImg" bytea NULL;
 
 INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-VALUES ('20181218075000_CompanyImageadd', '2.1.11-servicing-32099');
+VALUES ('20181218075000_CompanyImageadd', '3.1.1');
 
 ALTER TABLE "Branch" ADD "BranchEmail" character varying(200) NOT NULL DEFAULT '';
 
 ALTER TABLE "Branch" ADD "BranchPhone" text NOT NULL DEFAULT '';
 
 INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-VALUES ('20190108061125_mailandphoneadd', '2.1.11-servicing-32099');
+VALUES ('20190108061125_mailandphoneadd', '3.1.1');
 
 ALTER TABLE "Company" ADD "CompanyOwner" character varying(100) NOT NULL DEFAULT '';
 
 INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-VALUES ('20190108075357_ownername', '2.1.11-servicing-32099');
+VALUES ('20190108075357_ownername', '3.1.1');
 
 ALTER TABLE "Bill" ADD "BillDate" timestamp without time zone NOT NULL DEFAULT TIMESTAMP '0001-01-01 00:00:00';
 
 INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-VALUES ('20190108181050_billdate', '2.1.11-servicing-32099');
+VALUES ('20190108181050_billdate', '3.1.1');
 
 ALTER TABLE "BillDetails" ALTER COLUMN "YearInfo" TYPE integer;
 ALTER TABLE "BillDetails" ALTER COLUMN "YearInfo" DROP NOT NULL;
@@ -282,7 +183,7 @@ ALTER TABLE "BillDetails" ALTER COLUMN "Period" DROP NOT NULL;
 ALTER TABLE "BillDetails" ALTER COLUMN "Period" DROP DEFAULT;
 
 INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-VALUES ('20190110054917_rmrequired', '2.1.11-servicing-32099');
+VALUES ('20190110054917_rmrequired', '3.1.1');
 
 ALTER TABLE "BillDetails" DROP CONSTRAINT "FK_BillDetails_Debtor_DebtorID";
 
@@ -293,28 +194,28 @@ ALTER TABLE "BillDetails" ALTER COLUMN "DebtorID" DROP DEFAULT;
 ALTER TABLE "BillDetails" ADD CONSTRAINT "FK_BillDetails_Debtor_DebtorID" FOREIGN KEY ("DebtorID") REFERENCES "Debtor" ("DebtorID") ON DELETE RESTRICT;
 
 INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-VALUES ('20190110060142_rmfk', '2.1.11-servicing-32099');
+VALUES ('20190110060142_rmfk', '3.1.1');
 
 ALTER TABLE "Bill" ADD "BillActNum" integer NOT NULL DEFAULT 0;
 
 CREATE UNIQUE INDEX "IX_Bill_BillActNum" ON "Bill" ("BillActNum");
 
 INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-VALUES ('20190110121116_billnumunique', '2.1.11-servicing-32099');
+VALUES ('20190110121116_billnumunique', '3.1.1');
 
 ALTER TABLE "Bill" ALTER COLUMN "BillActNum" TYPE integer;
 ALTER TABLE "Bill" ALTER COLUMN "BillActNum" DROP NOT NULL;
 ALTER TABLE "Bill" ALTER COLUMN "BillActNum" DROP DEFAULT;
 
 INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-VALUES ('20190110140151_rmnotnull', '2.1.11-servicing-32099');
+VALUES ('20190110140151_rmnotnull', '3.1.1');
 
 ALTER TABLE "BillDetails" DROP CONSTRAINT "FK_BillDetails_Bill_BillNumber";
 
 ALTER TABLE "BillDetails" ADD CONSTRAINT "FK_BillDetails_Bill_BillNumber" FOREIGN KEY ("BillNumber") REFERENCES "Bill" ("BillNumber") ON DELETE CASCADE;
 
 INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-VALUES ('20190111175420_cascadedel', '2.1.11-servicing-32099');
+VALUES ('20190111175420_cascadedel', '3.1.1');
 
 ALTER TABLE "Bill" ADD "BillDelivered" boolean NOT NULL DEFAULT FALSE;
 
@@ -327,12 +228,12 @@ CREATE INDEX "IX_Bill_BranchID" ON "Bill" ("BranchID");
 ALTER TABLE "Bill" ADD CONSTRAINT "FK_Bill_Branch_BranchID" FOREIGN KEY ("BranchID") REFERENCES "Branch" ("BranchID") ON DELETE CASCADE;
 
 INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-VALUES ('20190206191351_Billchanges', '2.1.11-servicing-32099');
+VALUES ('20190206191351_Billchanges', '3.1.1');
 
 ALTER TABLE "Bill" ADD "MessageSent" boolean NULL;
 
 INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-VALUES ('20190206194820_Bill1change', '2.1.11-servicing-32099');
+VALUES ('20190206194820_Bill1change', '3.1.1');
 
 ALTER TABLE "Company" ALTER COLUMN "CompanyOwner" TYPE text;
 ALTER TABLE "Company" ALTER COLUMN "CompanyOwner" DROP NOT NULL;
@@ -343,7 +244,255 @@ ALTER TABLE "Branch" ADD "BranchManagerName" character varying(100) NOT NULL DEF
 ALTER TABLE "Branch" ADD "BranchManagerSign" bytea NULL;
 
 INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-VALUES ('20190207130417_BranchChange', '2.1.11-servicing-32099');
+VALUES ('20190207130417_BranchChange', '3.1.1');
+
+ALTER TABLE "Received" DROP CONSTRAINT "FK_Received_DebtorGroup_DebtorGroupID";
+
+ALTER TABLE "Received" ALTER COLUMN "DebtorGroupID" TYPE integer;
+ALTER TABLE "Received" ALTER COLUMN "DebtorGroupID" SET NOT NULL;
+ALTER TABLE "Received" ALTER COLUMN "DebtorGroupID" DROP DEFAULT;
+
+CREATE TABLE "AdvancePay" (
+    "AdvancePayID" serial NOT NULL,
+    "AdvanceAmount" double precision NOT NULL,
+    "ChequePaymet" boolean NOT NULL,
+    "ChequeNumber" text NULL,
+    "ReceivedDate" timestamp without time zone NOT NULL,
+    "DebtorGroupID" integer NOT NULL,
+    "CompanyID" integer NOT NULL,
+    "BranchID" integer NOT NULL,
+    CONSTRAINT "PK_AdvancePay" PRIMARY KEY ("AdvancePayID"),
+    CONSTRAINT "FK_AdvancePay_Branch_BranchID" FOREIGN KEY ("BranchID") REFERENCES "Branch" ("BranchID") ON DELETE CASCADE,
+    CONSTRAINT "FK_AdvancePay_Company_CompanyID" FOREIGN KEY ("CompanyID") REFERENCES "Company" ("CompanyID") ON DELETE CASCADE,
+    CONSTRAINT "FK_AdvancePay_DebtorGroup_DebtorGroupID" FOREIGN KEY ("DebtorGroupID") REFERENCES "DebtorGroup" ("DebtorGroupID") ON DELETE CASCADE
+);
+
+CREATE INDEX "IX_AdvancePay_BranchID" ON "AdvancePay" ("BranchID");
+
+CREATE INDEX "IX_AdvancePay_CompanyID" ON "AdvancePay" ("CompanyID");
+
+CREATE INDEX "IX_AdvancePay_DebtorGroupID" ON "AdvancePay" ("DebtorGroupID");
+
+ALTER TABLE "Received" ADD CONSTRAINT "FK_Received_DebtorGroup_DebtorGroupID" FOREIGN KEY ("DebtorGroupID") REFERENCES "DebtorGroup" ("DebtorGroupID") ON DELETE CASCADE;
+
+INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+VALUES ('20200108065235_advance_pay_integration', '3.1.1');
+
+ALTER TABLE "Received" ALTER COLUMN "ReceivedID" TYPE integer;
+ALTER TABLE "Received" ALTER COLUMN "ReceivedID" SET NOT NULL;
+ALTER SEQUENCE "Received_ReceivedID_seq" RENAME TO "Received_ReceivedID_old_seq";
+ALTER TABLE "Received" ALTER COLUMN "ReceivedID" DROP DEFAULT;
+ALTER TABLE "Received" ALTER COLUMN "ReceivedID" ADD GENERATED BY DEFAULT AS IDENTITY;
+SELECT * FROM setval('"Received_ReceivedID_seq"', nextval('"Received_ReceivedID_old_seq"'), false);
+DROP SEQUENCE "Received_ReceivedID_old_seq";
+
+ALTER TABLE "Particulars" ALTER COLUMN "ParticularsID" TYPE integer;
+ALTER TABLE "Particulars" ALTER COLUMN "ParticularsID" SET NOT NULL;
+ALTER SEQUENCE "Particulars_ParticularsID_seq" RENAME TO "Particulars_ParticularsID_old_seq";
+ALTER TABLE "Particulars" ALTER COLUMN "ParticularsID" DROP DEFAULT;
+ALTER TABLE "Particulars" ALTER COLUMN "ParticularsID" ADD GENERATED BY DEFAULT AS IDENTITY;
+SELECT * FROM setval('"Particulars_ParticularsID_seq"', nextval('"Particulars_ParticularsID_old_seq"'), false);
+DROP SEQUENCE "Particulars_ParticularsID_old_seq";
+
+ALTER TABLE "DebtorGroup" ALTER COLUMN "DebtorGroupID" TYPE integer;
+ALTER TABLE "DebtorGroup" ALTER COLUMN "DebtorGroupID" SET NOT NULL;
+ALTER SEQUENCE "DebtorGroup_DebtorGroupID_seq" RENAME TO "DebtorGroup_DebtorGroupID_old_seq";
+ALTER TABLE "DebtorGroup" ALTER COLUMN "DebtorGroupID" DROP DEFAULT;
+ALTER TABLE "DebtorGroup" ALTER COLUMN "DebtorGroupID" ADD GENERATED BY DEFAULT AS IDENTITY;
+SELECT * FROM setval('"DebtorGroup_DebtorGroupID_seq"', nextval('"DebtorGroup_DebtorGroupID_old_seq"'), false);
+DROP SEQUENCE "DebtorGroup_DebtorGroupID_old_seq";
+
+ALTER TABLE "DebtorGroup" ADD "AdvancePayAmount" double precision NOT NULL DEFAULT 0.0;
+
+ALTER TABLE "Debtor" ALTER COLUMN "DebtorID" TYPE integer;
+ALTER TABLE "Debtor" ALTER COLUMN "DebtorID" SET NOT NULL;
+ALTER SEQUENCE "Debtor_DebtorID_seq" RENAME TO "Debtor_DebtorID_old_seq";
+ALTER TABLE "Debtor" ALTER COLUMN "DebtorID" DROP DEFAULT;
+ALTER TABLE "Debtor" ALTER COLUMN "DebtorID" ADD GENERATED BY DEFAULT AS IDENTITY;
+SELECT * FROM setval('"Debtor_DebtorID_seq"', nextval('"Debtor_DebtorID_old_seq"'), false);
+DROP SEQUENCE "Debtor_DebtorID_old_seq";
+
+ALTER TABLE "Company" ALTER COLUMN "CompanyID" TYPE integer;
+ALTER TABLE "Company" ALTER COLUMN "CompanyID" SET NOT NULL;
+ALTER SEQUENCE "Company_CompanyID_seq" RENAME TO "Company_CompanyID_old_seq";
+ALTER TABLE "Company" ALTER COLUMN "CompanyID" DROP DEFAULT;
+ALTER TABLE "Company" ALTER COLUMN "CompanyID" ADD GENERATED BY DEFAULT AS IDENTITY;
+SELECT * FROM setval('"Company_CompanyID_seq"', nextval('"Company_CompanyID_old_seq"'), false);
+DROP SEQUENCE "Company_CompanyID_old_seq";
+
+ALTER TABLE "Branch" ALTER COLUMN "BranchID" TYPE integer;
+ALTER TABLE "Branch" ALTER COLUMN "BranchID" SET NOT NULL;
+ALTER SEQUENCE "Branch_BranchID_seq" RENAME TO "Branch_BranchID_old_seq";
+ALTER TABLE "Branch" ALTER COLUMN "BranchID" DROP DEFAULT;
+ALTER TABLE "Branch" ALTER COLUMN "BranchID" ADD GENERATED BY DEFAULT AS IDENTITY;
+SELECT * FROM setval('"Branch_BranchID_seq"', nextval('"Branch_BranchID_old_seq"'), false);
+DROP SEQUENCE "Branch_BranchID_old_seq";
+
+ALTER TABLE "BillDetails" ALTER COLUMN "BillDetailsID" TYPE integer;
+ALTER TABLE "BillDetails" ALTER COLUMN "BillDetailsID" SET NOT NULL;
+ALTER SEQUENCE "BillDetails_BillDetailsID_seq" RENAME TO "BillDetails_BillDetailsID_old_seq";
+ALTER TABLE "BillDetails" ALTER COLUMN "BillDetailsID" DROP DEFAULT;
+ALTER TABLE "BillDetails" ALTER COLUMN "BillDetailsID" ADD GENERATED BY DEFAULT AS IDENTITY;
+SELECT * FROM setval('"BillDetails_BillDetailsID_seq"', nextval('"BillDetails_BillDetailsID_old_seq"'), false);
+DROP SEQUENCE "BillDetails_BillDetailsID_old_seq";
+
+ALTER TABLE "AdvancePay" ALTER COLUMN "AdvancePayID" TYPE integer;
+ALTER TABLE "AdvancePay" ALTER COLUMN "AdvancePayID" SET NOT NULL;
+ALTER SEQUENCE "AdvancePay_AdvancePayID_seq" RENAME TO "AdvancePay_AdvancePayID_old_seq";
+ALTER TABLE "AdvancePay" ALTER COLUMN "AdvancePayID" DROP DEFAULT;
+ALTER TABLE "AdvancePay" ALTER COLUMN "AdvancePayID" ADD GENERATED BY DEFAULT AS IDENTITY;
+SELECT * FROM setval('"AdvancePay_AdvancePayID_seq"', nextval('"AdvancePay_AdvancePayID_old_seq"'), false);
+DROP SEQUENCE "AdvancePay_AdvancePayID_old_seq";
+
+CREATE TABLE "AdvancePayDeduct" (
+    "AdvancePayDeductID" integer NOT NULL GENERATED BY DEFAULT AS IDENTITY,
+    "AdvanceAmountDeducted" double precision NOT NULL,
+    "DeductDate" timestamp without time zone NOT NULL,
+    "DebtorGroupID" integer NOT NULL,
+    "BillDetailsID" integer NOT NULL,
+    "CompanyID" integer NOT NULL,
+    "BranchID" integer NOT NULL,
+    CONSTRAINT "PK_AdvancePayDeduct" PRIMARY KEY ("AdvancePayDeductID"),
+    CONSTRAINT "FK_AdvancePayDeduct_BillDetails_BillDetailsID" FOREIGN KEY ("BillDetailsID") REFERENCES "BillDetails" ("BillDetailsID") ON DELETE CASCADE,
+    CONSTRAINT "FK_AdvancePayDeduct_Branch_BranchID" FOREIGN KEY ("BranchID") REFERENCES "Branch" ("BranchID") ON DELETE CASCADE,
+    CONSTRAINT "FK_AdvancePayDeduct_Company_CompanyID" FOREIGN KEY ("CompanyID") REFERENCES "Company" ("CompanyID") ON DELETE CASCADE,
+    CONSTRAINT "FK_AdvancePayDeduct_DebtorGroup_DebtorGroupID" FOREIGN KEY ("DebtorGroupID") REFERENCES "DebtorGroup" ("DebtorGroupID") ON DELETE CASCADE
+);
+
+CREATE INDEX "IX_AdvancePayDeduct_BillDetailsID" ON "AdvancePayDeduct" ("BillDetailsID");
+
+CREATE INDEX "IX_AdvancePayDeduct_BranchID" ON "AdvancePayDeduct" ("BranchID");
+
+CREATE INDEX "IX_AdvancePayDeduct_CompanyID" ON "AdvancePayDeduct" ("CompanyID");
+
+CREATE INDEX "IX_AdvancePayDeduct_DebtorGroupID" ON "AdvancePayDeduct" ("DebtorGroupID");
+
+INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+VALUES ('20200217081000_ADVANCEPAYDEDUCT', '3.1.1');
+
+INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+VALUES ('20200219075100_ViewRp1Rp2', '3.1.1');
+
+ALTER TABLE "Bill" ADD "BillLocked" boolean NOT NULL DEFAULT FALSE;
+
+ALTER TABLE "AdvancePayDeduct" ADD "AdvancePayDeductLock" boolean NOT NULL DEFAULT FALSE;
+
+ALTER TABLE "AdvancePay" ADD "ActualDateTimeReceived" timestamp without time zone NOT NULL DEFAULT TIMESTAMP '0001-01-01 00:00:00';
+
+ALTER TABLE "AdvancePay" ADD "AdvancePayLock" boolean NOT NULL DEFAULT FALSE;
+
+INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+VALUES ('20200221071055_AddedLock_AP_Bill', '3.1.1');
+
+
+
+
+
+
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    "MigrationId" character varying(150) NOT NULL,
+    "ProductVersion" character varying(32) NOT NULL,
+    CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY ("MigrationId")
+);
+
+CREATE TABLE "AspNetRoles" (
+    "Id" text NOT NULL,
+    "Name" character varying(256) NULL,
+    "NormalizedName" character varying(256) NULL,
+    "ConcurrencyStamp" text NULL,
+    CONSTRAINT "PK_AspNetRoles" PRIMARY KEY ("Id")
+);
+
+CREATE TABLE "AspNetUsers" (
+    "Id" text NOT NULL,
+    "UserName" character varying(256) NULL,
+    "NormalizedUserName" character varying(256) NULL,
+    "Email" character varying(256) NULL,
+    "NormalizedEmail" character varying(256) NULL,
+    "EmailConfirmed" boolean NOT NULL,
+    "PasswordHash" text NULL,
+    "SecurityStamp" text NULL,
+    "ConcurrencyStamp" text NULL,
+    "PhoneNumber" text NULL,
+    "PhoneNumberConfirmed" boolean NOT NULL,
+    "TwoFactorEnabled" boolean NOT NULL,
+    "LockoutEnd" timestamp with time zone NULL,
+    "LockoutEnabled" boolean NOT NULL,
+    "AccessFailedCount" integer NOT NULL,
+    CONSTRAINT "PK_AspNetUsers" PRIMARY KEY ("Id")
+);
+
+CREATE TABLE "AspNetRoleClaims" (
+    "Id" serial NOT NULL,
+    "RoleId" text NOT NULL,
+    "ClaimType" text NULL,
+    "ClaimValue" text NULL,
+    CONSTRAINT "PK_AspNetRoleClaims" PRIMARY KEY ("Id"),
+    CONSTRAINT "FK_AspNetRoleClaims_AspNetRoles_RoleId" FOREIGN KEY ("RoleId") REFERENCES "AspNetRoles" ("Id") ON DELETE CASCADE
+);
+
+CREATE TABLE "AspNetUserClaims" (
+    "Id" serial NOT NULL,
+    "UserId" text NOT NULL,
+    "ClaimType" text NULL,
+    "ClaimValue" text NULL,
+    CONSTRAINT "PK_AspNetUserClaims" PRIMARY KEY ("Id"),
+    CONSTRAINT "FK_AspNetUserClaims_AspNetUsers_UserId" FOREIGN KEY ("UserId") REFERENCES "AspNetUsers" ("Id") ON DELETE CASCADE
+);
+
+CREATE TABLE "AspNetUserLogins" (
+    "LoginProvider" character varying(128) NOT NULL,
+    "ProviderKey" character varying(128) NOT NULL,
+    "ProviderDisplayName" text NULL,
+    "UserId" text NOT NULL,
+    CONSTRAINT "PK_AspNetUserLogins" PRIMARY KEY ("LoginProvider", "ProviderKey"),
+    CONSTRAINT "FK_AspNetUserLogins_AspNetUsers_UserId" FOREIGN KEY ("UserId") REFERENCES "AspNetUsers" ("Id") ON DELETE CASCADE
+);
+
+CREATE TABLE "AspNetUserRoles" (
+    "UserId" text NOT NULL,
+    "RoleId" text NOT NULL,
+    CONSTRAINT "PK_AspNetUserRoles" PRIMARY KEY ("UserId", "RoleId"),
+    CONSTRAINT "FK_AspNetUserRoles_AspNetRoles_RoleId" FOREIGN KEY ("RoleId") REFERENCES "AspNetRoles" ("Id") ON DELETE CASCADE,
+    CONSTRAINT "FK_AspNetUserRoles_AspNetUsers_UserId" FOREIGN KEY ("UserId") REFERENCES "AspNetUsers" ("Id") ON DELETE CASCADE
+);
+
+CREATE TABLE "AspNetUserTokens" (
+    "UserId" text NOT NULL,
+    "LoginProvider" character varying(128) NOT NULL,
+    "Name" character varying(128) NOT NULL,
+    "Value" text NULL,
+    CONSTRAINT "PK_AspNetUserTokens" PRIMARY KEY ("UserId", "LoginProvider", "Name"),
+    CONSTRAINT "FK_AspNetUserTokens_AspNetUsers_UserId" FOREIGN KEY ("UserId") REFERENCES "AspNetUsers" ("Id") ON DELETE CASCADE
+);
+
+CREATE INDEX "IX_AspNetRoleClaims_RoleId" ON "AspNetRoleClaims" ("RoleId");
+
+CREATE UNIQUE INDEX "RoleNameIndex" ON "AspNetRoles" ("NormalizedName");
+
+CREATE INDEX "IX_AspNetUserClaims_UserId" ON "AspNetUserClaims" ("UserId");
+
+CREATE INDEX "IX_AspNetUserLogins_UserId" ON "AspNetUserLogins" ("UserId");
+
+CREATE INDEX "IX_AspNetUserRoles_RoleId" ON "AspNetUserRoles" ("RoleId");
+
+CREATE INDEX "EmailIndex" ON "AspNetUsers" ("NormalizedEmail");
+
+CREATE UNIQUE INDEX "UserNameIndex" ON "AspNetUsers" ("NormalizedUserName");
+
+INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+VALUES ('20181213062107_idenmigration', '3.1.1');
+
+ALTER TABLE "AspNetUsers" ADD "Name" text NULL;
+
+INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+VALUES ('20181213064503_CustomUserData', '3.1.1');
+
+
+
+
+
+
 
 INSERT INTO "Company"("CompanyName","CreationDate","BillFormat","GSTIN","BankName","AccountType","AccountNumber","IFSCcode","PAN","CompanyLogoImg","CompanyOwner") 
 VALUES ('Test Company',CURRENT_DATE,1,'24CAGPP9521D1ZS','Test Bank',1,'50444444444321','HDFC0003789','AAPPP5612O','wdfwqdasdasd','Mr. Test');
