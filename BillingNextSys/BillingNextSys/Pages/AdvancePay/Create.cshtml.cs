@@ -48,7 +48,7 @@ namespace BillingNextSys.Pages.AdvancePay
             {
                 return Page();
             }
-
+            AdvancePay.ActualDateTimeReceived = DateTime.Now;
             _context.AdvancePay.Add(AdvancePay);
             await _context.SaveChangesAsync();
 
