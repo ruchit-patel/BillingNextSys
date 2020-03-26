@@ -1,4 +1,5 @@
 using System;
+using System.Configuration;
 using BillingNextSys.Areas.Identity.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -17,7 +18,8 @@ namespace BillingNextSys.Areas.Identity
             builder.ConfigureServices((context, services) => {
                 services.AddDbContext<BillingNextSysIdentityDbContext>(options =>
                     options.UseNpgsql(
-                        context.Configuration.GetConnectionString("BillingNextSysIdentityDbContextConnection")));
+                        context.Configuration.GetConnectionString("BillingNextSysIdentityDbContextConnection")
+                       ));
 
                 services.AddIdentity<BillingNextUser,IdentityRole> (config =>
                 {

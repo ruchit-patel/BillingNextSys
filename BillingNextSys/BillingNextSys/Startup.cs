@@ -16,7 +16,8 @@ using System.Globalization;
 using BillingNextSys.Services;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Mvc;
-
+using BillingNextSys.Hubs;
+using System.Configuration;
 
 namespace BillingNextSys
 {
@@ -30,7 +31,7 @@ namespace BillingNextSys
         .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
         .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
         .AddEnvironmentVariables();
-
+            
             //if (env.IsDevelopment())
             //{
             //    builder.AddUserSecrets<Startup>();
@@ -56,7 +57,7 @@ namespace BillingNextSys
             services.AddMvc()
             .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
             .AddSessionStateTempDataProvider();
-            
+            services.AddSignalR();
 
             services.AddSession(options =>
             {
@@ -69,10 +70,10 @@ namespace BillingNextSys
 
             services.AddRazorPages().AddNewtonsoftJson();
 
-            services.AddDbContext<BillingNextSysContext>(options =>
+                services.AddDbContext<BillingNextSysContext>(options =>
                     options.UseNpgsql(Configuration.GetConnectionString("BillingNextSysContext")));
-
             
+
             services.AddOptions();
             services.AddAntiforgery(options =>options.HeaderName = "MY-XSRF-TOKEN");
             services.Configure<Whatsappoptions>(Configuration.GetSection("WhatsappSettings"));
@@ -103,6 +104,7 @@ namespace BillingNextSys
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
+                endpoints.MapHub<ChatHub>("/chatHub");
             });
             CreateRoles(serviceProvider).Wait();
         }
