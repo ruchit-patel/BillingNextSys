@@ -33,6 +33,9 @@
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
             <h1 class="page-header">Dashboard</h1>
+           
+                <canvas id="myChart" width="400" height="200"></canvas>
+
             <h2 class="sub-header">Company Configuration</h2>
             <a asp-page="/Company/Create">Create New</a>
             <div class="row placeholders">
@@ -176,3 +179,7 @@
     </div>
 </div>
 <div class="pull-right">@Model.Companydet.FirstOrDefault().CompanyName : @Model.branchname</div>
+
+
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/GraphRealTimeData.js"></script>

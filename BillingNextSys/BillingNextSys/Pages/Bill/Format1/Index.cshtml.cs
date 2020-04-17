@@ -13,6 +13,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using MoreLinq;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.SignalR;
+using BillingNextSys.Hubs;
+
+
 
 namespace BillingNextSys.Pages.Bill.Format1
 {
@@ -25,11 +29,15 @@ namespace BillingNextSys.Pages.Bill.Format1
 
         private readonly BillingNextSys.Models.BillingNextSysContext _context;
 
-        public IndexModel(BillingNextSys.Models.BillingNextSysContext context, IHttpContextAccessor httpContextAccessor, IOptions<Whatsappoptions> optionsAccessor)
+        
+        private readonly IHubContext<GraphDataHub> _hubContext;
+
+        public IndexModel(BillingNextSys.Models.BillingNextSysContext context, IHttpContextAccessor httpContextAccessor, IOptions<Whatsappoptions> optionsAccessor, IHubContext<GraphDataHub> hubContext)
         {
             _context = context;
             _httpContextAccessor = httpContextAccessor;
             Options = optionsAccessor.Value;
+           _hubContext=hubContext;
         }
         public Whatsappoptions Options { get; }
         public void OnGet()
@@ -118,7 +126,7 @@ namespace BillingNextSys.Pages.Bill.Format1
 
         }
 
-        public IActionResult OnPostInsertReceived(int dgid, [FromBody] Models.Received obj)
+        public async Task<IActionResult> OnPostInsertReceivedAsync(int dgid, [FromBody] Models.Received obj)
         {
             obj.CompanyID = (int)_session.GetInt32("Cid");
             obj.DebtorGroupID = _context.BillDetails.Where(a => a.BillDetailsID.Equals(obj.BillDetailsID)).Select(a => a.DebtorGroupID).FirstOrDefault();
@@ -139,6 +147,9 @@ namespace BillingNextSys.Pages.Bill.Format1
             var dgdet = new Models.DebtorGroup { DebtorGroupID = dgid, DebtorOutstanding = debout };
             _context.DebtorGroup.Attach(dgdet).Property(x => x.DebtorOutstanding).IsModified = true;
             _context.SaveChanges();
+
+            GraphDataService graphDataService= new GraphDataService(_context,_hubContext);
+            graphDataService.UpdateDataOnClients();
 
             return new JsonResult("Successful!");
         }

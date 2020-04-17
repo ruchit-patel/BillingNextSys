@@ -105,6 +105,7 @@ namespace BillingNextSys
             {
                 endpoints.MapRazorPages();
                 endpoints.MapHub<ChatHub>("/chatHub");
+                endpoints.MapHub<GraphDataHub>("/graphHub");
             });
             CreateRoles(serviceProvider).Wait();
         }

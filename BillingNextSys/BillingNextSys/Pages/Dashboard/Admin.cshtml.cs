@@ -10,6 +10,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.SignalR;
+using BillingNextSys.Hubs;
+using BillingNextSys.Services;
 
 namespace BillingNextSys.Pages.Dashboard
 {
@@ -24,9 +27,11 @@ namespace BillingNextSys.Pages.Dashboard
         private readonly BillingNextSysIdentityDbContext _idcontext;
         private readonly RoleManager<IdentityRole> roleManager;
 
+        private readonly IHubContext<GraphDataHub> _hubContext;
+
         public int CompanyId;
 
-        public AdminModel(BillingNextSys.Models.BillingNextSysContext context, UserManager<BillingNextUser> userManager, BillingNextSysIdentityDbContext idcontext, RoleManager<IdentityRole> roleManager, IHttpContextAccessor httpContextAccessor)
+        public AdminModel(BillingNextSys.Models.BillingNextSysContext context, UserManager<BillingNextUser> userManager, BillingNextSysIdentityDbContext idcontext, RoleManager<IdentityRole> roleManager, IHttpContextAccessor httpContextAccessor, IHubContext<GraphDataHub> hubContext)
         {
       
             this.userManager = userManager;
@@ -34,6 +39,7 @@ namespace BillingNextSys.Pages.Dashboard
             _idcontext = idcontext;
             _context = context;
             _httpContextAccessor = httpContextAccessor;
+            _hubContext=hubContext;
         }
 
 
@@ -63,6 +69,8 @@ namespace BillingNextSys.Pages.Dashboard
                 Companydet = _context.Company.Where(a => a.CompanyID.Equals(cid)).ToList();
                 branchname = _context.Branch.Where(a => a.BranchID.Equals(bid)).Select(a => a.BranchName).FirstOrDefault().ToString();
 
+                GraphDataService graphDataService= new GraphDataService(_context,_hubContext);
+                graphDataService.UpdateDataOnClients();
                 return Page();
             }
             catch (InvalidOperationException)
