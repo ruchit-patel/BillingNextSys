@@ -15,51 +15,41 @@ using Newtonsoft.Json;
 
 namespace BillingNextSys.Services
 {
-    public class GraphDataService 
+    public class GraphDataService : IGraphDataService
     {
-        
         private readonly BillingNextSys.Models.BillingNextSysContext _context;
 
-        
         private readonly IHubContext<GraphDataHub> _hubContext;
         public GraphDataService(BillingNextSys.Models.BillingNextSysContext context, IHubContext<GraphDataHub> hubContext)
-        {
-            _context = context;  
+        { 
             _hubContext=hubContext;
+            _context = context;
         }
 
 
-       private async Task<List<GraphDataModel>> GenerateData()
+        //public async void UpdateDataOnClients(List<GraphDataModel> graphDataModels)
+        //{
+        //   // var abc= new List<GraphDataModel> { new GraphDataModel { Count = twodGraphdata.Count, Type = "Inward Cash Flows", GraphContent = twodGraphdata } };
+        //    //List<GraphDataModel> graphDataAmountReceived= await GenerateData();
+        //    await _hubContext.Clients.All.SendAsync("sendToUser",JsonConvert.SerializeObject(graphDataModels));
+        //}
+
+        async Task IGraphDataService.UpdateCashFlowsGraph()
         {
-           // return await _context.Received.GroupBy(x=>x.ReceivedDate).Select(g=> new GraphDataCashFlows{
-               // Datelables=g.Key,
-             //  Amount= g.Sum(x=>x.ReceivedAmount)
-         //   }).ToListAsync();  
-         List<GraphDataModel> graphDataCashFlows= new List<GraphDataModel>();   
-         List<TwoDGraphData> graphDataInCashes = new List<TwoDGraphData>();
-         graphDataInCashes.Add(new TwoDGraphData{ Label= DateTime.Now.Date.ToString(),Data= Convert.ToString(2000.2)});
-         graphDataInCashes.Add(new TwoDGraphData{ Label= new DateTime(2019,12,2).Date.ToString(),Data=Convert.ToString(2000.2)});
-         graphDataInCashes.Add(new TwoDGraphData{ Label= new DateTime(2020,1,2).Date.ToString(),Data= Convert.ToString(3100)});
-         graphDataInCashes.Add(new TwoDGraphData{ Label= new DateTime(2019,12,2).Date.ToString(),Data=Convert.ToString(4200.2)});
-         graphDataInCashes.Add(new TwoDGraphData{ Label= new DateTime(2019,12,5).Date.ToString(),Data=Convert.ToString(3500.2)});
-
-         graphDataCashFlows.Add(new GraphDataModel{Count=5, Type="Inward Cash Flows", GraphContent=graphDataInCashes});
-
-         List<TwoDGraphData> graphDataOutCashes = new List<TwoDGraphData>();
-         graphDataOutCashes.Add(new TwoDGraphData{ Label= DateTime.Now.Date.ToString(),Data= Convert.ToString(2000.2)});
-         graphDataOutCashes.Add(new TwoDGraphData{ Label= new DateTime(2019,12,12).Date.ToString(),Data=Convert.ToString(4000.2)});
-         graphDataOutCashes.Add(new TwoDGraphData{ Label= new DateTime(2020,1,12).Date.ToString(),Data= Convert.ToString(2100)});
-         graphDataOutCashes.Add(new TwoDGraphData{ Label= new DateTime(2019,12,4).Date.ToString(),Data=Convert.ToString(3200.2)});
-         graphDataOutCashes.Add(new TwoDGraphData{ Label= new DateTime(2019,1,3).Date.ToString(),Data=Convert.ToString(1500.2)});
-
-         graphDataCashFlows.Add(new GraphDataModel{Count=5, Type="Outward Cash Flows", GraphContent=graphDataOutCashes});
-         return graphDataCashFlows;
-        }
-
-        public async void UpdateDataOnClients()
-        {
-            List<GraphDataModel> graphDataAmountReceived= await GenerateData();
-            await _hubContext.Clients.All.SendAsync("sendToUser",JsonConvert.SerializeObject(graphDataAmountReceived));
+            var InflowData = await _context.Received.GroupBy(x => x.ReceivedDate).Select(g => new TwoDGraphData
+            {
+                Label = g.Key.ToString(),
+                Data = g.Sum(x => x.ReceivedAmount).ToString()
+            }).ToListAsync();
+            var OutFlowData = await _context.Bill.GroupBy(x => x.BillDate.Date).Select(g => new TwoDGraphData
+            {
+                Label = g.Key.ToString(),
+                Data = g.Sum(x => x.BillAmount).ToString()
+            }).ToListAsync();
+            var graphDataList = new List<GraphDataModel>();
+            graphDataList.Add(new GraphDataModel { Count = InflowData.Count, Type = "Cash Inflow", GraphContent = InflowData });
+            graphDataList.Add(new GraphDataModel { Count = OutFlowData.Count, Type = "Bills Generated", GraphContent = OutFlowData });
+            await _hubContext.Clients.All.SendAsync("sendCashFlowsData", JsonConvert.SerializeObject(graphDataList));
         }
     }
 

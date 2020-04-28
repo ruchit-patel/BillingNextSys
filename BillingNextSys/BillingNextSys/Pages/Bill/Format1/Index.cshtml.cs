@@ -15,8 +15,7 @@ using MoreLinq;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.SignalR;
 using BillingNextSys.Hubs;
-
-
+using BillingNextSys.DataModels;
 
 namespace BillingNextSys.Pages.Bill.Format1
 {
@@ -28,16 +27,16 @@ namespace BillingNextSys.Pages.Bill.Format1
         private readonly IWhatsappSender _smsSender;
 
         private readonly BillingNextSys.Models.BillingNextSysContext _context;
+        private readonly IGraphDataService _graphDataService;
 
         
-        private readonly IHubContext<GraphDataHub> _hubContext;
 
-        public IndexModel(BillingNextSys.Models.BillingNextSysContext context, IHttpContextAccessor httpContextAccessor, IOptions<Whatsappoptions> optionsAccessor, IHubContext<GraphDataHub> hubContext)
+        public IndexModel(BillingNextSys.Models.BillingNextSysContext context, IHttpContextAccessor httpContextAccessor, IOptions<Whatsappoptions> optionsAccessor,  IGraphDataService graphDataService)
         {
             _context = context;
             _httpContextAccessor = httpContextAccessor;
             Options = optionsAccessor.Value;
-           _hubContext=hubContext;
+            _graphDataService = graphDataService;
         }
         public Whatsappoptions Options { get; }
         public void OnGet()
@@ -148,9 +147,7 @@ namespace BillingNextSys.Pages.Bill.Format1
             _context.DebtorGroup.Attach(dgdet).Property(x => x.DebtorOutstanding).IsModified = true;
             _context.SaveChanges();
 
-            GraphDataService graphDataService= new GraphDataService(_context,_hubContext);
-            graphDataService.UpdateDataOnClients();
-
+            await _graphDataService.UpdateCashFlowsGraph();
             return new JsonResult("Successful!");
         }
 

@@ -4,6 +4,7 @@
     ViewData["Title"] = "Dashboard - Admin";
 }
 <link rel="stylesheet" href="/css/dashboard.css" />
+@Html.AntiForgeryToken()
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
@@ -33,22 +34,22 @@
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
             <h1 class="page-header">Dashboard</h1>
-           
-                <canvas id="myChart" width="400" height="200"></canvas>
+
+            <canvas id="myChart" width="400" height="200"></canvas>
 
             <h2 class="sub-header">Company Configuration</h2>
             <a asp-page="/Company/Create">Create New</a>
             <div class="row placeholders">
                 @foreach (var item in Model.Company)
-              {
-            <div class="col-xs-6 col-sm-4 placeholder">
-                <a asp-page="/Company/Edit" asp-route-id="@item.CompanyID">
-                    <img src="data:image/png;base64,@Convert.ToBase64String(item.CompanyLogoImg)" width="200" height="200" class="img-responsive" alt="Company Logo">
-                    <h4> @Html.DisplayFor(modelItem => item.CompanyName)</h4>
-                    <span class="text-muted">GSTIN: @Html.DisplayFor(modelItem => item.GSTIN)</span>
-                </a>
-            </div>
-            }
+                {
+                    <div class="col-xs-6 col-sm-4 placeholder">
+                        <a asp-page="/Company/Edit" asp-route-id="@item.CompanyID">
+                            <img src="data:image/png;base64,@Convert.ToBase64String(item.CompanyLogoImg)" width="200" height="200" class="img-responsive" alt="Company Logo">
+                            <h4> @Html.DisplayFor(modelItem => item.CompanyName)</h4>
+                            <span class="text-muted">GSTIN: @Html.DisplayFor(modelItem => item.GSTIN)</span>
+                        </a>
+                    </div>
+                }
             </div>
 
 
@@ -66,31 +67,31 @@
                     </thead>
                     <tbody>
                         @foreach (var item in Model.usersofRoleAdmin)
-            {
-                <tr>
+                        {
+                            <tr>
 
 
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Email)
-                    </td>
-                    <td>
-                        <form method="POST">
-                            <select name="Roles" asp-items="@new SelectList(Model.Roles)"></select>
-                            <input type="hidden" name="UserID" value="@Html.DisplayFor(modelItem=>item.Id)" />
-                            <input type="hidden" name="curRole" value="Admin" />
-                            <input type="submit" value="Save" class="btn btn-primary-v3" />
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Email)
+                                </td>
+                                <td>
+                                    <form method="POST">
+                                        <select name="Roles" asp-items="@new SelectList(Model.Roles)"></select>
+                                        <input type="hidden" name="UserID" value="@Html.DisplayFor(modelItem=>item.Id)" />
+                                        <input type="hidden" name="curRole" value="Admin" />
+                                        <input type="submit" value="Save" class="btn btn-primary-v3" />
 
-                        </form>
-                    </td>
+                                    </form>
+                                </td>
 
-                    <td>
-                        <a href="./delete?id=@item.Id">Delete</a>
-                    </td>
-                </tr>
-}
+                                <td>
+                                    <a href="./delete?id=@item.Id">Delete</a>
+                                </td>
+                            </tr>
+                        }
 
                     </tbody>
                 </table>
@@ -107,30 +108,30 @@
                     </thead>
                     <tbody>
                         @foreach (var item in Model.usersofRoleAccountant)
-            {
-                <tr>
+                        {
+                            <tr>
 
 
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Email)
-                    </td>
-                    <td>
-                        <form method="POST">
-                            <select name="Roles" asp-items="@new SelectList(Model.Roles)"></select>
-                            <input type="hidden" name="UserID" value="@Html.DisplayFor(modelItem=>item.Id)" />
-                            <input type="hidden" name="curRole" value="Accountant" />
-                            <input type="submit" value="Save" class="btn btn-primary-v3" />
-                        </form>
-                    </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Email)
+                                </td>
+                                <td>
+                                    <form method="POST">
+                                        <select name="Roles" asp-items="@new SelectList(Model.Roles)"></select>
+                                        <input type="hidden" name="UserID" value="@Html.DisplayFor(modelItem=>item.Id)" />
+                                        <input type="hidden" name="curRole" value="Accountant" />
+                                        <input type="submit" value="Save" class="btn btn-primary-v3" />
+                                    </form>
+                                </td>
 
-                    <td>
-                        <a href="./delete?id=@item.Id">Delete</a>
-                    </td>
-                </tr>
-}
+                                <td>
+                                    <a href="./delete?id=@item.Id">Delete</a>
+                                </td>
+                            </tr>
+                        }
 
                     </tbody>
                 </table>
@@ -147,30 +148,30 @@
                     </thead>
                     <tbody>
                         @foreach (var item in Model.usersofRoleDeveloper)
-            {
-                <tr>
+                        {
+                            <tr>
 
 
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Email)
-                    </td>
-                    <td>
-                        <form method="POST">
-                            <select name="Roles" asp-items="@new SelectList(Model.Roles)"></select>
-                            <input type="hidden" name="UserID" value="@Html.DisplayFor(modelItem=>item.Id)" />
-                            <input type="hidden" name="curRole" value="Developer" />
-                            <input type="submit" value="Save" class="btn btn-primary-v3" />
-                        </form>
-                    </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Email)
+                                </td>
+                                <td>
+                                    <form method="POST">
+                                        <select name="Roles" asp-items="@new SelectList(Model.Roles)"></select>
+                                        <input type="hidden" name="UserID" value="@Html.DisplayFor(modelItem=>item.Id)" />
+                                        <input type="hidden" name="curRole" value="Developer" />
+                                        <input type="submit" value="Save" class="btn btn-primary-v3" />
+                                    </form>
+                                </td>
 
-                    <td>
-                        <a href="./delete?id=@item.Id" >Delete</a>
-                    </td>
-                </tr>
-}
+                                <td>
+                                    <a href="./delete?id=@item.Id">Delete</a>
+                                </td>
+                            </tr>
+                        }
 
                     </tbody>
                 </table>
@@ -180,6 +181,6 @@
 </div>
 <div class="pull-right">@Model.Companydet.FirstOrDefault().CompanyName : @Model.branchname</div>
 
-
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/GraphRealTimeData.js"></script>
+

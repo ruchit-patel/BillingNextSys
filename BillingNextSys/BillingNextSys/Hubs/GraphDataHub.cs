@@ -5,6 +5,6 @@ namespace BillingNextSys.Hubs
 {
     public class GraphDataHub:Hub
     {
-        
+       
     }
 }
