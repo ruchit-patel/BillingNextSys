@@ -18,6 +18,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using BillingNextSys.Hubs;
 using System.Configuration;
+using BillingNextSys.DataModels;
 
 namespace BillingNextSys
 {
@@ -57,6 +58,7 @@ namespace BillingNextSys
             services.AddMvc()
             .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
             .AddSessionStateTempDataProvider();
+
             services.AddSignalR();
 
             services.AddSession(options =>
@@ -72,7 +74,9 @@ namespace BillingNextSys
 
                 services.AddDbContext<BillingNextSysContext>(options =>
                     options.UseNpgsql(Configuration.GetConnectionString("BillingNextSysContext")));
-            
+
+            services.AddScoped(typeof(IGraphDataService), typeof(GraphDataService));
+
 
             services.AddOptions();
             services.AddAntiforgery(options =>options.HeaderName = "MY-XSRF-TOKEN");
@@ -105,6 +109,8 @@ namespace BillingNextSys
             {
                 endpoints.MapRazorPages();
                 endpoints.MapHub<ChatHub>("/chatHub");
+                endpoints.MapHub<GraphDataHub>("/graphHub");
+                
             });
             CreateRoles(serviceProvider).Wait();
         }

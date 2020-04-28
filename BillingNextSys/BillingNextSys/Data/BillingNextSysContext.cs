@@ -12,6 +12,7 @@ namespace BillingNextSys.Models
         public BillingNextSysContext (DbContextOptions<BillingNextSysContext> options)
             : base(options)
         {
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

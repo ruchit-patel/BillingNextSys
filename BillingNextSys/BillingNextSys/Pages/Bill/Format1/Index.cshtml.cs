@@ -13,6 +13,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using MoreLinq;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.SignalR;
+using BillingNextSys.Hubs;
+using BillingNextSys.DataModels;
 
 namespace BillingNextSys.Pages.Bill.Format1
 {
@@ -24,12 +27,16 @@ namespace BillingNextSys.Pages.Bill.Format1
         private readonly IWhatsappSender _smsSender;
 
         private readonly BillingNextSys.Models.BillingNextSysContext _context;
+        private readonly IGraphDataService _graphDataService;
 
-        public IndexModel(BillingNextSys.Models.BillingNextSysContext context, IHttpContextAccessor httpContextAccessor, IOptions<Whatsappoptions> optionsAccessor)
+        
+
+        public IndexModel(BillingNextSys.Models.BillingNextSysContext context, IHttpContextAccessor httpContextAccessor, IOptions<Whatsappoptions> optionsAccessor,  IGraphDataService graphDataService)
         {
             _context = context;
             _httpContextAccessor = httpContextAccessor;
             Options = optionsAccessor.Value;
+            _graphDataService = graphDataService;
         }
         public Whatsappoptions Options { get; }
         public void OnGet()
@@ -118,7 +125,7 @@ namespace BillingNextSys.Pages.Bill.Format1
 
         }
 
-        public IActionResult OnPostInsertReceived(int dgid, [FromBody] Models.Received obj)
+        public async Task<IActionResult> OnPostInsertReceivedAsync(int dgid, [FromBody] Models.Received obj)
         {
             obj.CompanyID = (int)_session.GetInt32("Cid");
             obj.DebtorGroupID = _context.BillDetails.Where(a => a.BillDetailsID.Equals(obj.BillDetailsID)).Select(a => a.DebtorGroupID).FirstOrDefault();
@@ -140,6 +147,7 @@ namespace BillingNextSys.Pages.Bill.Format1
             _context.DebtorGroup.Attach(dgdet).Property(x => x.DebtorOutstanding).IsModified = true;
             _context.SaveChanges();
 
+            await _graphDataService.UpdateCashFlowsGraph();
             return new JsonResult("Successful!");
         }
 
