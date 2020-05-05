@@ -1,6 +1,12 @@
 "use strict";
 
-window.addEventListener('load', function () {
+if (document.readyState === 'loading') {  // Loading hasn't finished yet
+    document.addEventListener('DOMContentLoaded', callUpdategraph);
+} else {  // `DOMContentLoaded` has already fired
+    callUpdategraph();
+}
+
+function callUpdategraph() {
     $.ajax({
         url: '/Dashboard/Admin?handler=UpdateGraph',
         type: 'post',
@@ -15,15 +21,13 @@ window.addEventListener('load', function () {
             console.info(data);
         }
     });
-});
+}
 
 var connection = new signalR.HubConnectionBuilder().withUrl("/graphHub").build();
 
 
 connection.on("sendCashFlowsData", (graphData) => {
     var graphJSONData = JSON.parse(graphData);
-    console.log(graphJSONData);
-    
         getGraphBorderColorsAsync().then(borderdata =>
             getGraphColorsAsync()
                 .then(data =>
